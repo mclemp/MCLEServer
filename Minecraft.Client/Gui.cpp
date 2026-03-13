@@ -1012,45 +1012,41 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
     if (true)
     {
         // Real window dimensions updated on every WM_SIZE — always current
-        extern int g_rScreenWidth;
-        extern int g_rScreenHeight;
 
         // Set up a fresh projection using physical pixel coordinates so the debug
         // text is never distorted regardless of aspect ratio, splitscreen layout,
         // or menu state. 1 coordinate unit = 1 physical pixel.
         // Compute the actual viewport dimensions for this player's screen section.
         // glOrtho must match the viewport exactly for 1 unit = 1 physical pixel.
-        int vpW = g_rScreenWidth;
-        int vpH = g_rScreenHeight;
-        switch (minecraft->player->m_iScreenSection)
-        {
-        case C4JRender::VIEWPORT_TYPE_SPLIT_TOP:
-        case C4JRender::VIEWPORT_TYPE_SPLIT_BOTTOM:
-            vpH /= 2;
-            break;
-        case C4JRender::VIEWPORT_TYPE_SPLIT_LEFT:
-        case C4JRender::VIEWPORT_TYPE_SPLIT_RIGHT:
-            vpW /= 2;
-            break;
-        case C4JRender::VIEWPORT_TYPE_QUADRANT_TOP_LEFT:
-        case C4JRender::VIEWPORT_TYPE_QUADRANT_TOP_RIGHT:
-        case C4JRender::VIEWPORT_TYPE_QUADRANT_BOTTOM_LEFT:
-        case C4JRender::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT:
-            vpW /= 2;
-            vpH /= 2;
-            break;
-        default: // VIEWPORT_TYPE_FULLSCREEN
-            break;
-        }
+        //switch (minecraft->player->m_iScreenSection)
+        //{
+        //case C4JRender::VIEWPORT_TYPE_SPLIT_TOP:
+        //case C4JRender::VIEWPORT_TYPE_SPLIT_BOTTOM:
+        //    vpH /= 2;
+        //    break;
+        //case C4JRender::VIEWPORT_TYPE_SPLIT_LEFT:
+        //case C4JRender::VIEWPORT_TYPE_SPLIT_RIGHT:
+        //    vpW /= 2;
+        //    break;
+        //case C4JRender::VIEWPORT_TYPE_QUADRANT_TOP_LEFT:
+        //case C4JRender::VIEWPORT_TYPE_QUADRANT_TOP_RIGHT:
+        //case C4JRender::VIEWPORT_TYPE_QUADRANT_BOTTOM_LEFT:
+        //case C4JRender::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT:
+        //    vpW /= 2;
+        //    vpH /= 2;
+        //    break;
+        //default: // VIEWPORT_TYPE_FULLSCREEN
+        //    break;
+        //}
 
-        glMatrixMode(GL_PROJECTION);
-        glPushMatrix();
-        glLoadIdentity();
-        glOrtho(0, vpW, vpH, 0, 1000, 3000);
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadIdentity();
-        glTranslatef(0, 0, -2000);
+        //glMatrixMode(GL_PROJECTION);
+        //glPushMatrix();
+        //glLoadIdentity();
+        //glOrtho(0, vpW, vpH, 0, 1000, 3000);
+        //glMatrixMode(GL_MODELVIEW);
+        //glPushMatrix();
+        //glLoadIdentity();
+        //glTranslatef(0, 0, -2000);
 
         // Font was designed for guiScale px/unit; scale up so characters appear
         // at the same physical size as the rest of the HUD at 0.5x.
@@ -1137,43 +1133,6 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
             lines.push_back(minecraft->gatherStats2());
             lines.push_back(minecraft->gatherStats3());
         }
-
-#ifdef _DEBUG
-        if (minecraft->options->renderDebug && minecraft->player != nullptr && minecraft->level != nullptr && minecraft->level->dimension->id == 0)
-        {
-            wstring wfeature[eTerrainFeature_Count];
-            wfeature[eTerrainFeature_Stronghold] = L"Stronghold: ";
-            wfeature[eTerrainFeature_Mineshaft]  = L"Mineshaft: ";
-            wfeature[eTerrainFeature_Village]    = L"Village: ";
-            wfeature[eTerrainFeature_Ravine]     = L"Ravine: ";
-
-            // maxW in font units: physical width divided by font scale
-            float maxW = (static_cast<float>(g_rScreenWidth) - debugLeft - 8) / fontScale;
-            float maxWForContent = maxW - static_cast<float>(font->width(L"..."));
-            bool truncated[eTerrainFeature_Count] = {};
-
-            for (size_t i = 0; i < app.m_vTerrainFeatures.size(); i++)
-            {
-                FEATURE_DATA *pFeatureData = app.m_vTerrainFeatures[i];
-                int type = pFeatureData->eTerrainFeature;
-                if (type < eTerrainFeature_Stronghold || type > eTerrainFeature_Ravine) continue;
-                if (truncated[type]) continue;
-                wstring itemInfo = L"[" + std::to_wstring(pFeatureData->x * 16) + L", " + std::to_wstring(pFeatureData->z * 16) + L"] ";
-                if (font->width(wfeature[type] + itemInfo) <= maxWForContent)
-                    wfeature[type] += itemInfo;
-                else
-                {
-                    wfeature[type] += L"...";
-                    truncated[type] = true;
-                }
-            }
-
-            lines.push_back(L"");
-            for (int i = eTerrainFeature_Stronghold; i <= static_cast<int>(eTerrainFeature_Ravine); i++)
-                lines.push_back(wfeature[i]);
-            lines.push_back(L"");
-        }
-#endif
 
         int yPos = debugTop;
         for (const auto &line : lines)

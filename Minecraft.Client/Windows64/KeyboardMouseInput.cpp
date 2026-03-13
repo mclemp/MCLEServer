@@ -7,8 +7,6 @@
 
 KeyboardMouseInput g_KBMInput;
 
-extern HWND g_hWnd;
-
 // Forward declaration
 static void ClipCursorToWindow(HWND hWnd);
 
@@ -62,7 +60,6 @@ void KeyboardMouseInput::Init()
 	rid.usUsagePage = 0x01; // HID_USAGE_PAGE_GENERIC
 	rid.usUsage = 0x02;     // HID_USAGE_GENERIC_MOUSE
 	rid.dwFlags = 0;
-	rid.hwndTarget = g_hWnd;
 	RegisterRawInputDevices(&rid, 1, sizeof(rid));
 }
 
@@ -123,17 +120,6 @@ void KeyboardMouseInput::Tick()
 		{
 			if (m_mouseButtonDown[i]) { m_hasInput = true; break; }
 		}
-	}
-
-	if ((m_mouseGrabbed || m_cursorHiddenForUI) && m_windowFocused && g_hWnd)
-	{
-		RECT rc;
-		GetClientRect(g_hWnd, &rc);
-		POINT center;
-		center.x = (rc.right - rc.left) / 2;
-		center.y = (rc.bottom - rc.top) / 2;
-		ClientToScreen(g_hWnd, &center);
-		SetCursorPos(center.x, center.y);
 	}
 }
 
@@ -265,60 +251,12 @@ void KeyboardMouseInput::ConsumeMouseDelta(float &dx, float &dy)
 
 void KeyboardMouseInput::SetMouseGrabbed(bool grabbed)
 {
-	if (m_mouseGrabbed == grabbed)
-		return;
-
-	m_mouseGrabbed = grabbed;
-	if (grabbed && g_hWnd)
-	{
-		while (ShowCursor(FALSE) >= 0) {}
-		ClipCursorToWindow(g_hWnd);
-
-		RECT rc;
-		GetClientRect(g_hWnd, &rc);
-		POINT center;
-		center.x = (rc.right - rc.left) / 2;
-		center.y = (rc.bottom - rc.top) / 2;
-		ClientToScreen(g_hWnd, &center);
-		SetCursorPos(center.x, center.y);
-
-		m_mouseDeltaAccumX = 0;
-		m_mouseDeltaAccumY = 0;
-	}
-	else if (!grabbed && !m_cursorHiddenForUI && g_hWnd)
-	{
-		while (ShowCursor(TRUE) < 0) {}
-		ClipCursor(nullptr);
-	}
+	return;
 }
 
 void KeyboardMouseInput::SetCursorHiddenForUI(bool hidden)
 {
-	if (m_cursorHiddenForUI == hidden)
-		return;
-
-	m_cursorHiddenForUI = hidden;
-	if (hidden && g_hWnd)
-	{
-		while (ShowCursor(FALSE) >= 0) {}
-		ClipCursorToWindow(g_hWnd);
-
-		RECT rc;
-		GetClientRect(g_hWnd, &rc);
-		POINT center;
-		center.x = (rc.right - rc.left) / 2;
-		center.y = (rc.bottom - rc.top) / 2;
-		ClientToScreen(g_hWnd, &center);
-		SetCursorPos(center.x, center.y);
-
-		m_mouseDeltaAccumX = 0;
-		m_mouseDeltaAccumY = 0;
-	}
-	else if (!hidden && !m_mouseGrabbed && g_hWnd)
-	{
-		while (ShowCursor(TRUE) < 0) {}
-		ClipCursor(nullptr);
-	}
+	return;
 }
 
 static void ClipCursorToWindow(HWND hWnd)
@@ -336,25 +274,7 @@ static void ClipCursorToWindow(HWND hWnd)
 
 void KeyboardMouseInput::SetWindowFocused(bool focused)
 {
-	m_windowFocused = focused;
-	if (focused)
-	{
-		if (m_mouseGrabbed || m_cursorHiddenForUI)
-		{
-			while (ShowCursor(FALSE) >= 0) {}
-			ClipCursorToWindow(g_hWnd);
-		}
-		else
-		{
-			while (ShowCursor(TRUE) < 0) {}
-			ClipCursor(nullptr);
-		}
-	}
-	else
-	{
-		while (ShowCursor(TRUE) < 0) {}
-		ClipCursor(nullptr);
-	}
+	return;
 }
 
 float KeyboardMouseInput::GetMoveX() const

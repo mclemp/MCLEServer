@@ -826,20 +826,6 @@ void UIController::tickInput()
                     F32 mouseX = static_cast<F32>(rawMouseX);
                     F32 mouseY = static_cast<F32>(rawMouseY);
 
-                    extern HWND g_hWnd;
-                    if (g_hWnd)
-                    {
-                        RECT rc;
-                        GetClientRect(g_hWnd, &rc);
-                        int winW = rc.right - rc.left;
-                        int winH = rc.bottom - rc.top;
-                        if (winW > 0 && winH > 0)
-                        {
-                            mouseX = mouseX * (m_fScreenWidth / static_cast<F32>(winW));
-                            mouseY = mouseY * (m_fScreenHeight / static_cast<F32>(winH));
-                        }
-                    }
-
 					// Only update hover focus when the mouse has actually moved,
 					// so that mouse-wheel scrolling can change list selection
 					// without the hover immediately snapping focus back.
@@ -853,44 +839,7 @@ void UIController::tickInput()
 					//   1. Map window pixels -> UIController screen space
 					//   2. Subtract the viewport tile origin
 					//   3. Scale from display dimensions to SWF authoring dimensions
-					F32 sceneMouseX = static_cast<F32>(rawMouseX);
-					F32 sceneMouseY = static_cast<F32>(rawMouseY);
-					{
-						extern HWND g_hWnd;
-						RECT rc;
-						if (g_hWnd && GetClientRect(g_hWnd, &rc))
-						{
-							int winW = rc.right - rc.left;
-							int winH = rc.bottom - rc.top;
-							if (winW > 0 && winH > 0)
-							{
-								// Step 1: window pixels -> screen space
-								F32 screenX = sceneMouseX * (getScreenWidth() / static_cast<F32>(winW));
-								F32 screenY = sceneMouseY * (getScreenHeight() / static_cast<F32>(winH));
-
-								// Step 2 & 3: account for split-screen viewport
-								C4JRender::eViewportType vp = pScene->GetParentLayer()->getViewport();
-								S32 displayW = 0, displayH = 0;
-								getRenderDimensions(vp, displayW, displayH);
-
-								F32 vpOriginX, vpOriginY, vpW, vpH;
-								GetViewportRect(getScreenWidth(), getScreenHeight(), vp, vpOriginX, vpOriginY, vpW, vpH);
-								// All viewports use Fit16x9 for menu scenes
-								S32 fitW, fitH, fitOffsetX, fitOffsetY;
-								Fit16x9(vpW, vpH, fitW, fitH, fitOffsetX, fitOffsetY);
-								S32 originX = static_cast<S32>(vpOriginX) + fitOffsetX;
-								S32 originY = static_cast<S32>(vpOriginY) + fitOffsetY;
-								displayW = fitW;
-								displayH = fitH;
-
-								if (displayW > 0 && displayH > 0)
-								{
-									sceneMouseX = (screenX - originX) * (static_cast<F32>(pScene->getRenderWidth()) / static_cast<F32>(displayW));
-									sceneMouseY = (screenY - originY) * (static_cast<F32>(pScene->getRenderHeight()) / static_cast<F32>(displayH));
-								}
-							}
-						}
-					}
+					
 
 					// Get main panel offset (controls are positioned relative to it)
 					S32 panelOffsetX = 0, panelOffsetY = 0;
@@ -943,43 +892,6 @@ void UIController::tickInput()
 								if (cw <= 0 || ch <= 0)
 									continue;
 
-								if (sceneMouseX >= cx && sceneMouseX <= cx + cw &&
-									sceneMouseY >= cy && sceneMouseY <= cy + ch)
-								{
-									if (type == UIControl::eButtonList)
-									{
-										// ButtonList manages focus internally via Flash —
-										// pass mouse coords so it can highlight the right item.
-										static_cast<UIControl_ButtonList*>(ctrl)->SetTouchFocus(
-											static_cast<S32>(sceneMouseX), static_cast<S32>(sceneMouseY), false);
-										hitControlId = -1;
-										hitArea = INT_MAX;
-										hitCtrl = NULL;
-										break; // ButtonList takes priority
-									}
-									if (type == UIControl::eTexturePackList)
-									{
-										// TexturePackList expects coords relative to its origin.
-										UIControl_TexturePackList *pList = static_cast<UIControl_TexturePackList*>(ctrl);
-										pScene->SetFocusToElement(ctrl->getId());
-										pList->SetTouchFocus(
-											static_cast<S32>(sceneMouseX - cx), static_cast<S32>(sceneMouseY - cy), false);
-										m_bMouseHoverHorizontalList = true;
-										hitControlId = -1;
-										hitArea = INT_MAX;
-										hitCtrl = NULL;
-										break;
-									}
-									S32 area = cw * ch;
-									if (area < hitArea)
-									{
-										hitControlId = ctrl->getId();
-										hitArea = area;
-										hitCtrl = ctrl;
-										if (type == UIControl::eSlider)
-											m_bMouseHoverHorizontalList = true;
-									}
-								}
 							}
 
 							if (hitControlId >= 0 && pScene->getControlFocus() != hitControlId)
@@ -1013,109 +925,6 @@ void UIController::tickInput()
 					{
 						m_mouseDraggingSliderScene = eUIScene_COUNT;
 						m_mouseDraggingSliderId = -1;
-					}
-
-					if (leftPressed)
-					{
-						vector<UIControl *> *controls = pScene->GetControls();
-						if (controls)
-						{
-							// Set Iggy dispatch focus for TextInput on click (not hover)
-							// so ACTION_MENU_OK targets the correct text field.
-							for (size_t i = 0; i < controls->size(); ++i)
-							{
-								UIControl *ctrl = (*controls)[i];
-								if (!ctrl || ctrl->getControlType() != UIControl::eTextInput || !ctrl->getVisible())
-									continue;
-								if (pMainPanel && ctrl->getParentPanel() != pMainPanel)
-									continue;
-								ctrl->UpdateControl();
-								S32 cx = ctrl->getXPos() + panelOffsetX;
-								S32 cy = ctrl->getYPos() + panelOffsetY;
-								S32 cw = ctrl->getWidth();
-								S32 ch = ctrl->getHeight();
-								if (cw > 0 && ch > 0 &&
-									sceneMouseX >= cx && sceneMouseX <= cx + cw &&
-									sceneMouseY >= cy && sceneMouseY <= cy + ch)
-								{
-									Iggy *movie = pScene->getMovie();
-									IggyFocusHandle currentFocus = IGGY_FOCUS_NULL;
-									IggyFocusableObject focusables[64];
-									S32 numFocusables = 0;
-									IggyPlayerGetFocusableObjects(movie, &currentFocus, focusables, 64, &numFocusables);
-									for (S32 fi = 0; fi < numFocusables && fi < 64; ++fi)
-									{
-										if (sceneMouseX >= focusables[fi].x0 && sceneMouseX <= focusables[fi].x1 &&
-											sceneMouseY >= focusables[fi].y0 && sceneMouseY <= focusables[fi].y1)
-										{
-											IggyPlayerSetFocusRS(movie, focusables[fi].object, 0);
-											break;
-										}
-									}
-									break;
-								}
-							}
-
-							for (size_t i = 0; i < controls->size(); ++i)
-							{
-								UIControl *ctrl = (*controls)[i];
-								if (!ctrl || ctrl->getControlType() != UIControl::eSlider || !ctrl->getVisible())
-									continue;
-
-								if (pMainPanel && ctrl->getParentPanel() != pMainPanel)
-									continue;
-
-								UIControl_Slider *pSlider = static_cast<UIControl_Slider *>(ctrl);
-								pSlider->UpdateControl();
-								S32 cx = pSlider->getXPos() + panelOffsetX;
-								S32 cy = pSlider->getYPos() + panelOffsetY;
-								S32 cw = pSlider->GetRealWidth();
-								S32 ch = pSlider->getHeight();
-								if (cw <= 0 || ch <= 0)
-									continue;
-
-								if (sceneMouseX >= cx && sceneMouseX <= cx + cw && sceneMouseY >= cy && sceneMouseY <= cy + ch)
-								{
-									m_mouseDraggingSliderScene = pScene->getSceneType();
-									m_mouseDraggingSliderId = pSlider->getId();
-									break;
-								}
-							}
-						}
-					}
-
-					if (leftDown && m_mouseDraggingSliderScene == pScene->getSceneType() && m_mouseDraggingSliderId >= 0)
-					{
-						UIControl_Slider *pSlider = FindSliderById(pScene, m_mouseDraggingSliderId);
-						if (pSlider && pSlider->getVisible())
-						{
-							pSlider->UpdateControl();
-							S32 sliderX = pSlider->getXPos() + panelOffsetX;
-							S32 sliderWidth = pSlider->GetRealWidth();
-							if (sliderWidth > 0)
-							{
-								float fNewSliderPos = (sceneMouseX - static_cast<float>(sliderX)) / static_cast<float>(sliderWidth);
-								if (fNewSliderPos < 0.0f) fNewSliderPos = 0.0f;
-								if (fNewSliderPos > 1.0f) fNewSliderPos = 1.0f;
-								pSlider->SetSliderTouchPos(fNewSliderPos);
-							}
-						}
-						else
-						{
-							m_mouseDraggingSliderScene = eUIScene_COUNT;
-							m_mouseDraggingSliderId = -1;
-						}
-					}
-					else if (!leftDown)
-					{
-						m_mouseDraggingSliderScene = eUIScene_COUNT;
-						m_mouseDraggingSliderId = -1;
-					}
-
-					// Let the scene handle mouse clicks for custom navigation (e.g. crafting slots)
-					if (leftPressed && m_mouseDraggingSliderId < 0)
-					{
-						m_mouseClickConsumedByScene = pScene->handleMouseClick(sceneMouseX, sceneMouseY);
 					}
 				}
 			}

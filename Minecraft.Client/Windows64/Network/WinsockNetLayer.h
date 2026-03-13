@@ -163,7 +163,6 @@ public:
 	static void ClearSocketForSmallId(BYTE smallId);
 };
 
-extern bool g_Win64MultiplayerHost;
 extern bool g_Win64MultiplayerJoin;
 extern int g_Win64MultiplayerPort;
 extern char g_Win64MultiplayerIP[256];

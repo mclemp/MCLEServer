@@ -263,23 +263,7 @@ void UIScene_AbstractContainerMenu::render(S32 width, S32 height, C4JRender::eVi
 
 void UIScene_AbstractContainerMenu::getMouseToSWFScale(float &scaleX, float &scaleY)
 {
-	extern HWND g_hWnd;
-	RECT rc;
-	GetClientRect(g_hWnd, &rc);
-	int winW = rc.right - rc.left;
-	int winH = rc.bottom - rc.top;
-	if(winW <= 0 || winH <= 0) { scaleX = 1.0f; scaleY = 1.0f; return; }
-
-	S32 renderW, renderH;
-	C4JRender::eViewportType vp = GetParentLayer()->getViewport();
-	ui.getRenderDimensions(vp, renderW, renderH);
-	if(vp != C4JRender::VIEWPORT_TYPE_FULLSCREEN)
-		Fit16x9(renderW, renderH);
-
-	float screenW = (float)ui.getScreenWidth();
-	float screenH = (float)ui.getScreenHeight();
-	scaleX = static_cast<float>(m_movieWidth) * screenW / (static_cast<float>(renderW) * static_cast<float>(winW));
-	scaleY = static_cast<float>(m_movieHeight) * screenH / (static_cast<float>(renderH) * static_cast<float>(winH));
+	
 }
 
 void UIScene_AbstractContainerMenu::customDraw(IggyCustomDrawCallbackRegion *region)

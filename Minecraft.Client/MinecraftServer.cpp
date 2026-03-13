@@ -87,11 +87,7 @@ unordered_map<wstring, int> MinecraftServer::ironTimers;
 
 static bool ShouldUseDedicatedServerProperties()
 {
-#ifdef _WINDOWS64
-	return g_Win64DedicatedServer;
-#else
-	return false;
-#endif
+	return true;
 }
 
 static int GetDedicatedServerInt(Settings *settings, const wchar_t *key, int defaultValue)
