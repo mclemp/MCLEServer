@@ -228,7 +228,7 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
     Font *font = minecraft->font;
 
 
-    minecraft->gameRenderer->setupGuiScreen(guiScale);
+    //minecraft->gameRenderer->setupGuiScreen(guiScale);
 
 
 

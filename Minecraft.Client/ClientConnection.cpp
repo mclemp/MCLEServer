@@ -2964,7 +2964,7 @@ void ClientConnection::handleRespawn(shared_ptr<RespawnPacket> packet)
 	// in there assume that we are set up for the player that the respawn is coming in for
 	int oldIndex = minecraft->getLocalPlayerIdx();
 	minecraft->setLocalPlayerIdx(m_userIndex);
-	minecraft->respawnPlayer(minecraft->localplayers[m_userIndex]->GetXboxPad(),packet->dimension,packet->m_newEntityId);
+	//minecraft->respawnPlayer(minecraft->localplayers[m_userIndex]->GetXboxPad(),packet->dimension,packet->m_newEntityId);
 	((MultiPlayerGameMode *) minecraft->localgameModes[m_userIndex])->setLocalMode(packet->playerGameType);
 	minecraft->setLocalPlayerIdx(oldIndex);
 }

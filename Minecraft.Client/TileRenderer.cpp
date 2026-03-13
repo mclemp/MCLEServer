@@ -878,16 +878,6 @@ bool TileRenderer::tesselateFlowerPotInWorld(FlowerPotTile *tt, int x, int y, in
 	float g = ((col >> 8) & 0xff) / 255.0f;
 	float b = ((col) & 0xff) / 255.0f;
 
-	if (GameRenderer::anaglyph3d)
-	{
-		float cr = (r * 30 + g * 59 + b * 11) / 100;
-		float cg = (r * 30 + g * 70) / (100);
-		float cb = (r * 30 + b * 70) / (100);
-
-		r = cr;
-		g = cg;
-		b = cb;
-	}
 	t->color(br * r, br * g, br * b);
 
 	// render inside
@@ -1014,16 +1004,6 @@ bool TileRenderer::tesselateAnvilInWorld(AnvilTile *tt, int x, int y, int z, int
 	float g = ((col >> 8) & 0xff) / 255.0f;
 	float b = ((col) & 0xff) / 255.0f;
 
-	if (GameRenderer::anaglyph3d)
-	{
-		float cr = (r * 30 + g * 59 + b * 11) / 100;
-		float cg = (r * 30 + g * 70) / (100);
-		float cb = (r * 30 + b * 70) / (100);
-
-		r = cr;
-		g = cg;
-		b = cb;
-	}
 	t->color(br * r, br * g, br * b);
 
 	return tesselateAnvilInWorld(tt, x, y, z, data, false);
@@ -3226,16 +3206,6 @@ bool TileRenderer::tesselateThinPaneInWorld(Tile *tt, int x, int y, int z)
 	float g = ((col >> 8) & 0xff) / 255.0f;
 	float b = ((col) & 0xff) / 255.0f;
 
-	if (GameRenderer::anaglyph3d)
-	{
-		float cr = (r * 30 + g * 59 + b * 11) / 100;
-		float cg = (r * 30 + g * 70) / (100);
-		float cb = (r * 30 + b * 70) / (100);
-
-		r = cr;
-		g = cg;
-		b = cb;
-	}
 	t->color(r, g, b);
 
 	Icon *tex;
@@ -3647,16 +3617,6 @@ bool TileRenderer::tesselateThinFenceInWorld( ThinFenceTile* tt, int x, int y, i
 	float			g = ( ( col >> 8 ) & 0xff ) / 255.0f;
 	float			b = ( ( col )& 0xff ) / 255.0f;
 
-	if ( GameRenderer::anaglyph3d )
-	{
-		float	cr = ( r * 30 + g * 59 + b * 11 ) / 100;
-		float	cg = ( r * 30 + g * 70 ) / ( 100 );
-		float	cb = ( r * 30 + b * 70 ) / ( 100 );
-
-		r = cr;
-		g = cg;
-		b = cb;
-	}
 	t->color( br * r, br * g, br * b );
 
 	Icon *tex;
@@ -4149,16 +4109,6 @@ bool TileRenderer::tesselateCrossInWorld( Tile* tt, int x, int y, int z )
 	float		g = ( ( col >> 8 ) & 0xff ) / 255.0f;
 	float		b = ( ( col )& 0xff ) / 255.0f;
 
-	if ( GameRenderer::anaglyph3d )
-	{
-		float	cr = ( r * 30 + g * 59 + b * 11 ) / 100;
-		float	cg = ( r * 30 + g * 70 ) / ( 100 );
-		float	cb = ( r * 30 + b * 70 ) / ( 100 );
-
-		r = cr;
-		g = cg;
-		b = cb;
-	}
 	t->color( br * r, br * g, br * b );
 
 	float		xt = static_cast<float>(x);
@@ -4199,16 +4149,6 @@ bool TileRenderer::tesselateStemInWorld( Tile* _tt, int x, int y, int z )
 	float		g = ( ( col >> 8 ) & 0xff ) / 255.0f;
 	float		b = ( ( col )& 0xff ) / 255.0f;
 
-	if ( GameRenderer::anaglyph3d )
-	{
-		float	cr = ( r * 30.0f + g * 59.0f + b * 11.0f ) / 100.0f;
-		float	cg = ( r * 30.0f + g * 70.0f ) / ( 100.0f );
-		float	cb = ( r * 30.0f + b * 70.0f ) / ( 100.0f );
-
-		r = cr;
-		g = cg;
-		b = cb;
-	}
 	t->color( br * r, br * g, br * b );
 
 	tt->updateShape( level, x, y, z );
@@ -4885,17 +4825,6 @@ bool TileRenderer::tesselateBlockInWorld( Tile* tt, int x, int y, int z )
 	float	g = ( ( col >> 8 ) & 0xff ) / 255.0f;
 	float	b = ( ( col )& 0xff ) / 255.0f;
 
-	if ( GameRenderer::anaglyph3d )
-	{
-		float	cr = ( r * 30 + g * 59 + b * 11 ) / 100;
-		float	cg = ( r * 30 + g * 70 ) / ( 100 );
-		float	cb = ( r * 30 + b * 70 ) / ( 100 );
-
-		r = cr;
-		g = cg;
-		b = cb;
-	}
-
 	if ( Tile::lightEmission[tt->id] == 0 )//4J - TODO/remove (Minecraft::useAmbientOcclusion())
 	{
 		return tesselateBlockInWorldWithAmbienceOcclusionTexLighting(tt, x, y, z, r, g, b, 0, smoothShapeLighting);
@@ -4913,17 +4842,6 @@ bool TileRenderer::tesselateBlockInWorld( Tile* tt, int x, int y, int z, int fac
 	float	r = ( ( col >> 16 ) & 0xff ) / 255.0f;
 	float	g = ( ( col >> 8 ) & 0xff ) / 255.0f;
 	float	b = ( ( col )& 0xff ) / 255.0f;
-
-	if ( GameRenderer::anaglyph3d )
-	{
-		float	cr = ( r * 30 + g * 59 + b * 11 ) / 100;
-		float	cg = ( r * 30 + g * 70 ) / ( 100 );
-		float	cb = ( r * 30 + b * 70 ) / ( 100 );
-
-		r = cr;
-		g = cg;
-		b = cb;
-	}
 
 	if ( Tile::lightEmission[tt->id] == 0 )//4J - TODO/remove (Minecraft::useAmbientOcclusion())
 	{
@@ -6305,17 +6223,6 @@ bool TileRenderer::tesselateCactusInWorld( Tile* tt, int x, int y, int z )
 	float	g = ( ( col >> 8 ) & 0xff ) / 255.0f;
 	float	b = ( ( col )& 0xff ) / 255.0f;
 
-	if ( GameRenderer::anaglyph3d )
-	{
-		float	cr = ( r * 30 + g * 59 + b * 11 ) / 100;
-		float	cg = ( r * 30 + g * 70 ) / ( 100 );
-		float	cb = ( r * 30 + b * 70 ) / ( 100 );
-
-		r = cr;
-		g = cg;
-		b = cb;
-	}
-
 	return tesselateCactusInWorld( tt, x, y, z, r, g, b );
 }
 
@@ -6806,16 +6713,6 @@ bool TileRenderer::tesselateHopperInWorld(Tile *tt, int x, int y, int z)
 	float g = ((col >> 8) & 0xff) / 255.0f;
 	float b = ((col) & 0xff) / 255.0f;
 
-	if (GameRenderer::anaglyph3d)
-	{
-		float cr = (r * 30 + g * 59 + b * 11) / 100;
-		float cg = (r * 30 + g * 70) / (100);
-		float cb = (r * 30 + b * 70) / (100);
-
-		r = cr;
-		g = cg;
-		b = cb;
-	}
 	t->color(br * r, br * g, br * b);
 
 	return tesselateHopperInWorld(tt, x, y, z, level->getData(x, y, z), false);
@@ -6884,15 +6781,6 @@ bool TileRenderer::tesselateHopperInWorld(Tile *tt, int x, int y, int z, int dat
 		float g = ((col >> 8) & 0xff) / 255.0f;
 		float b = ((col) & 0xff) / 255.0f;
 
-		if (GameRenderer::anaglyph3d) {
-			float cr = (r * 30 + g * 59 + b * 11) / 100;
-			float cg = (r * 30 + g * 70) / (100);
-			float cb = (r * 30 + b * 70) / (100);
-
-			r = cr;
-			g = cg;
-			b = cb;
-		}
 		t->color(br * r, br * g, br * b);
 	}
 

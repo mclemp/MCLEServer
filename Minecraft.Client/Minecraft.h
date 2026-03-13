@@ -287,7 +287,6 @@ public:
 	wstring gatherStats3();
 	wstring gatherStats4();
 
-	void respawnPlayer(int iPad,int dimension,int newEntityId);
 	static void start(const wstring& name, const wstring& sid);
 	static void startAndConnectTo(const wstring& name, const wstring& sid, const wstring& url);
 	ClientConnection *getConnection(int iPad); // 4J Stu added iPad param

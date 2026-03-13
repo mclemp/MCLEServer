@@ -351,7 +351,7 @@ void Minecraft::init()
 	//GrassColor::init(textures->loadTexturePixels(L"misc/grasscolor.png"));
 	//FoliageColor::init(textures->loadTexturePixels(L"misc/foliagecolor.png"));
 
-	//gameRenderer = new GameRenderer(this);
+	gameRenderer = new GameRenderer(this);
 	//EntityRenderDispatcher::instance->itemInHandRenderer = new ItemInHandRenderer(this,false);
 
 	for( int i=0 ; i<4 ; ++i )
@@ -794,18 +794,6 @@ void Minecraft::run()
 // 4J added - Selects which local player is currently active for processing by the existing minecraft code
 bool Minecraft::setLocalPlayerIdx(int idx)
 {
-	localPlayerIdx = idx;
-	// If the player is not null, but the game mode is then this is just a temp player
-	// whose only real purpose is to hold the viewport position
-	if( localplayers[idx] == nullptr || localgameModes[idx] == nullptr ) return false;
-
-	gameMode = localgameModes[idx];
-	player = localplayers[idx];
-	cameraTargetPlayer = localplayers[idx];
-	gameRenderer->itemInHandRenderer = localitemInHandRenderers[idx];
-	level = getLevel( localplayers[idx]->dimension );
-	particleEngine->setLevel( level );
-
 	return true;
 }
 
@@ -1961,7 +1949,7 @@ void Minecraft::run_middle()
 					{
 						PIXBeginNamedEvent(0,"Game render player idx %d",i);
 						RenderManager.StateSetViewport(static_cast<C4JRender::eViewportType>(player->m_iScreenSection));
-						gameRenderer->render(timer->a, bFirst);
+						//gameRenderer->render(timer->a, bFirst);
 						bFirst = false;
 						PIXEndNamedEvent();
 
@@ -2302,8 +2290,8 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 	// 4J added
 	if( bFirst ) levelRenderer->destroyedTileManager->tick();
 
-	gui->tick();
-	gameRenderer->pick(1);
+	//gui->tick();
+	//gameRenderer->pick(1);
 #if 0
 	// 4J - removed - we don't use ChunkCache anymore
 	if (player != nullptr)
@@ -4030,7 +4018,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 		}
 
 		PIXBeginNamedEvent(0,"Game renderer tick");
-		if (!pause) gameRenderer->tick( bFirst);
+		//if (!pause) gameRenderer->tick( bFirst);
 		PIXEndNamedEvent();
 
 		// 4J - we want to tick each level once only per frame, and do it when a player that is actually in that level happens to be active.
@@ -4534,120 +4522,6 @@ wstring Minecraft::gatherStats3()
 wstring Minecraft::gatherStats4()
 {
 	return level->gatherChunkSourceStats();
-}
-
-void Minecraft::respawnPlayer(int iPad, int dimension, int newEntityId)
-{
-	gameRenderer->DisableUpdateThread(); // 4J - don't do updating whilst we are adjusting the player & localplayer array
-	shared_ptr<MultiplayerLocalPlayer> localPlayer = localplayers[iPad];
-
-	level->validateSpawn();
-	level->removeAllPendingEntityRemovals();
-
-	if (localPlayer != nullptr)
-	{
-		level->removeEntity(localPlayer);
-	}
-
-	shared_ptr<Player> oldPlayer = localPlayer;
-	cameraTargetPlayer = nullptr;
-
-	// 4J-PB - copy and set the players xbox pad
-	int iTempPad=localPlayer->GetXboxPad();
-	int iTempScreenSection = localPlayer->m_iScreenSection;
-	EDefaultSkins skin = localPlayer->getPlayerDefaultSkin();
-	player = localgameModes[iPad]->createPlayer(level);
-
-	PlayerUID playerXUIDOffline = INVALID_XUID;
-	PlayerUID playerXUIDOnline = INVALID_XUID;
-	ProfileManager.GetXUID(iTempPad,&playerXUIDOffline,false);
-	ProfileManager.GetXUID(iTempPad,&playerXUIDOnline,true);
-#ifdef _WINDOWS64
-	// Same compatibility rule as create/init paths.
-	INetworkPlayer *localNetworkPlayer = g_NetworkManager.GetLocalPlayerByUserIndex(iTempPad);
-	if(localNetworkPlayer != nullptr && localNetworkPlayer->IsHost())
-	{
-		playerXUIDOffline = Win64Xuid::GetLegacyEmbeddedHostXuid();
-	}
-	else
-	{
-		playerXUIDOffline = Win64Xuid::ResolvePersistentXuid();
-	}
-#endif
-	player->setXuid(playerXUIDOffline);
-	player->setOnlineXuid(playerXUIDOnline);
-	player->setIsGuest( ProfileManager.IsGuest(iTempPad) );
-
-	player->m_displayName = ProfileManager.GetDisplayName(iPad);
-
-	player->SetXboxPad(iTempPad);
-
-	player->m_iScreenSection = iTempScreenSection;
-	player->setPlayerIndex( localPlayer->getPlayerIndex() );
-	player->setCustomSkin(localPlayer->getCustomSkin());
-	player->setPlayerDefaultSkin( skin );
-	player->setCustomCape(localPlayer->getCustomCape());
-	player->m_sessionTimeStart = localPlayer->m_sessionTimeStart;
-	player->m_dimensionTimeStart = localPlayer->m_dimensionTimeStart;
-	player->setPlayerGamePrivilege(Player::ePlayerGamePrivilege_All, localPlayer->getAllPlayerGamePrivileges());
-
-	player->SetThirdPersonView(oldPlayer->ThirdPersonView());
-
-	// Fix for #63021 - TU7: Content: UI: Travelling from/to the Nether results in switching currently held item to another.
-	// Fix for #81759 - TU9: Content: Gameplay: Entering The End Exit Portal replaces the Player's currently held item with the first one from the Quickbar
-	if( localPlayer->getHealth() > 0 && localPlayer->y > -64)
-	{
-		player->inventory->selected = localPlayer->inventory->selected;
-	}
-
-	// Set the animation override if the skin has one
-	DWORD dwSkinID=app.getSkinIdFromPath(player->customTextureUrl);
-	if(GET_IS_DLC_SKIN_FROM_BITMASK(dwSkinID))
-	{
-		player->setAnimOverrideBitmask(player->getSkinAnimOverrideBitmask(dwSkinID));
-	}
-
-	player->dimension = dimension;
-	cameraTargetPlayer = player;
-
-	// 4J-PB - are we the primary player or a local player?
-	if(iPad==ProfileManager.GetPrimaryPad())
-	{
-		createPrimaryLocalPlayer(iPad);
-
-		// update the debugoptions
-		app.SetGameSettingsDebugMask(ProfileManager.GetPrimaryPad(),app.GetGameSettingsDebugMask(-1,true));
-	}
-	else
-	{
-		storeExtraLocalPlayer(iPad);
-	}
-
-	player->setShowOnMaps(app.GetGameHostOption(eGameHostOption_Gamertags)!=0?true:false);
-
-	player->resetPos();
-	level->addEntity(player);
-	gameMode->initPlayer(player);
-
-	if(player->input != nullptr) delete player->input;
-	player->input = new Input();
-	player->entityId = newEntityId;
-	player->animateRespawn();
-	gameMode->adjustPlayer(player);
-
-	// 4J - added isClientSide check here
-	if (!level->isClientSide)
-	{
-		prepareLevel(IDS_PROGRESS_RESPAWNING);
-	}
-
-	// 4J Added for multiplayer. At this point we know everything is ready to run again
-	//SetEvent(m_hPlayerRespawned);
-	player->SetPlayerRespawned(true);
-
-	if (dynamic_cast<DeathScreen *>(screen) != nullptr) setScreen(nullptr);
-
-	gameRenderer->EnableUpdateThread();
 }
 
 void Minecraft::start(const wstring& name, const wstring& sid)

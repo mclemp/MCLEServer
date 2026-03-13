@@ -272,21 +272,6 @@ void UIScene_DebugOverlay::handleSliderMove(F64 sliderId, F64 currentValue)
 			m_sliderTime.setLabel(tempString);
 		}
 		break;
-	case eControl_FOV:
-		{
-			Minecraft *pMinecraft = Minecraft::GetInstance();
-			int v = static_cast<int>(currentValue);
-			if (v < 0) v = 0;
-			if (v > 100) v = 100;
-			int fovDeg = 70 + v * 40 / 100;
-			pMinecraft->gameRenderer->SetFovVal(static_cast<float>(fovDeg));
-			app.SetGameSettings(m_iPad, eGameSetting_FOV, v);
-
-			WCHAR tempString[256];
-			swprintf( tempString, 256, L"Set fov (%d)", fovDeg);
-			m_sliderFov.setLabel(tempString);
-		}
-		break;
 	};
 }
 #endif

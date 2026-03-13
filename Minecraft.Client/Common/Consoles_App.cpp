@@ -1402,8 +1402,8 @@ void CMinecraftApp::ActionGameSettings(int iPad,eGameSetting eVal)
 		if(iPad==ProfileManager.GetPrimaryPad())
 		{
 			float fovDeg = 70.0f + (float)GameSettingsA[iPad]->ucFov * 40.0f / 100.0f;
-			pMinecraft->gameRenderer->SetFovVal(fovDeg);
-			pMinecraft->options->set(Options::Option::FOV, (float)GameSettingsA[iPad]->ucFov / 100.0f);
+			//pMinecraft->gameRenderer->SetFovVal(fovDeg);
+			//pMinecraft->options->set(Options::Option::FOV, (float)GameSettingsA[iPad]->ucFov / 100.0f);
 		}
 		break;
 	case eGameSetting_Difficulty:		
@@ -3338,61 +3338,6 @@ void CMinecraftApp::HandleXuiActions(void)
 			case eAppAction_ExitTrial:
 				//XLaunchNewImage(XLAUNCH_KEYWORD_DASH_ARCADE, 0);
 				ExitGame();
-				break;
-
-			case eAppAction_Respawn:
-				{
-					ConnectionProgressParams *param = new ConnectionProgressParams();
-					param->iPad = i;
-					param->stringId = IDS_PROGRESS_RESPAWNING;
-					param->showTooltips = false;
-					param->setFailTimer = false;
-					ui.NavigateToScene(i,eUIScene_ConnectingProgress, param);
-
-					// Need to reset this incase the player has already died and respawned
-					pMinecraft->localplayers[i]->SetPlayerRespawned(false);
-
-					SetAction(i,eAppAction_WaitForRespawnComplete);
-					if( app.GetLocalPlayerCount()>1 )
-					{
-						// In split screen mode, we don't want to do any async loading or flushing of the cache, just a simple respawn
-						pMinecraft->localplayers[i]->respawn();
-
-						// If the respawn requires a dimension change then the action will have changed
-						//if(app.GetXuiAction(i) == eAppAction_Respawn)
-						//{
-						//	SetAction(i,eAppAction_Idle);
-						//	CloseXuiScenes(i);
-						//}
-					}
-					else
-					{
-						//SetAction(i,eAppAction_WaitForRespawnComplete);
-
-						//LoadingInputParams *loadingParams = new LoadingInputParams();
-						//loadingParams->func = &CScene_Death::RespawnThreadProc;
-						//loadingParams->lpParam = (LPVOID)i;
-
-						// Disable game & update thread whilst we do any of this
-						//app.SetGameStarted(false);
-						pMinecraft->gameRenderer->DisableUpdateThread();
-
-						// 4J Stu - We don't need this on a thread in multiplayer as respawning is asynchronous.
-						pMinecraft->localplayers[i]->respawn();
-
-						//app.SetGameStarted(true);
-						pMinecraft->gameRenderer->EnableUpdateThread();
-
-						//UIFullscreenProgressCompletionData *completionData = new UIFullscreenProgressCompletionData();
-						//completionData->bShowBackground=TRUE;
-						//completionData->bShowLogo=TRUE;
-						//completionData->type = e_ProgressCompletion_CloseUIScenes;
-						//completionData->iPad = i;
-						//loadingParams->completionData = completionData;
-
-						//app.NavigateToScene(i,eUIScene_FullscreenProgress, loadingParams, true);
-					}
-				}
 				break;
 			case eAppAction_WaitForRespawnComplete:
 				player = pMinecraft->localplayers[i];

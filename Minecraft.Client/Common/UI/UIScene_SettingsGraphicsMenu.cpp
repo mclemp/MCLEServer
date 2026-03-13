@@ -215,19 +215,6 @@ void UIScene_SettingsGraphicsMenu::handleSliderMove(F64 sliderId, F64 currentVal
 
 		break;
 
-	case eControl_FOV:
-		{
-			m_sliderFOV.handleSliderMove(value);
-			const Minecraft* pMinecraft = Minecraft::GetInstance();
-			const int fovValue = sliderValueToFov(value);
-			pMinecraft->gameRenderer->SetFovVal(static_cast<float>(fovValue));
-			app.SetGameSettings(m_iPad, eGameSetting_FOV, value);
-			WCHAR tempString[256];
-			swprintf(tempString, 256, L"FOV: %d", fovValue);
-			m_sliderFOV.setLabel(tempString);
-		}
-		break;
-
 	case eControl_InterfaceOpacity:
 		m_sliderInterfaceOpacity.handleSliderMove(value);
 		
