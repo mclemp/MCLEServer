@@ -6,7 +6,6 @@
 #include "System.h"
 #include "BiomeSource.h"
 #include "..\Minecraft.Client\Minecraft.h"
-#include "..\Minecraft.Client\ProgressRenderer.h"
 
 // 4J - removal of separate temperature & downfall layers brought forward from 1.2.3
 void BiomeSource::_init()
@@ -419,9 +418,6 @@ int64_t BiomeSource::findSeed(LevelType *generator)
 
 	int64_t bestSeed = 0;
 
-	ProgressRenderer *mcprogress = Minecraft::GetInstance()->progressRenderer;
-	mcprogress->progressStage(IDS_PROGRESS_NEW_WORLD_SEED);
-
 #ifndef _CONTENT_PACKAGE
 	if(app.DebugSettingsOn() && app.GetGameSettingsDebugMask(ProfileManager.GetPrimaryPad())&(1L<<eDebugSetting_EnableBiomeOverride))
 	{
@@ -468,7 +464,6 @@ int64_t BiomeSource::findSeed(LevelType *generator)
 				delete biomeSource;
 				tryCount++;
 
-				mcprogress->progressStagePercentage( tryCount % 100 );
 #ifdef __PSVITA__
 			} while (!matchFound && *pServerRunning);
 #else

@@ -8,7 +8,6 @@
 #include "ChoiceTask.h"
 #include "..\..\..\Minecraft.World\Material.h"
 #include "..\..\Windows64\KeyboardMouseInput.h"
-#include "Common/UI/UI.h"
 
 ChoiceTask::ChoiceTask(Tutorial *tutorial, int descriptionId, int promptId /*= -1*/, bool requiresUserInput /*= false*/,
                        int iConfirmMapping /*= 0*/, int iCancelMapping /*= 0*/,
@@ -48,11 +47,7 @@ bool ChoiceTask::isCompleted()
 		return true;
 	}	
 	
-	if(ui.GetMenuDisplayed(tutorial->getPad()))
-	{
-		// If a menu is displayed, then we use the handleUIInput to complete the task
-	}
-	else
+	
 	{
 		// If the player is under water then allow all keypresses so they can jump out
 		if (pMinecraft->localplayers[tutorial->getPad()]->isUnderLiquid(Material::water)) return false;

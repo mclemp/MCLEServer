@@ -8,7 +8,6 @@
 #include "..\Minecraft.World\File.h"
 #include "..\Minecraft.World\StringHelpers.h"
 #include "Minimap.h"
-#include "Common/UI/UI.h"
 
 TexturePack *TexturePackRepository::DEFAULT_TEXTURE_PACK = nullptr;
 
@@ -423,7 +422,6 @@ void TexturePackRepository::updateUI()
 		lastSelected->unloadUI();
 		selected->loadUI();
 		Minimap::reloadColours();
-		ui.StartReloadSkinThread();
 		lastSelected = nullptr;
 	}
 }

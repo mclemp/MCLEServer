@@ -37,7 +37,6 @@
 #include "..\Minecraft.World\Pos.h"
 #include "..\Minecraft.World\Socket.h"
 #include "Minecraft.h"
-#include "ProgressRenderer.h"
 #include "LevelRenderer.h"
 #include "Options.h"
 #include "MinecraftServer.h"
@@ -48,7 +47,6 @@
 #ifdef _XBOX
 #include "Common\XUI\XUI_Scene_Trading.h"
 #else
-#include "Common\UI\UI.h"
 #endif
 #ifdef __PS3__
 #include "PS3/Network/SonyVoiceChat.h"
@@ -227,11 +225,6 @@ void ClientConnection::handleLogin(shared_ptr<LoginPacket> packet)
 	if(!g_NetworkManager.IsLocalGame())
 	{
 		pMojangData=app.GetMojangDataForXuid(OnlineXuid);
-	}
-
-	if(!g_NetworkManager.IsHost() )
-	{
-		Minecraft::GetInstance()->progressRenderer->progressStagePercentage((eCCLoginReceived * 100)/ (eCCConnected));
 	}
 
 	// 4J-PB - load the local player skin (from the global title user storage area) if there is one
@@ -464,11 +457,6 @@ void ClientConnection::handleLogin(shared_ptr<LoginPacket> packet)
 	((MultiPlayerGameMode *)minecraft->localgameModes[m_userIndex])->setLocalMode(GameType::byId(packet->gameType));
 	minecraft->player = lastPlayer;
 
-	// make sure the UI offsets for this player are set correctly
-	if(iUserID!=-1)
-	{
-		ui.UpdateSelectedItemPos(iUserID);
-	}
 
 	TelemetryManager->RecordLevelStart(m_userIndex, eSen_FriendOrMatch_Playing_With_Invited_Friends, eSen_CompeteOrCoop_Coop_and_Competitive, Minecraft::GetInstance()->getLevel(packet->dimension)->difficulty, app.GetLocalPlayerCount(), g_NetworkManager.GetOnlinePlayerCount());
 }
@@ -1156,11 +1144,6 @@ void ClientConnection::handleMovePlayer(shared_ptr<MovePlayerPacket> packet)
 	connection->send(packet);
 	if (!started)
 	{
-
-		if(!g_NetworkManager.IsHost() )
-		{
-			Minecraft::GetInstance()->progressRenderer->progressStagePercentage((eCCConnected * 100)/ (eCCConnected));
-		}
 		player->xo = player->x;
 		player->yo = player->y;
 		player->zo = player->z;
@@ -1175,10 +1158,6 @@ void ClientConnection::handleMovePlayer(shared_ptr<MovePlayerPacket> packet)
 		// Fix for #105852 - TU12: Content: Gameplay: Local splitscreen Players are spawned at incorrect places after re-joining previously saved and loaded "Mass Effect World".
 		// Move this check from Minecraft::createExtraLocalPlayer
 		// 4J-PB - can't call this when this function is called from the qnet thread (GetGameStarted will be false)
-		if(app.GetGameStarted())
-		{
-			ui.CloseUIScenes(m_userIndex);
-		}
 	}
 
 }
@@ -1434,7 +1413,6 @@ void ClientConnection::onDisconnect(DisconnectPacket::eDisconnectReason reason, 
 	{
 		UINT uiIDA[1];
 		uiIDA[0]=IDS_CONFIRM_OK;
-		ui.RequestErrorMessage(IDS_EXITING_GAME, IDS_GENERIC_ERROR, uiIDA, 1, ProfileManager.GetPrimaryPad(),&ClientConnection::HostDisconnectReturned,nullptr);
 	}
 	else
 	{
@@ -1941,7 +1919,6 @@ void ClientConnection::handleChat(shared_ptr<ChatPacket> packet)
 	// flag that a message is a death message
 	bool bIsDeathMessage = (packet->m_messageType>=ChatPacket::e_ChatDeathInFire) && (packet->m_messageType<=ChatPacket::e_ChatDeathIndirectMagicItem);
 
-	if( displayOnGui ) minecraft->gui->addMessage(message,m_userIndex, bIsDeathMessage);
 }
 
 void ClientConnection::handleAnimate(shared_ptr<AnimatePacket> packet)
@@ -2372,8 +2349,6 @@ void ClientConnection::handlePreLogin(shared_ptr<PreLoginPacket> packet)
 			app.DebugPrintf("Exiting player %d on handling Pre-Login packet due UGC privileges: %d\n", m_userIndex, reason);
 			UINT uiIDA[1];
 			uiIDA[0]=IDS_CONFIRM_OK;
-			if(!isFriendsWithHost) ui.RequestErrorMessage( IDS_CANTJOIN_TITLE, IDS_NOTALLOWED_FRIENDSOFFRIENDS, uiIDA,1,m_userIndex);
-			else ui.RequestErrorMessage( IDS_CANTJOIN_TITLE, IDS_NO_USER_CREATED_CONTENT_PRIVILEGE_SINGLE_LOCAL, uiIDA,1,m_userIndex);
 
 			app.SetDisconnectReason( reason );
 
@@ -2413,10 +2388,6 @@ void ClientConnection::handlePreLogin(shared_ptr<PreLoginPacket> packet)
 			}
 		}
 
-		if(!g_NetworkManager.IsHost() )
-		{
-			Minecraft::GetInstance()->progressRenderer->progressStagePercentage((eCCPreLoginReceived * 100)/ (eCCConnected));
-		}
 		// need to use the XUID here
 		PlayerUID offlineXUID = INVALID_XUID;
 		PlayerUID onlineXUID = INVALID_XUID;
@@ -2446,10 +2417,6 @@ void ClientConnection::handlePreLogin(shared_ptr<PreLoginPacket> packet)
 		send(std::make_shared<LoginPacket>(minecraft->user->name, SharedConstants::NETWORK_PROTOCOL_VERSION, offlineXUID, onlineXUID, (allAllowed != TRUE && friendsAllowed == TRUE),
                                            packet->m_ugcPlayersVersion, app.GetPlayerSkinId(m_userIndex), app.GetPlayerCapeId(m_userIndex), ProfileManager.IsGuest(m_userIndex)));
 
-		if(!g_NetworkManager.IsHost() )
-		{
-			Minecraft::GetInstance()->progressRenderer->progressStagePercentage((eCCLoginSent * 100)/ (eCCConnected));
-		}
 	}
 #else
 	// 4J - removed
@@ -2640,10 +2607,6 @@ void ClientConnection::handleSetHealth(shared_ptr<SetHealthPacket> packet)
 	// We need food
 	if(packet->food < FoodConstants::HEAL_LEVEL - 1)
 	{
-		if(minecraft->localgameModes[m_userIndex] != nullptr && !minecraft->localgameModes[m_userIndex]->hasInfiniteItems() )
-		{
-			minecraft->localgameModes[m_userIndex]->getTutorial()->changeTutorialState(e_Tutorial_State_Food_Bar);
-		}
 	}
 }
 
@@ -2922,39 +2885,6 @@ void ClientConnection::handleRespawn(shared_ptr<RespawnPacket> packet)
 		// 4J-JEV: Fix for Durango #156334 - Content: UI: Rich Presence 'In the Nether' message is updating with a 3 to 10 minute  delay.
 		minecraft->localplayers[m_userIndex]->updateRichPresence();
 
-		ConnectionProgressParams *param = new ConnectionProgressParams();
-		param->iPad = m_userIndex;
-		if( packet->dimension == -1)
-		{
-			param->stringId = IDS_PROGRESS_ENTERING_NETHER;
-		}
-		else if( oldDimension == -1)
-		{
-			param->stringId = IDS_PROGRESS_LEAVING_NETHER;
-		}
-		else if( packet->dimension == 1)
-		{
-			param->stringId = IDS_PROGRESS_ENTERING_END;
-		}
-		else if( oldDimension == 1)
-		{
-			param->stringId = IDS_PROGRESS_LEAVING_END;
-		}
-		param->showTooltips = false;
-		param->setFailTimer = false;
-
-		// 4J Stu - Fix for #13543 - Crash: Game crashes if entering a portal with the inventory menu open
-		ui.CloseUIScenes( m_userIndex );
-
-		if(app.GetLocalPlayerCount()>1)
-		{
-			ui.NavigateToScene(m_userIndex, eUIScene_ConnectingProgress, param);
-		}
-		else
-		{
-			ui.NavigateToScene(m_userIndex, eUIScene_ConnectingProgress, param);
-		}
-
 		app.SetAction( m_userIndex, eAppAction_WaitForDimensionChangeComplete);
 	}
 
@@ -3220,7 +3150,7 @@ void ClientConnection::handleContainerOpen(shared_ptr<ContainerOpenPacket> packe
 		// If we don't have a non-inventory container open, just send the packet, and again we ought to be in sync with the server.
 		if( player->containerMenu != player->inventoryMenu )
 		{
-			ui.CloseUIScenes(m_userIndex);
+			
 		}
 		else
 		{
@@ -3442,7 +3372,6 @@ void ClientConnection::handleGameEvent(shared_ptr<GameEventPacket> gameEventPack
 	}
 	else if (event == GameEventPacket::WIN_GAME)
 	{
-		ui.SetWinUserIndex( (BYTE)gameEventPacket->param );
 
 #ifdef _XBOX
 
@@ -3462,7 +3391,6 @@ void ClientConnection::handleGameEvent(shared_ptr<GameEventPacket> gameEventPack
 		app.DebugPrintf("handleGameEvent packet for WIN_GAME - %d\n", m_userIndex);
 		// This just allows it to be shown
 		if(minecraft->localgameModes[ProfileManager.GetPrimaryPad()] != nullptr) minecraft->localgameModes[ProfileManager.GetPrimaryPad()]->getTutorial()->showTutorialPopup(false);
-		ui.NavigateToScene(ProfileManager.GetPrimaryPad(), eUIScene_EndPoem, nullptr, eUILayer_Scene, eUIGroup_Fullscreen);
 #endif
 	}
 	else if( event == GameEventPacket::START_SAVING )
@@ -3701,7 +3629,6 @@ void ClientConnection::displayPrivilegeChanges(shared_ptr<MultiplayerLocalPlayer
 					break;
 				};
 			}
-			if(!message.empty()) minecraft->gui->addMessage(message,userIndex);
 		}
 	}
 }
@@ -3734,32 +3661,7 @@ void ClientConnection::handleCustomPayload(shared_ptr<CustomPayloadPacket> custo
 		ByteArrayInputStream bais(customPayloadPacket->data);
 		DataInputStream input(&bais);
 		int containerId = input.readInt();
-		if (ui.IsSceneInStack(m_userIndex, eUIScene_TradingMenu) && containerId == minecraft->localplayers[m_userIndex]->containerMenu->containerId)
-		{
-			shared_ptr<Merchant> trader = nullptr;
-
-#ifdef _XBOX
-			HXUIOBJ scene = app.GetCurrentScene(m_userIndex);
-			HXUICLASS thisClass = XuiFindClass( L"CXuiSceneTrading" );
-			HXUICLASS objClass = XuiGetObjectClass( scene );
-
-			// Also returns TRUE if they are the same (which is what we want)
-			if( XuiClassDerivesFrom( objClass, thisClass ) )
-			{
-				CXuiSceneTrading *screen;
-				HRESULT hr = XuiObjectFromHandle(scene, (void **) &screen);
-				if (FAILED(hr)) return;
-				trader = screen->getMerchant();
-			}
-#else
-			UIScene *scene = ui.GetTopScene(m_userIndex, eUILayer_Scene);
-			UIScene_TradingMenu *screen = (UIScene_TradingMenu *)scene;
-			trader = screen->getMerchant();
-#endif
-
-			MerchantRecipeList *recipeList = MerchantRecipeList::createFromStream(&input);
-			trader->overrideOffers(recipeList);
-		}
+		
 	}
 }
 
@@ -3807,7 +3709,7 @@ void ClientConnection::handleXZ(shared_ptr<XZPacket> packet)
 
 void ClientConnection::handleUpdateProgress(shared_ptr<UpdateProgressPacket> packet)
 {
-	if(!g_NetworkManager.IsHost() ) Minecraft::GetInstance()->progressRenderer->progressStagePercentage( packet->m_percentage );
+
 }
 
 void ClientConnection::handleUpdateGameRuleProgressPacket(shared_ptr<UpdateGameRuleProgressPacket> packet)
@@ -3878,7 +3780,6 @@ int ClientConnection::HostDisconnectReturned(void *pParam,int iPad,C4JStorage::E
 		UINT uiIDA[2];
 		uiIDA[0]=IDS_CONFIRM_CANCEL;
 		uiIDA[1]=IDS_CONFIRM_OK;
-		ui.RequestErrorMessage(IDS_TITLE_SAVE_GAME, IDS_CONFIRM_SAVE_GAME, uiIDA, 2, ProfileManager.GetPrimaryPad(),&ClientConnection::ExitGameAndSaveReturned,nullptr);
 	}
 	else
 #endif

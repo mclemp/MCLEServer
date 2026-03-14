@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "StatsScreen.h"
 #include "StatsCounter.h"
-#include "ItemRenderer.h"
 #include "Button.h"
 #include "Font.h"
 #include "Lighting.h"
@@ -10,12 +9,10 @@
 #include "..\Minecraft.World\net.minecraft.world.item.h"
 
 const float StatsScreen::SLOT_TEX_SIZE = 128.0f;
-ItemRenderer *StatsScreen::itemRenderer = nullptr;
 
 StatsScreen::StatsScreen(Screen *lastScreen, StatsCounter *stats)
 {
 	// 4J - added initialisers
-	itemRenderer = new ItemRenderer();
 	statsList = nullptr;
 	itemStatsList = nullptr;
 	blockStatsList = nullptr;

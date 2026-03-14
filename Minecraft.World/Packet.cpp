@@ -9,7 +9,6 @@
 
 #ifndef _CONTENT_PACKAGE
 #include "..\Minecraft.Client\Minecraft.h"
-#include "..\Minecraft.Client\Gui.h"
 #endif
 
 void Packet::staticCtor()

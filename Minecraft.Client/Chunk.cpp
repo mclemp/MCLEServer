@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "Chunk.h"
-#include "TileRenderer.h"
-#include "TileEntityRenderDispatcher.h"
 #include "..\Minecraft.World\net.minecraft.world.level.h"
 #include "..\Minecraft.World\net.minecraft.world.level.chunk.h"
 #include "..\Minecraft.World\net.minecraft.world.level.tile.h"
@@ -237,7 +235,6 @@ void Chunk::rebuild()
 	level->getChunkAt(x,z)->getBlockData(tileArray);		// 4J - TODO - now our data has been re-arranged, we could just extra the vertical slice of this chunk rather than the whole thing
 
 	LevelSource *region = new Region(level, x0 - r, y0 - r, z0 - r, x1 + r, y1 + r, z1 + r, r);
-	TileRenderer *tileRenderer = new TileRenderer(region, this->x, this->y, this->z, tileIds);
 
 	// AP - added a caching system for Chunk::rebuild to take advantage of
 	// Basically we're storing of copy of the tileIDs array inside the region so that calls to Region::getTile can grab data
@@ -331,7 +328,6 @@ void Chunk::rebuild()
 		}
 
 		delete region;
-		delete tileRenderer;
 		return;
 	}
 	// 4J - optimisation ends
@@ -403,23 +399,11 @@ void Chunk::rebuild()
 						}
 
 						Tile *tile = Tile::tiles[tileId];
-						if (currentLayer == 0 && tile->isEntityTile())
-						{
-							shared_ptr<TileEntity> et = region->getTileEntity(x, y, z);
-							if (TileEntityRenderDispatcher::instance->hasRenderer(et))
-							{
-								renderableTileEntities.push_back(et);
-							}
-						}
 						int renderLayer = tile->getRenderLayer();
 
 						if (renderLayer != currentLayer)
 						{
 							renderNextLayer = true;
-						}
-						else if (renderLayer == currentLayer)
-						{
-							rendered |= tileRenderer->tesselateInWorld(tile, x, y, z);
 						}
 					}
 				}
@@ -479,7 +463,6 @@ void Chunk::rebuild()
 			   bounds.boundingBox[3], bounds.boundingBox[4], bounds.boundingBox[5]);
 	}
 
-	delete tileRenderer;
 	delete region;
 
 	PIXEndNamedEvent();

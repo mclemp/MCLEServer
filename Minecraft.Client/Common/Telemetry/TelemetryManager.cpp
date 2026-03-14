@@ -79,11 +79,6 @@ bool CTelemetryManager::RecordUnpauseOrActive(int iPad)
 	return true;
 }
 
-bool CTelemetryManager::RecordMenuShown(int iPad, EUIScene menuID, int optionalMenuSubID)
-{
-	return true;
-}
-
 bool CTelemetryManager::RecordAchievementUnlocked(int iPad, int achievementID, int achievementGamerscore)
 {
 	return true;

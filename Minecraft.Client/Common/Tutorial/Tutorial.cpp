@@ -17,7 +17,6 @@
 #include "TutorialTasks.h"
 #include "TutorialConstraints.h"
 #include "TutorialHints.h"
-#include "Common/UI/UI.h"
 
 vector<int> Tutorial::s_completableTasks;
 
@@ -361,7 +360,6 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	m_hintDisplayed = false;
 	m_freezeTime = false;
 	m_timeFrozen = false;
-	m_UIScene = nullptr;
 	m_allowShow = true;
 	m_bHasTickedOnce = false;
 	m_firstTickTime = 0;
@@ -1367,7 +1365,6 @@ void Tutorial::tick()
 		{
 			uiTempDisabled = true;
 		}
-		ui.SetTutorialVisible( m_iPad, false );
 		return;
 	}
 
@@ -1385,7 +1382,6 @@ void Tutorial::tick()
 			app.NavigateToScene(m_iPad, eUIComponent_TutorialPopup,(void *)this, false, false, &m_hTutorialScene);
 		}
 #else
-		ui.SetTutorial(m_iPad, this);
 #endif
 		hasRequestedUI = true;
 	}
@@ -1406,23 +1402,13 @@ void Tutorial::tick()
 				app.NavigateToScene(m_iPad, eUIComponent_TutorialPopup,(void *)this, false, false, &m_hTutorialScene);
 			}
 #else
-			ui.SetTutorial(m_iPad, this);
 #endif
 		}
 	}
 
-	if(ui.IsPauseMenuDisplayed( m_iPad ) )
-	{
-		if( currentTask[m_CurrentState] != nullptr && (!currentTask[m_CurrentState]->AllowFade() || (lastMessageTime + m_iTutorialDisplayMessageTime ) > GetTickCount() ) )
-		{
-			uiTempDisabled = true;
-		}
-		ui.SetTutorialVisible( m_iPad, false );
-		return;
-	}
+	
 	if( uiTempDisabled )
 	{
-		ui.SetTutorialVisible( m_iPad, true );
 		lastMessageTime = GetTickCount();
 		uiTempDisabled = false;
 	}
@@ -1662,12 +1648,6 @@ void Tutorial::tick()
 	}
 
 	m_hasStateChanged = false;
-
-	// If we have completed this state, and it is one that occurs during normal gameplay then change back to the gameplay track
-	if( m_CurrentState != e_Tutorial_State_Gameplay && activeTasks[m_CurrentState].size() == 0 && (isSelectedItemState() || !ui.GetMenuDisplayed(m_iPad) ) )
-	{
-		this->changeTutorialState( e_Tutorial_State_Gameplay );
-	}
 }
 
 bool Tutorial::setMessage(PopupMessageDetails *message)
@@ -1733,35 +1713,7 @@ bool Tutorial::setMessage(PopupMessageDetails *message)
 			}
 		}
 
-		wstring title;
-		TutorialPopupInfo popupInfo;
-		popupInfo.interactScene = m_UIScene;
-		popupInfo.desc = text.c_str();
-		popupInfo.icon = message->m_icon;
-		popupInfo.iAuxVal = message->m_iAuxVal;
-		popupInfo.allowFade = message->m_allowFade;
-		popupInfo.isReminder = message->m_isReminder;
-		popupInfo.tutorial = this;
-		if( !message->m_titleString.empty() || message->m_titleId > 0 )
-		{
-			if(message->m_titleString.empty()) title = wstring( app.GetString(message->m_titleId) );
-			else title = message->m_titleString;
 
-			popupInfo.title = title.c_str();
-			ui.SetTutorialDescription( m_iPad, &popupInfo );
-		}
-		else
-		{
-			ui.SetTutorialDescription( m_iPad, &popupInfo );
-		}
-	}
-	else if( (m_lastMessage != nullptr && m_lastMessage->m_messageId != -1) ) //&& (lastMessageTime + m_iTutorialReminderTime ) > GetTickCount() )
-	{
-		// This should cause the popup to dissappear
-		TutorialPopupInfo popupInfo;
-		popupInfo.interactScene = m_UIScene;
-		popupInfo.tutorial = this;
-		ui.SetTutorialDescription( m_iPad, &popupInfo );
 	}
 
 	if(m_lastMessage != nullptr) delete m_lastMessage;
@@ -1820,7 +1772,6 @@ void Tutorial::showTutorialPopup(bool show)
 		{
 			uiTempDisabled = true;
 		}
-		ui.SetTutorialVisible( m_iPad, show );
 	}
 }
 
@@ -1994,48 +1945,17 @@ void Tutorial::onSelectedItemChanged(shared_ptr<ItemInstance> item)
 			switch(item->id)
 			{
 			case Item::fishingRod_Id:
-				changeTutorialState(e_Tutorial_State_Fishing);
 				break;
 			default:
-				changeTutorialState(e_Tutorial_State_Gameplay);
 				break;
 			}
-		}
-		else
-		{
-			changeTutorialState(e_Tutorial_State_Gameplay);
 		}
 	}
 }
 
 void Tutorial::onLookAt(int id, int iData)
 {
-	if( m_hintDisplayed ) return;
-
-	bool hintNeeded = false;
-	for(auto& hint : hints[m_CurrentState])
-	{
-		hintNeeded = hint->onLookAt(id, iData);
-		if(hintNeeded)
-		{
-			break;
-		}
-	}
-
-	if( m_CurrentState == e_Tutorial_State_Gameplay )
-	{
-		if(id > 0)
-		{
-			switch(id)
-			{
-			case Tile::bed_Id:
-				changeTutorialState(e_Tutorial_State_Bed);
-				break;
-			default:
-				break;
-			}
-		}
-	}
+	
 }
 
 void Tutorial::onLookAtEntity(shared_ptr<Entity> entity)
@@ -2052,11 +1972,6 @@ void Tutorial::onLookAtEntity(shared_ptr<Entity> entity)
 		}
 	}
 
-	if ( (m_CurrentState == e_Tutorial_State_Gameplay) && entity->instanceof(eTYPE_HORSE) )
-	{
-		changeTutorialState(e_Tutorial_State_Horse);
-	}
-
 	for (auto& it : activeTasks[m_CurrentState])
 	{
 		it->onLookAtEntity(entity);
@@ -2065,19 +1980,7 @@ void Tutorial::onLookAtEntity(shared_ptr<Entity> entity)
 
 void Tutorial::onRideEntity(shared_ptr<Entity> entity)
 {
-	if(m_CurrentState == e_Tutorial_State_Gameplay)
-	{
-		switch (entity->GetType())
-		{
-		case eTYPE_MINECART:	changeTutorialState(e_Tutorial_State_Riding_Minecart);	break;
-		case eTYPE_BOAT:		changeTutorialState(e_Tutorial_State_Riding_Boat);		break;
-		}
-	}
-
-	for (auto& it : activeTasks[m_CurrentState])
-	{
-		it->onRideEntity(entity);
-	}
+	
 }
 
 void Tutorial::onEffectChanged(MobEffect *effect, bool bRemoved)
@@ -2209,83 +2112,6 @@ void Tutorial::addMessage(int messageId, bool limitRepeats /*= false*/, unsigned
 {
 	if(messageId >= 0 && messages.find(messageId)==messages.end())
 		messages[messageId] = new TutorialMessage(messageId, limitRepeats, numRepeats);
-}
-
-#ifdef _XBOX
-void Tutorial::changeTutorialState(eTutorial_State newState, CXuiScene *scene /*= nullptr*/)
-#else
-void Tutorial::changeTutorialState(eTutorial_State newState, UIScene *scene /*= nullptr*/)
-#endif
-{
-	if(newState == m_CurrentState)
-	{
-		// If clearing the scene, make sure that the tutorial popup has its reference to this scene removed
-#ifndef _XBOX
-		if( scene == nullptr )
-		{
-			ui.RemoveInteractSceneReference(m_iPad, m_UIScene);
-		}
-#endif
-		m_UIScene = scene;
-		return;
-	}
-	// 4J Stu - TU-1 interim
-	// Allow turning off all the hints
-	bool hintsOn = m_isFullTutorial || app.GetGameSettings(m_iPad,eGameSetting_Hints);
-
-	if(hintsOn)
-	{
-		// If we have completed this state, and it is one that occurs during normal gameplay then change back to the gameplay track
-		if( newState != e_Tutorial_State_Gameplay && activeTasks[newState].size() == 0 && !ui.GetMenuDisplayed(m_iPad) )
-		{
-			return;
-		}
-
-		// The action that caused the change of state may also have completed the current task
-		if( currentTask[m_CurrentState] != nullptr && currentTask[m_CurrentState]->isCompleted() )
-		{
-			activeTasks[m_CurrentState].erase( find( activeTasks[m_CurrentState].begin(), activeTasks[m_CurrentState].end(), currentTask[m_CurrentState]) );
-
-			if( activeTasks[m_CurrentState].size() > 0 )
-			{
-				currentTask[m_CurrentState] = activeTasks[m_CurrentState][0];
-				currentTask[m_CurrentState]->setAsCurrentTask();
-			}
-			else
-			{
-				currentTask[m_CurrentState] = nullptr;
-			}
-		}
-
-		if( currentTask[m_CurrentState] != nullptr )
-		{
-			currentTask[m_CurrentState]->onStateChange(newState);
-		}
-
-		// Make sure that the current message is cleared
-		setMessage( nullptr );
-
-		// If clearing the scene, make sure that the tutorial popup has its reference to this scene removed
-#ifndef _XBOX
-		if( scene == nullptr )
-		{
-			ui.RemoveInteractSceneReference(m_iPad, m_UIScene);
-		}
-#endif
-		m_UIScene = scene;
-
-
-		if( m_CurrentState != newState )
-		{
-            for (auto& task : activeTasks[newState] )
-            {
-				task->onStateChange(newState);
-			}
-			m_CurrentState = newState;
-			m_hasStateChanged = true;
-			m_hintDisplayed = false;
-		}
-	}
 }
 
 bool Tutorial::isSelectedItemState()

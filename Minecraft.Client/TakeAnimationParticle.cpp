@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "TakeAnimationParticle.h"
-#include "EntityRenderDispatcher.h"
 #include "..\Minecraft.World\net.minecraft.world.item.h"
 #include "..\Minecraft.World\net.minecraft.world.level.h"
 #include "..\Minecraft.World\Mth.h"
@@ -62,9 +61,6 @@ void TakeAnimationParticle::render(Tesselator *t, float a, float xa, float ya, f
     xx-=xOff;
     yy-=yOff;
     zz-=zOff;
-        
-    
-    EntityRenderDispatcher::instance->render(item, static_cast<float>(xx), static_cast<float>(yy), static_cast<float>(zz), item->yRot, a);
 
 }
 

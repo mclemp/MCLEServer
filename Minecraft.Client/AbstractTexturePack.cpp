@@ -3,7 +3,6 @@
 #include "AbstractTexturePack.h"
 #include "..\Minecraft.World\InputOutputStream.h"
 #include "..\Minecraft.World\StringHelpers.h"
-#include "Common/UI/UI.h"
 
 AbstractTexturePack::AbstractTexturePack(DWORD id, File *file, const wstring &name, TexturePack *fallback) : id(id), name(name)
 {
@@ -245,7 +244,6 @@ void AbstractTexturePack::loadDefaultUI()
 	//CXuiSceneBase::GetInstance()->SetVisualPrefix(L"TexturePack");
 	CXuiSceneBase::GetInstance()->SkinChanged(CXuiSceneBase::GetInstance()->m_hObj);
 #else
-	ui.ReloadSkin();
 #endif
 }
 

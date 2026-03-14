@@ -193,7 +193,6 @@ typedef XUID GameSessionUID;
 #include "Textures.h"
 #include "Font.h"
 #include "ClientConstants.h"
-#include "Gui.h"
 #include "Screen.h"
 #include "ScreenSizeCalculator.h"
 #include "Minecraft.h"
@@ -209,8 +208,6 @@ typedef XUID GameSessionUID;
 #endif
 
 #include "Common\App_defines.h"
-#include "Common\UI\UIEnums.h"
-#include "Common\UI\UIStructs.h"
 // #ifdef _XBOX
 #include "Common\App_enums.h"
 #include "Common\Tutorial\TutorialEnum.h"
@@ -278,7 +275,6 @@ typedef XUID GameSessionUID;
 	#include "Common\Audio\SoundEngine.h"
 	#include "Windows64\Iggy\include\iggy.h"
 	#include "Windows64\Iggy\gdraw\gdraw_d3d11.h"
-	#include "Windows64\Windows64_UIController.h"
 #elif defined __PSVITA__
 	#include "PSVita\PSVita_App.h"
 	#include "PSVitaMedia\strings.h"		// TODO - create PSVita-specific version of this

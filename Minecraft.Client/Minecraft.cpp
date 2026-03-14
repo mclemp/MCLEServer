@@ -1,22 +1,17 @@
 #include "stdafx.h"
 #include "Minecraft.h"
-#include "Common/UI/UIScene.h"
 #include "GameMode.h"
 #include "Timer.h"
-#include "ProgressRenderer.h"
 #include "LevelRenderer.h"
 #include "ParticleEngine.h"
 #include "MultiPlayerLocalPlayer.h"
 #include "User.h"
 #include "Textures.h"
 #include "GameRenderer.h"
-#include "ItemInHandRenderer.h"
 #include "HumanoidModel.h"
 #include "Options.h"
 #include "TexturePackRepository.h"
 #include "StatsCounter.h"
-#include "EntityRenderDispatcher.h"
-#include "TileEntityRenderDispatcher.h"
 #include "SurvivalMode.h"
 #include "Chunk.h"
 #include "CreativeMode.h"
@@ -69,8 +64,6 @@
 #ifdef _XBOX
 #include "Xbox\Network\NetworkPlayerXbox.h"
 #endif
-#include "Common\UI\IUIScene_CreativeMenu.h"
-#include "Common\UI\UIFontData.h"
 #include "DLCTexturePack.h"
 
 #ifdef __ORBIS__
@@ -92,8 +85,6 @@ int64_t Minecraft::tickTimes[512];
 int Minecraft::frameTimePos = 0;
 int64_t Minecraft::warezTime = 0;
 File Minecraft::workDir = File(L"");
-
-extern ConsoleUIController ui;
 
 #ifdef __PSVITA__
 
@@ -143,7 +134,6 @@ Minecraft::Minecraft(Component *mouseComponent, Canvas *parent, MinecraftApplet 
 	rightClickDelay = 0;
 
 	// 4J Stu Added
-	InitializeCriticalSection( &ProgressRenderer::s_progress );
 	InitializeCriticalSection(&m_setLevelCS);
 	//m_hPlayerRespawned = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
@@ -160,7 +150,6 @@ Minecraft::Minecraft(Component *mouseComponent, Canvas *parent, MinecraftApplet 
 
 	orgWidth = orgHeight = 0;
 	achievementPopup = new AchievementPopup(this);
-	gui = nullptr;
 	noRender = true;
 	//humanoidModel = new HumanoidModel(0);
 	hitResult = nullptr;
@@ -220,7 +209,6 @@ Minecraft::Minecraft(Component *mouseComponent, Canvas *parent, MinecraftApplet 
 		m_pendingLocalConnections[i] = nullptr;
 		m_connectionFailed[i] = false;
 		localgameModes[i]= nullptr;
-		localitemInHandRenderers[i] = nullptr;
 	}
 
 	animateTickLevel = nullptr;	// 4J added
@@ -336,9 +324,6 @@ void Minecraft::init()
 	textures = new Textures(skins, options);
 	//renderLoadingScreen();
 
-	font = new Font(options, L"font/Default.png", textures, false, &DEFAULT_FONT_LOCATION, 23, 20, 8, 8, SFontData::Codepoints);
-	altFont = new Font(options, L"font/alternate.png", textures, false, &ALT_FONT_LOCATION, 16, 16, 8, 8);
-
 	//if (options.languageCode != null) {
 	//	Language.getInstance().loadLanguage(options.languageCode);
 	//	//            font.setEnforceUnicodeSheet("true".equalsIgnoreCase(I18n.get("language.enforceUnicode")));
@@ -417,7 +402,6 @@ void Minecraft::init()
 	MemSect(31);
 	checkGlError(L"Post startup");
 	MemSect(0);
-	gui = new Gui(this);
 
 	if (connectToIp != L"")	// 4J - was nullptr comparison
 	{
@@ -427,7 +411,6 @@ void Minecraft::init()
 	{
 		setScreen(new TitleScreen());
 	}
-	progressRenderer = new ProgressRenderer(this);
 
 	RenderManager.CBuffLockStaticCreations();
 }
@@ -521,33 +504,6 @@ void Minecraft::setScreen(Screen *screen)
 	stats->forceSend();
 	}
 	stats->forceSave();*/
-
-	if (screen == nullptr && level == nullptr)
-	{
-		screen = new TitleScreen();
-	}
-	else if (player != nullptr && !ui.GetMenuDisplayed(player->GetXboxPad()) && player->getHealth() <= 0)
-	{
-		//screen = new DeathScreen();
-
-		// 4J Stu - If we exit from the death screen then we are saved as being dead. In the Java
-		// game when you load the game you are still dead, but this is silly so only show the dead
-		// screen if we have died during gameplay
-		if(ticks==0)
-		{
-			player->respawn();
-		}
-		else
-		{
-			ui.NavigateToScene(player->GetXboxPad(),eUIScene_DeathMenu,nullptr);
-		}
-	}
-
-	if (dynamic_cast<TitleScreen *>(screen)!=nullptr)
-	{
-		options->renderDebug = false;
-		gui->clearMessages();
-	}
 
 	this->screen = screen;
 	if (screen != nullptr)
@@ -901,10 +857,6 @@ void Minecraft::updatePlayerViewportAssignments()
 			}
 		}
 	}
-
-	// 4J Stu - If the game is not running we do not want to do this yet, and should wait until the task
-	// that caused the app to not be running is finished
-	if(app.GetGameStarted())ui.UpdatePlayerBasePositions();
 }
 
 // Add a temporary player so that the viewports get re-arranged, and add the player to the game session
@@ -945,17 +897,6 @@ bool Minecraft::addLocalPlayer(int idx)
 			}
 		}
 #endif
-
-		ConnectionProgressParams *param = new ConnectionProgressParams();
-		param->iPad = idx;
-		param->stringId = IDS_PROGRESS_CONNECTING;
-		param->showTooltips = true;
-		param->setFailTimer = true;
-		param->timerTime = CONNECTING_PROGRESS_CHECK_TIME;
-
-		// Joining as second player so always the small progress
-		ui.NavigateToScene(idx, eUIScene_ConnectingProgress, param);
-
 	}
 	else
 	{
@@ -1164,7 +1105,6 @@ void Minecraft::removeLocalPlayerIdx(int idx)
 		gameRenderer->DisableUpdateThread();
 		levelRenderer->setLevel(idx, nullptr);
 		gameRenderer->EnableUpdateThread();
-		ui.CloseUIScenes(idx,true);
 		updatePlayerViewportAssignments();
 	}
 
@@ -1262,88 +1202,7 @@ void Minecraft::run_middle()
 			//                stop();
 			//            }
 
-			// 4J-PB - AUTOSAVE TIMER - only in the full game and if the player is the host
-			if(level!=nullptr && ProfileManager.IsFullVersion() && g_NetworkManager.IsHost())
-			{
-				/*if(!bAutosaveTimerSet)
-				{
-				// set the timer
-				bAutosaveTimerSet=true;
-
-				app.SetAutosaveTimerTime();
-				}
-				else*/
-				{
-					// if the pause menu is up for the primary player, don't autosave
-					// If saving isn't disabled, and the main player has a app action running , or has any crafting or containers open, don't autosave
-					if(!StorageManager.GetSaveDisabled() && (app.GetXuiAction(ProfileManager.GetPrimaryPad())==eAppAction_Idle) )
-					{
-						if(!ui.IsPauseMenuDisplayed(ProfileManager.GetPrimaryPad()) && !ui.IsIgnoreAutosaveMenuDisplayed(ProfileManager.GetPrimaryPad()))
-						{
-							// check if the autotimer countdown has reached zero
-							unsigned char ucAutosaveVal=app.GetGameSettings(ProfileManager.GetPrimaryPad(),eGameSetting_Autosave);
-							bool bTrialTexturepack=false;
-							if(!Minecraft::GetInstance()->skins->isUsingDefaultSkin())
-							{
-								TexturePack *tPack = Minecraft::GetInstance()->skins->getSelected();
-								DLCTexturePack *pDLCTexPack=static_cast<DLCTexturePack *>(tPack);
-
-								DLCPack *pDLCPack=pDLCTexPack->getDLCInfoParentPack();
-
-								if( pDLCPack )
-								{
-									if(!pDLCPack->hasPurchasedFile( DLCManager::e_DLCType_Texture, L"" ))
-									{
-										bTrialTexturepack=true;
-									}
-								}
-							}
-
-							// If the autosave value is not zero, and the player isn't using a trial texture pack, then check whether we need to save this tick
-							if((ucAutosaveVal!=0) && !bTrialTexturepack)
-							{
-								if(app.AutosaveDue())
-								{
-									// disable the autosave countdown
-									ui.ShowAutosaveCountdownTimer(false);
-
-									// Need to save now
-									app.DebugPrintf("+++++++++++\n");
-									app.DebugPrintf("+++Autosave\n");
-									app.DebugPrintf("+++++++++++\n");
-									app.SetAction(ProfileManager.GetPrimaryPad(),eAppAction_AutosaveSaveGame);
-									//app.SetAutosaveTimerTime();
-#ifndef _CONTENT_PACKAGE
-									{
-										// print the time
-										SYSTEMTIME UTCSysTime;
-										GetSystemTime( &UTCSysTime );
-										//char szTime[15];
-
-										app.DebugPrintf("%02d:%02d:%02d\n",UTCSysTime.wHour,UTCSysTime.wMinute,UTCSysTime.wSecond);
-									}
-#endif
-								}
-								else
-								{
-									unsigned int uiTimeToAutosave=app.SecondsToAutosave();
-
-									if(uiTimeToAutosave<6)
-									{
-										ui.ShowAutosaveCountdownTimer(true);
-										ui.UpdateAutosaveCountdownTimer(uiTimeToAutosave);
-									}
-								}
-							}
-						}
-						else
-						{
-							// disable the autosave countdown
-							ui.ShowAutosaveCountdownTimer(false);
-						}
-					}
-				}
-			}
+			
 
 			// 4J-PB - Once we're in the level, check if the players have the level in their banned list and ask if they want to play it
 			for( int i = 0; i < XUSER_MAX_COUNT; i++ )
@@ -1381,32 +1240,6 @@ void Minecraft::run_middle()
 			{
 				app.m_dlcManager.checkForCorruptDLCAndAlert();
 			}
-
-			// When we go into the first loaded level, check if the console has active joypads that are not in the game, and bring up the quadrant display to remind them to press start (if the session has space)
-			if(level!=nullptr && bFirstTimeIntoGame && g_NetworkManager.SessionHasSpace())
-			{
-				// have a short delay before the display
-				if(iFirstTimeCountdown==0)
-				{
-					bFirstTimeIntoGame=false;
-
-					if(app.IsLocalMultiplayerAvailable())
-					{
-						for( int i = 0; i < XUSER_MAX_COUNT; i++ )
-						{
-							if((localplayers[i] == nullptr) && InputManager.IsPadConnected(i))
-							{
-								if(!ui.PressStartPlaying(i))
-								{
-									ui.ShowPressStart(i);
-								}
-							}
-						}
-					}
-				}
-				else iFirstTimeCountdown--;
-			}
-			// 4J-PB - store any button toggles for the players, since the minecraft::tick may not be called if we're running fast, and a button press and release will be missed
 
 			for( int i = 0; i < XUSER_MAX_COUNT; i++ )
 			{
@@ -1472,61 +1305,14 @@ void Minecraft::run_middle()
 							if(g_KBMInput.IsMouseButtonPressed(KeyboardMouseInput::MOUSE_RIGHT))
 								localplayers[i]->ullButtonsPressed|=1LL<<MINECRAFT_ACTION_USE;
 
-							bool isClosableByEitherKey = ui.IsSceneInStack(i, eUIScene_FurnaceMenu) ||
-								ui.IsSceneInStack(i, eUIScene_ContainerMenu) ||
-								ui.IsSceneInStack(i, eUIScene_DispenserMenu) ||
-								ui.IsSceneInStack(i, eUIScene_EnchantingMenu) ||
-								ui.IsSceneInStack(i, eUIScene_BrewingStandMenu) ||
-								ui.IsSceneInStack(i, eUIScene_TradingMenu) ||
-								ui.IsSceneInStack(i, eUIScene_AnvilMenu) ||
-								ui.IsSceneInStack(i, eUIScene_HopperMenu) ||
-								ui.IsSceneInStack(i, eUIScene_BeaconMenu) ||
-								ui.IsSceneInStack(i, eUIScene_InventoryMenu) ||
-								ui.IsSceneInStack(i, eUIScene_HorseMenu);
-							bool isEditing = ui.GetTopScene(i) && ui.GetTopScene(i)->isDirectEditBlocking();
 
-							if(g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_INVENTORY))
-							{
-								if(isClosableByEitherKey && !isEditing)
-								{
-									ui.CloseUIScenes(i);
-								}
-								else
-								{
-									localplayers[i]->ullButtonsPressed|=1LL<<MINECRAFT_ACTION_INVENTORY;
-								}
-							}
+							
 
 							if(g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_DROP))
 								localplayers[i]->ullButtonsPressed|=1LL<<MINECRAFT_ACTION_DROP;
 
-							if(g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_CRAFTING) || g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_CRAFTING_ALT))
-							{
-							if((ui.IsSceneInStack(i, eUIScene_Crafting2x2Menu) || ui.IsSceneInStack(i, eUIScene_Crafting3x3Menu) || ui.IsSceneInStack(i, eUIScene_CreativeMenu) || isClosableByEitherKey) && !isEditing)
-							{
-								ui.CloseUIScenes(i);
-							}
-							else
-							{
-								localplayers[i]->ullButtonsPressed|=1LL<<MINECRAFT_ACTION_CRAFTING;
-							}
-						}
-
-							for (int slot = 0; slot < 9; slot++)
-							{
-								if (g_KBMInput.IsKeyPressed('1' + slot))
-								{
-									if (localplayers[i]->inventory)
-										localplayers[i]->inventory->selected = slot;
-								}
-							}
-						}
-
-						// Utility keys always work regardless of KBM active state
-						if(g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_PAUSE) && !ui.GetMenuDisplayed(i))
-						{
-							localplayers[i]->ullButtonsPressed|=1LL<<MINECRAFT_ACTION_PAUSEMENU;
-							app.DebugPrintf("PAUSE PRESSED (keyboard) - ipad = %d\n",i);
+							
+							
 						}
 
 						if(g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_THIRD_PERSON))
@@ -1535,13 +1321,6 @@ void Minecraft::run_middle()
 						if(g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_DEBUG_MENU))
 						{
 							localplayers[i]->ullButtonsPressed|=1LL<<MINECRAFT_ACTION_RENDER_DEBUG;
-						}
-
-						// In flying mode, Shift held = sneak/descend
-						if(g_KBMInput.IsKBMActive() && g_KBMInput.IsKeyDown(KeyboardMouseInput::KEY_SNEAK))
-						{
-							if (localplayers[i]->abilities.flying && !ui.GetMenuDisplayed(i))
-								localplayers[i]->ullButtonsPressed|=1LL<<MINECRAFT_ACTION_SNEAK_TOGGLE;
 						}
 					}
 #endif
@@ -1617,7 +1396,6 @@ void Minecraft::run_middle()
 						s_prevXButtons[i] = xCurButtons;
 					}
 					bool startJustPressed = s_startPressLatch[i] > 0;
-					bool tryJoin = !pause && !ui.IsIgnorePlayerJoinMenuDisplayed(ProfileManager.GetPrimaryPad()) && g_NetworkManager.SessionHasSpace() && xCurButtons != 0 && g_KBMInput.IsWindowFocused();
 #else
 					bool tryJoin = !pause && !ui.IsIgnorePlayerJoinMenuDisplayed(ProfileManager.GetPrimaryPad()) && g_NetworkManager.SessionHasSpace() && RenderManager.IsHiDef() && InputManager.ButtonPressed(i);
 #endif
@@ -1631,147 +1409,7 @@ void Minecraft::run_middle()
 						tryJoin = tryJoin && ProfileManager.GetChatAndContentRestrictions(i,true,nullptr,nullptr,nullptr);
 					}
 #endif
-					if(tryJoin)
-					{
-						if(!ui.PressStartPlaying(i))
-						{
-#ifdef __ORBIS__
-							// Don't let player start joining until their PS Plus check has finished
-							if (g_NetworkManager.IsLocalGame() || !ProfileManager.RequestingPlaystationPlus(i))
-#endif
-							{
-								ui.ShowPressStart(i);
-							}
-						}
-						else
-						{
-							// did we just get input from a player who doesn't exist? They'll be wanting to join the game then
-#ifdef __ORBIS__
-							if(InputManager.ButtonPressed(i, ACTION_MENU_A))
-#elif defined _WINDOWS64
-							if(startJustPressed)
-#else
-							if(InputManager.ButtonPressed(i, MINECRAFT_ACTION_PAUSEMENU))
-#endif
-							{
-								// Let them join
-
-								// are they signed in?
-#ifdef _WINDOWS64
-								if(ProfileManager.IsSignedIn(i) || (g_NetworkManager.IsLocalGame() && InputManager.IsPadConnected(i)))
-#else
-								if(ProfileManager.IsSignedIn(i))
-#endif
-								{
-									// if this is a local game, then the player just needs to be signed in
-									if( g_NetworkManager.IsLocalGame() || (ProfileManager.IsSignedInLive(i) && ProfileManager.AllowedToPlayMultiplayer(i) ) )
-									{
-#ifdef __ORBIS__
-										bool contentRestricted = false;
-										ProfileManager.GetChatAndContentRestrictions(i,false,nullptr,&contentRestricted,nullptr); // TODO!
-
-										if (!g_NetworkManager.IsLocalGame() && contentRestricted)
-										{
-											ui.RequestContentRestrictedMessageBox(IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE, IDS_CONTENT_RESTRICTION, i);
-										}
-										else if(!g_NetworkManager.IsLocalGame() && !ProfileManager.HasPlayStationPlus(i))
-										{
-											m_pPsPlusUpsell = new PsPlusUpsellWrapper(i);
-											m_pPsPlusUpsell->displayUpsell();
-										}
-										else
-#endif
-										if( level->isClientSide )
-										{
-											bool success=addLocalPlayer(i);
-
-											if(!success)
-											{
-												app.DebugPrintf("Bringing up the sign in ui\n");
-												ProfileManager.RequestSignInUI(false, g_NetworkManager.IsLocalGame(), true, false,true,&Minecraft::InGame_SignInReturned, this,i);
-											}
-											else
-											{
-#ifdef __ORBIS__
-												if(g_NetworkManager.IsLocalGame() == false)
-												{
-													bool chatRestricted = false;
-													ProfileManager.GetChatAndContentRestrictions(i,false,&chatRestricted,nullptr,nullptr);
-													if(chatRestricted)
-													{
-														ProfileManager.DisplaySystemMessage( SCE_MSG_DIALOG_SYSMSG_TYPE_TRC_PSN_CHAT_RESTRICTION, i );
-													}
-												}
-#endif
-											}
-										}
-										else
-										{
-											// create the localplayer
-											shared_ptr<Player> player = localplayers[i];
-											if( player == nullptr)
-											{
-												player = createExtraLocalPlayer(i, (convStringToWstring( ProfileManager.GetGamertag(i) )).c_str(), i, level->dimension->id);
-											}
-										}
-									}
-									else
-									{
-										if( ProfileManager.IsSignedInLive(ProfileManager.GetPrimaryPad()) && !ProfileManager.AllowedToPlayMultiplayer(i) )
-										{
-											ProfileManager.RequestConvertOfflineToGuestUI( &Minecraft::InGame_SignInReturned, this,i);
-											// 4J Stu - Don't allow converting to guests as we don't allow any guest sign-in while in the game
-											// Fix for #66516 - TCR #124: MPS Guest Support ; #001: BAS Game Stability: TU8: The game crashes when second Guest signs-in on console which takes part in Xbox LIVE multiplayer session.
-											//ProfileManager.RequestConvertOfflineToGuestUI( &Minecraft::InGame_SignInReturned, this,i);
-
-#ifndef _XBOX
-											ui.HidePressStart();
-#endif
-
-#ifdef __ORBIS__
-											int npAvailability = ProfileManager.getNPAvailability(i);
-
-											// Check if PSN is unavailable because of age restriction
-											if (npAvailability == SCE_NP_ERROR_AGE_RESTRICTION)
-											{
-												UINT uiIDA[1];
-												uiIDA[0] = IDS_OK;
-												ui.RequestErrorMessage(IDS_ONLINE_SERVICE_TITLE, IDS_CONTENT_RESTRICTION, uiIDA, 1, i);
-											}
-											else if (ProfileManager.IsSignedIn(i) && !ProfileManager.IsSignedInLive(i))
-											{
-												// You're not signed in to PSN!
-												UINT uiIDA[2];
-												uiIDA[0] = IDS_PRO_NOTONLINE_ACCEPT;
-												uiIDA[1] = IDS_CANCEL;
-												ui.RequestAlertMessage(IDS_PRO_NOTONLINE_TITLE, IDS_PRO_NOTONLINE_TEXT, uiIDA, 2, i,&Minecraft::MustSignInReturnedPSN, this);
-											}
-											else
-#endif
-											{
-												UINT uiIDA[1];
-												uiIDA[0]=IDS_CONFIRM_OK;
-												ui.RequestErrorMessage(IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE, IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT, uiIDA, 1, i);
-											}
-										}
-										//else
-										{
-											// player not signed in to live
-											// bring up the sign in dialog
-											app.DebugPrintf("Bringing up the sign in ui\n");
-											ProfileManager.RequestSignInUI(false, g_NetworkManager.IsLocalGame(), true, false,true,&Minecraft::InGame_SignInReturned, this,i);
-										}
-									}
-								}
-								else
-								{
-									// bring up the sign in dialog
-									app.DebugPrintf("Bringing up the sign in ui\n");
-									ProfileManager.RequestSignInUI(false, g_NetworkManager.IsLocalGame(), true, false,true,&Minecraft::InGame_SignInReturned, this,i);
-								}
-							}
-						}
-					}
+					
 #endif // _DURANGO
 				}
 			}
@@ -1891,7 +1529,6 @@ void Minecraft::run_middle()
 					}
 				}
 
-				ui.HandleGameTick();
 
 				setLocalPlayerIdx(ProfileManager.GetPrimaryPad());
 
@@ -1919,7 +1556,6 @@ void Minecraft::run_middle()
 			checkGlError(L"Pre render");
 			MemSect(0);
 
-			TileRenderer::fancy = options->fancyGraphics;
 
 			// if (pause) timer.a = 1;
 
@@ -1971,16 +1607,6 @@ void Minecraft::run_middle()
 							}
 						}
 					}
-				}
-				// If there's an unoccupied quadrant, then clear that to black
-				if( unoccupiedQuadrant > -1 )
-				{
-					// render a logo
-					RenderManager.StateSetViewport(static_cast<C4JRender::eViewportType>(C4JRender::VIEWPORT_TYPE_QUADRANT_TOP_LEFT + unoccupiedQuadrant));
-					glClearColor(0, 0, 0, 0);
-					glClear(GL_COLOR_BUFFER_BIT);
-
-					ui.SetEmptyQuadrantLogo(C4JRender::VIEWPORT_TYPE_QUADRANT_TOP_LEFT + unoccupiedQuadrant);
 				}
 				setLocalPlayerIdx(iPrimaryPad);
 				RenderManager.StateSetViewport(C4JRender::VIEWPORT_TYPE_FULLSCREEN);
@@ -2329,21 +1955,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 	* progressRenderer.progressStagePercentage(0); } else {
 	* serverConnection.tick(); serverConnection.sendPosition(player); } }
 	*/
-	if (screen == nullptr && player != nullptr )
-	{
-		if (player->getHealth() <= 0 && !ui.GetMenuDisplayed(iPad) )
-		{
-			setScreen(nullptr);
-		}
-		else if (player->isSleeping() && level != nullptr && level->isClientSide)
-		{
-			//            setScreen(new InBedChatScreen());		// 4J - TODO put back in
-		}
-	}
-	else if (screen != nullptr && (dynamic_cast<InBedChatScreen *>(screen)!=nullptr) && !player->isSleeping())
-	{
-		setScreen(nullptr);
-	}
+	
 
 	if (screen != nullptr)
 	{
@@ -2361,1785 +1973,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 			screen->tick();
 		}
 	}
-
-#ifdef _WINDOWS64
-	// Mouse grab/release only for the primary (KBM) player — splitscreen
-	// players use controllers and must never fight over the cursor state.
-	if (iPad == ProfileManager.GetPrimaryPad())
-	{
-		if ((screen != nullptr || ui.GetMenuDisplayed(iPad)) && g_KBMInput.IsMouseGrabbed())
-		{
-			g_KBMInput.SetMouseGrabbed(false);
-		}
-	}
-#endif
-
-	if (screen == nullptr && !ui.GetMenuDisplayed(iPad) )
-	{
-#ifdef _WINDOWS64
-		if (iPad == ProfileManager.GetPrimaryPad() && !g_KBMInput.IsMouseGrabbed() && g_KBMInput.IsWindowFocused())
-		{
-			g_KBMInput.SetMouseGrabbed(true);
-		}
-#endif
-		// 4J-PB - add some tooltips if required
-		int iA=-1, iB=-1, iX, iY=IDS_CONTROLS_INVENTORY, iLT=-1, iRT=-1, iLB=-1, iRB=-1, iLS=-1, iRS=-1;
-
-		if(player->abilities.instabuild)
-		{
-			iX=IDS_TOOLTIPS_CREATIVE;
-		}
-		else
-		{
-			iX=IDS_CONTROLS_CRAFTING;
-		}
-		// control scheme remapping can move the Action button, so we need to check this
-		int *piAction;
-		int *piJump;
-		int *piUse;
-		int *piAlt;
-
-		unsigned int uiAction = InputManager.GetGameJoypadMaps(InputManager.GetJoypadMapVal( iPad ) ,MINECRAFT_ACTION_ACTION );
-		unsigned int uiJump = InputManager.GetGameJoypadMaps(InputManager.GetJoypadMapVal( iPad ) ,MINECRAFT_ACTION_JUMP );
-		unsigned int uiUse = InputManager.GetGameJoypadMaps(InputManager.GetJoypadMapVal( iPad ) ,MINECRAFT_ACTION_USE );
-		unsigned int uiAlt = InputManager.GetGameJoypadMaps(InputManager.GetJoypadMapVal( iPad ) ,MINECRAFT_ACTION_SNEAK_TOGGLE );
-
-		// Also need to handle PS3 having swapped triggers/bumpers
-		switch(uiAction)
-		{
-		case _360_JOY_BUTTON_RT:
-			piAction=&iRT;
-			break;
-		case _360_JOY_BUTTON_LT:
-			piAction=&iLT;
-			break;
-		case _360_JOY_BUTTON_LB:
-			piAction=&iLB;
-			break;
-		case _360_JOY_BUTTON_RB:
-			piAction=&iRB;
-			break;
-		case _360_JOY_BUTTON_A:
-		default:
-			piAction=&iA;
-			break;
-		}
-
-		switch(uiJump)
-		{
-		case _360_JOY_BUTTON_LT:
-			piJump=&iLT;
-			break;
-		case _360_JOY_BUTTON_RT:
-			piJump=&iRT;
-			break;
-		case _360_JOY_BUTTON_LB:
-			piJump=&iLB;
-			break;
-		case _360_JOY_BUTTON_RB:
-			piJump=&iRB;
-			break;
-		case _360_JOY_BUTTON_A:
-		default:
-			piJump=&iA;
-			break;
-		}
-
-		switch(uiUse)
-		{
-		case _360_JOY_BUTTON_LB:
-			piUse=&iLB;
-			break;
-		case _360_JOY_BUTTON_RB:
-			piUse=&iRB;
-			break;
-		case _360_JOY_BUTTON_LT:
-			piUse=&iLT;
-			break;
-		case _360_JOY_BUTTON_RT:
-		default:
-			piUse=&iRT;
-			break;
-		}
-
-		switch(uiAlt)
-		{
-		default:
-		case _360_JOY_BUTTON_LSTICK_RIGHT:
-			piAlt=&iRS;
-			break;
-
-			//TODO
-		}
-
-		if (player->isUnderLiquid(Material::water))
-		{
-			*piJump=IDS_TOOLTIPS_SWIMUP;
-		}
-		else
-		{
-			*piJump=-1;
-		}
-
-		*piUse=-1;
-		*piAction=-1;
-		*piAlt=-1;
-
-		// 4J-PB another special case for when the player is sleeping in a bed
-		if (player->isSleeping() && (level != nullptr) && level->isClientSide)
-		{
-			*piUse=IDS_TOOLTIPS_WAKEUP;
-		}
-		else
-		{
-			if (player->isRiding())
-			{
-				shared_ptr<Entity> mount = player->riding;
-
-				if ( mount->instanceof(eTYPE_MINECART) || mount->instanceof(eTYPE_BOAT) )
-				{
-					*piAlt = IDS_TOOLTIPS_EXIT;
-				}
-				else
-				{
-					*piAlt = IDS_TOOLTIPS_DISMOUNT;
-				}
-			}
-
-			// no hit result, but we may have something in our hand that we can do something with
-			shared_ptr<ItemInstance> itemInstance = player->inventory->getSelected();
-
-			// 4J-JEV: Moved all this here to avoid having it in 3 different places.
-			if (itemInstance)
-			{
-				// 4J-PB - very special case for boat and empty bucket and glass bottle and more
-				bool bUseItem = gameMode->useItem(player, level, itemInstance, true);
-
-				switch (itemInstance->getItem()->id)
-				{
-					// food
-				case Item::potatoBaked_Id:
-				case Item::potato_Id:
-				case Item::pumpkinPie_Id:
-				case Item::potatoPoisonous_Id:
-				case Item::carrotGolden_Id:
-				case Item::carrots_Id:
-				case Item::mushroomStew_Id:
-				case Item::apple_Id:
-				case Item::bread_Id:
-				case Item::porkChop_raw_Id:
-				case Item::porkChop_cooked_Id:
-				case Item::apple_gold_Id:
-				case Item::fish_raw_Id:
-				case Item::fish_cooked_Id:
-				case Item::cookie_Id:
-				case Item::beef_cooked_Id:
-				case Item::beef_raw_Id:
-				case Item::chicken_cooked_Id:
-				case Item::chicken_raw_Id:
-				case Item::melon_Id:
-				case Item::rotten_flesh_Id:
-				case Item::spiderEye_Id:
-					// Check that we are actually hungry so will eat this item
-					{
-						FoodItem *food = static_cast<FoodItem *>(itemInstance->getItem());
-						if (food != nullptr && food->canEat(player))
-						{
-							*piUse=IDS_TOOLTIPS_EAT;
-						}
-					}
-					break;
-
-				case Item::bucket_milk_Id:
-					*piUse=IDS_TOOLTIPS_DRINK;
-					break;
-
-				case Item::fishingRod_Id:	// use
-				case Item::emptyMap_Id:
-					*piUse=IDS_TOOLTIPS_USE;
-					break;
-
-				case Item::egg_Id:			// throw
-				case Item::snowBall_Id:
-					*piUse=IDS_TOOLTIPS_THROW;
-					break;
-
-				case Item::bow_Id:	// draw or release
-					if ( player->abilities.instabuild || player->inventory->hasResource(Item::arrow_Id) )
-					{
-						if (player->isUsingItem())	*piUse=IDS_TOOLTIPS_RELEASE_BOW;
-						else						*piUse=IDS_TOOLTIPS_DRAW_BOW;
-					}
-					break;
-
-				case Item::sword_wood_Id:
-				case Item::sword_stone_Id:
-				case Item::sword_iron_Id:
-				case Item::sword_diamond_Id:
-				case Item::sword_gold_Id:
-					*piUse=IDS_TOOLTIPS_BLOCK;
-					break;
-
-				case Item::bucket_empty_Id:
-				case Item::glassBottle_Id:
-					if (bUseItem) *piUse=IDS_TOOLTIPS_COLLECT;
-					break;
-
-				case Item::bucket_lava_Id:
-				case Item::bucket_water_Id:
-					*piUse=IDS_TOOLTIPS_EMPTY;
-					break;
-
-				case Item::boat_Id:
-				case Tile::waterLily_Id:
-					if (bUseItem) *piUse=IDS_TOOLTIPS_PLACE;
-					break;
-
-				case Item::potion_Id:
-					if (bUseItem)
-					{
-						if (MACRO_POTION_IS_SPLASH(itemInstance->getAuxValue()))	*piUse=IDS_TOOLTIPS_THROW;
-						else														*piUse=IDS_TOOLTIPS_DRINK;
-					}
-					break;
-
-				case Item::enderPearl_Id:
-					if (bUseItem) *piUse=IDS_TOOLTIPS_THROW;
-					break;
-
-				case Item::eyeOfEnder_Id:
-					// This will only work if there is a stronghold in this dimension
-					if ( bUseItem && (level->dimension->id==0) && level->getLevelData()->getHasStronghold() )
-					{
-						*piUse=IDS_TOOLTIPS_THROW;
-					}
-					break;
-
-				case Item::expBottle_Id:
-					if (bUseItem) *piUse=IDS_TOOLTIPS_THROW;
-					break;
-				}
-			}
-
-			if (hitResult!=nullptr)
-			{
-				switch(hitResult->type)
-				{
-				case HitResult::TILE:
-					{
-						int x,y,z;
-						x=hitResult->x;
-						y=hitResult->y;
-						z=hitResult->z;
-						int face = hitResult->f;
-
-						int iTileID=level->getTile(x,y ,z );
-						int iData = level->getData(x, y, z);
-
-						if( gameMode != nullptr && gameMode->getTutorial() != nullptr )
-						{
-							// 4J Stu - For the tutorial we want to be able to record what items we look at so that we can give hints
-							gameMode->getTutorial()->onLookAt(iTileID,iData);
-						}
-
-						// 4J-PB - Call the useItemOn with the TestOnly flag set
-						bool bUseItemOn=gameMode->useItemOn(player, level, itemInstance, x, y, z, face, hitResult->pos, true);
-
-						/* 4J-Jev:
-						 *	Moved this here so we have item tooltips to fallback on
-						 *	for noteblocks, enderportals and flowerpots in case of non-standard items.
-						 *	(ie. ignite behaviour)
-						 */
-						if (bUseItemOn && itemInstance!=nullptr)
-						{
-							switch (itemInstance->getItem()->id)
-							{
-							case Tile::mushroom_brown_Id:
-							case Tile::mushroom_red_Id:
-							case Tile::tallgrass_Id:
-							case Tile::cactus_Id:
-							case Tile::sapling_Id:
-							case Tile::reeds_Id:
-							case Tile::flower_Id:
-							case Tile::rose_Id:
-								*piUse=IDS_TOOLTIPS_PLANT;
-								break;
-
-								// Things to USE
-							case Item::hoe_wood_Id:
-							case Item::hoe_stone_Id:
-							case Item::hoe_iron_Id:
-							case Item::hoe_diamond_Id:
-							case Item::hoe_gold_Id:
-								*piUse=IDS_TOOLTIPS_TILL;
-								break;
-
-							case Item::seeds_wheat_Id:
-							case Item::netherwart_seeds_Id:
-								*piUse=IDS_TOOLTIPS_PLANT;
-								break;
-
-							case Item::dye_powder_Id:
-								// bonemeal grows various plants
-								if (itemInstance->getAuxValue() == DyePowderItem::WHITE)
-								{
-									switch(iTileID)
-									{
-									case Tile::sapling_Id:
-									case Tile::wheat_Id:
-									case Tile::grass_Id:
-									case Tile::mushroom_brown_Id:
-									case Tile::mushroom_red_Id:
-									case Tile::melonStem_Id:
-									case Tile::pumpkinStem_Id:
-									case Tile::carrots_Id:
-									case Tile::potatoes_Id:
-										*piUse=IDS_TOOLTIPS_GROW;
-										break;
-									}
-								}
-								break;
-
-							case Item::painting_Id:
-								*piUse=IDS_TOOLTIPS_HANG;
-								break;
-
-							case Item::flintAndSteel_Id:
-							case Item::fireball_Id:
-								*piUse=IDS_TOOLTIPS_IGNITE;
-								break;
-
-							case Item::fireworks_Id:
-								*piUse=IDS_TOOLTIPS_FIREWORK_LAUNCH;
-								break;
-
-							case Item::lead_Id:
-								*piUse=IDS_TOOLTIPS_ATTACH;
-								break;
-
-							default:
-								*piUse=IDS_TOOLTIPS_PLACE;
-								break;
-							}
-						}
-
-						switch(iTileID)
-						{
-						case Tile::anvil_Id:
-						case Tile::enchantTable_Id:
-						case Tile::brewingStand_Id:
-						case Tile::workBench_Id:
-						case Tile::furnace_Id:
-						case Tile::furnace_lit_Id:
-						case Tile::door_wood_Id:
-						case Tile::dispenser_Id:
-						case Tile::lever_Id:
-						case Tile::button_stone_Id:
-						case Tile::button_wood_Id:
-						case Tile::trapdoor_Id:
-						case Tile::fenceGate_Id:
-						case Tile::beacon_Id:
-							*piAction=IDS_TOOLTIPS_MINE;
-							*piUse=IDS_TOOLTIPS_USE;
-							break;
-
-						case Tile::chest_Id:
-							*piAction = IDS_TOOLTIPS_MINE;
-							*piUse = (Tile::chest->getContainer(level,x,y,z) != nullptr) ? IDS_TOOLTIPS_OPEN : -1;
-							break;
-
-						case Tile::enderChest_Id:
-						case Tile::chest_trap_Id:
-						case Tile::dropper_Id:
-						case Tile::hopper_Id:
-							*piUse=IDS_TOOLTIPS_OPEN;
-							*piAction=IDS_TOOLTIPS_MINE;
-							break;
-
-						case Tile::activatorRail_Id:
-						case Tile::goldenRail_Id:
-						case Tile::detectorRail_Id:
-						case Tile::rail_Id:
-							if (bUseItemOn) *piUse=IDS_TOOLTIPS_PLACE;
-							*piAction=IDS_TOOLTIPS_MINE;
-							break;
-
-						case Tile::bed_Id:
-							if (bUseItemOn)	*piUse=IDS_TOOLTIPS_SLEEP;
-							*piAction=IDS_TOOLTIPS_MINE;
-							break;
-
-						case Tile::noteblock_Id:
-							// if in creative mode, we will mine
-							if (player->abilities.instabuild)	*piAction=IDS_TOOLTIPS_MINE;
-							else								*piAction=IDS_TOOLTIPS_PLAY;
-							*piUse=IDS_TOOLTIPS_CHANGEPITCH;
-							break;
-
-						case Tile::sign_Id:
-							*piAction=IDS_TOOLTIPS_MINE;
-							break;
-
-						case Tile::cauldron_Id:
-							// special case for a cauldron of water and an empty bottle
-							if (itemInstance)
-							{
-								int iID=itemInstance->getItem()->id;
-								int currentData = level->getData(x, y, z);
-								if ((iID==Item::glassBottle_Id) && (currentData > 0))
-								{
-									*piUse=IDS_TOOLTIPS_COLLECT;
-								}
-							}
-							*piAction=IDS_TOOLTIPS_MINE;
-							break;
-
-						case Tile::cake_Id:
-							if (player->abilities.instabuild) // if in creative mode, we will mine
-							{
-								*piAction=IDS_TOOLTIPS_MINE;
-							}
-							else
-							{
-								if (player->getFoodData()->needsFood() ) // 4J-JEV: Changed from healthto hunger.
-								{
-									*piAction=IDS_TOOLTIPS_EAT;
-									*piUse=IDS_TOOLTIPS_EAT;
-								}
-								else
-								{
-									*piAction=IDS_TOOLTIPS_MINE;
-								}
-							}
-							break;
-
-						case Tile::jukebox_Id:
-							if (!bUseItemOn && itemInstance!=nullptr)
-							{
-								int iID=itemInstance->getItem()->id;
-								if ( (iID>=Item::record_01_Id) && (iID<=Item::record_12_Id) )
-								{
-									*piUse=IDS_TOOLTIPS_PLAY;
-								}
-								*piAction=IDS_TOOLTIPS_MINE;
-							}
-							else
-							{
-								if (Tile::jukebox->TestUse(level, x, y, z, player)) // means we can eject
-								{
-									*piUse=IDS_TOOLTIPS_EJECT;
-								}
-								*piAction=IDS_TOOLTIPS_MINE;
-							}
-							break;
-
-						case Tile::flowerPot_Id:
-							if ( !bUseItemOn && (itemInstance != nullptr) && (iData == 0) )
-							{
-								int iID = itemInstance->getItem()->id;
-								if (iID<256) // is it a tile?
-								{
-									switch(iID)
-									{
-									case Tile::flower_Id:
-									case Tile::rose_Id:
-									case Tile::sapling_Id:
-									case Tile::mushroom_brown_Id:
-									case Tile::mushroom_red_Id:
-									case Tile::cactus_Id:
-									case Tile::deadBush_Id:
-										*piUse=IDS_TOOLTIPS_PLANT;
-										break;
-
-									case Tile::tallgrass_Id:
-										if (itemInstance->getAuxValue() != TallGrass::TALL_GRASS) *piUse=IDS_TOOLTIPS_PLANT;
-										break;
-									}
-								}
-							}
-							*piAction=IDS_TOOLTIPS_MINE;
-							break;
-
-						case Tile::comparator_off_Id:
-						case Tile::comparator_on_Id:
-							*piUse=IDS_TOOLTIPS_USE;
-							*piAction=IDS_TOOLTIPS_MINE;
-							break;
-
-						case Tile::diode_off_Id:
-						case Tile::diode_on_Id:
-							*piUse=IDS_TOOLTIPS_USE;
-							*piAction=IDS_TOOLTIPS_MINE;
-							break;
-
-						case Tile::redStoneOre_Id:
-							if (bUseItemOn)	*piUse=IDS_TOOLTIPS_USE;
-							*piAction=IDS_TOOLTIPS_MINE;
-							break;
-
-						case Tile::door_iron_Id:
-							if(*piUse==IDS_TOOLTIPS_PLACE)
-							{
-								*piUse = -1;
-							}
-							*piAction=IDS_TOOLTIPS_MINE;
-							break;
-
-						default:
-							*piAction=IDS_TOOLTIPS_MINE;
-							break;
-						}
-					}
-					break;
-
-				case HitResult::ENTITY:
-					eINSTANCEOF entityType = hitResult->entity->GetType();
-
-					if ( (gameMode != nullptr) && (gameMode->getTutorial() != nullptr) )
-					{
-						// 4J Stu - For the tutorial we want to be able to record what items we look at so that we can give hints
-						gameMode->getTutorial()->onLookAtEntity(hitResult->entity);
-					}
-
-					shared_ptr<ItemInstance> heldItem = nullptr;
-					if (player->inventory->IsHeldItem())
-					{
-						heldItem = player->inventory->getSelected();
-					}
-					int heldItemId = heldItem != nullptr ? heldItem->getItem()->id : -1;
-
-					switch(entityType)
-					{
-					case eTYPE_CHICKEN:
-						{
-							if(player->isAllowedToAttackAnimals()) *piAction=IDS_TOOLTIPS_HIT;
-
-							shared_ptr<Animal> animal = dynamic_pointer_cast<Animal>(hitResult->entity);
-
-							if (animal->isLeashed() && animal->getLeashHolder() == player)
-							{
-								*piUse=IDS_TOOLTIPS_UNLEASH;
-								break;
-							}
-
-							switch(heldItemId)
-							{
-							case Item::nameTag_Id:
-								*piUse=IDS_TOOLTIPS_NAME;
-								break;
-
-							case Item::lead_Id:
-								if (!animal->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
-								break;
-
-							default:
-								{
-									if(!animal->isBaby() && !animal->isInLove() && (animal->getAge() == 0) && animal->isFood(heldItem))
-									{
-										*piUse=IDS_TOOLTIPS_LOVEMODE;
-									}
-								}
-								break;
-
-							case -1: break; // 4J-JEV: Empty hand.
-							}
-						}
-						break;
-
-					case eTYPE_COW:
-						{
-							if(player->isAllowedToAttackAnimals()) *piAction=IDS_TOOLTIPS_HIT;
-
-							shared_ptr<Animal> animal = dynamic_pointer_cast<Animal>(hitResult->entity);
-
-							if (animal->isLeashed() && animal->getLeashHolder() == player)
-							{
-								*piUse=IDS_TOOLTIPS_UNLEASH;
-								break;
-							}
-
-							switch (heldItemId)
-							{
-									// Things to USE
-							case Item::nameTag_Id:
-								*piUse=IDS_TOOLTIPS_NAME;
-								break;
-							case Item::lead_Id:
-								if (!animal->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
-								break;
-							case Item::bucket_empty_Id:
-									*piUse=IDS_TOOLTIPS_MILK;
-									break;
-								default:
-									{
-										if(!animal->isBaby() && !animal->isInLove() && (animal->getAge() == 0) && animal->isFood(heldItem))
-										{
-											*piUse=IDS_TOOLTIPS_LOVEMODE;
-										}
-									}
-									break;
-
-							case -1: break; // 4J-JEV: Empty hand.
-								}
-						}
-						break;
-					case eTYPE_MUSHROOMCOW:
-						{
-							// 4J-PB - Fix for #13081 - No tooltip is displayed for hitting a cow when you have nothing in your hand
-							if(player->isAllowedToAttackAnimals()) *piAction=IDS_TOOLTIPS_HIT;
-
-							shared_ptr<Animal> animal = dynamic_pointer_cast<Animal>(hitResult->entity);
-
-							if (animal->isLeashed() && animal->getLeashHolder() == player)
-							{
-								*piUse=IDS_TOOLTIPS_UNLEASH;
-								break;
-							}
-
-								// It's an item
-							switch(heldItemId)
-							{
-								// Things to USE
-							case Item::nameTag_Id:
-								*piUse=IDS_TOOLTIPS_NAME;
-								break;
-
-							case Item::lead_Id:
-								if (!animal->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
-								break;
-
-								case Item::bowl_Id:
-								case Item::bucket_empty_Id: // You can milk a mooshroom with either a bowl (mushroom soup) or a bucket (milk)!
-									*piUse=IDS_TOOLTIPS_MILK;
-									break;
-								case Item::shears_Id:
-									{
-										if(player->isAllowedToAttackAnimals()) *piAction=IDS_TOOLTIPS_HIT;
-										if(!animal->isBaby()) *piUse=IDS_TOOLTIPS_SHEAR;
-									}
-									break;
-								default:
-									{
-										if(!animal->isBaby() && !animal->isInLove() && (animal->getAge() == 0) && animal->isFood(heldItem))
-										{
-											*piUse=IDS_TOOLTIPS_LOVEMODE;
-										}
-									}
-									break;
-
-							case -1: break; // 4J-JEV: Empty hand.
-							}
-						}
-						break;
-
-					case eTYPE_BOAT:
-						*piAction=IDS_TOOLTIPS_MINE;
-						*piUse=IDS_TOOLTIPS_SAIL;
-						break;
-
-					case eTYPE_MINECART_RIDEABLE:
-						*piAction = IDS_TOOLTIPS_MINE;
-						*piUse = IDS_TOOLTIPS_RIDE; // are we in the minecart already? - 4J-JEV: Doesn't matter anymore.
-						break;
-
-					case eTYPE_MINECART_FURNACE:
-						*piAction = IDS_TOOLTIPS_MINE;
-
-						// if you have coal, it'll go. Is there an object in hand?
-						if (heldItemId == Item::coal_Id) *piUse=IDS_TOOLTIPS_USE;
-						break;
-
-					case eTYPE_MINECART_CHEST:
-					case eTYPE_MINECART_HOPPER:
-						*piAction = IDS_TOOLTIPS_MINE;
-						*piUse = IDS_TOOLTIPS_OPEN;
-						break;
-
-					case eTYPE_MINECART_SPAWNER:
-					case eTYPE_MINECART_TNT:
-						*piUse = IDS_TOOLTIPS_MINE;
-						break;
-
-					case eTYPE_SHEEP:
-						{
-							// can dye a sheep
-							if(player->isAllowedToAttackAnimals()) *piAction=IDS_TOOLTIPS_HIT;
-
-							shared_ptr<Sheep> sheep = dynamic_pointer_cast<Sheep>(hitResult->entity);
-
-							if (sheep->isLeashed() && sheep->getLeashHolder() == player)
-							{
-								*piUse=IDS_TOOLTIPS_UNLEASH;
-								break;
-							}
-
-							switch(heldItemId)
-							{
-							case Item::nameTag_Id:
-								*piUse=IDS_TOOLTIPS_NAME;
-								break;
-
-							case Item::lead_Id:
-								if (!sheep->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
-								break;
-
-							case Item::dye_powder_Id:
-								{
-									// convert to tile-based color value (0 is white instead of black)
-									int newColor = ColoredTile::getTileDataForItemAuxValue(heldItem->getAuxValue());
-
-									// can only use a dye on sheep that haven't been sheared
-									if(!(sheep->isSheared() && sheep->getColor() != newColor))
-									{
-										*piUse=IDS_TOOLTIPS_DYE;
-									}
-								}
-								break;
-							case Item::shears_Id:
-								{
-									// can only shear a sheep that hasn't been sheared
-									if ( !sheep->isBaby() && !sheep->isSheared() )
-									{
-										*piUse=IDS_TOOLTIPS_SHEAR;
-									}
-								}
-
-								break;
-							default:
-								{
-									if(!sheep->isBaby() && !sheep->isInLove() && (sheep->getAge() == 0) && sheep->isFood(heldItem))
-									{
-										*piUse=IDS_TOOLTIPS_LOVEMODE;
-									}
-								}
-								break;
-
-							case -1: break; // 4J-JEV: Empty hand.
-							}
-						}
-						break;
-
-					case eTYPE_PIG:
-						{
-							// can ride a pig
-							if(player->isAllowedToAttackAnimals()) *piAction=IDS_TOOLTIPS_HIT;
-
-							shared_ptr<Pig> pig = dynamic_pointer_cast<Pig>(hitResult->entity);
-
-							if (pig->isLeashed() && pig->getLeashHolder() == player)
-							{
-								*piUse=IDS_TOOLTIPS_UNLEASH;
-							}
-							else if (heldItemId == Item::lead_Id)
-							{
-								if (!pig->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
-							}
-							else if (heldItemId == Item::nameTag_Id)
-							{
-								*piUse = IDS_TOOLTIPS_NAME;
-							}
-							else if (pig->hasSaddle()) // does the pig have a saddle?
-							{
-								*piUse=IDS_TOOLTIPS_MOUNT;
-							}
-							else if (!pig->isBaby())
-							{
-								if(player->inventory->IsHeldItem())
-								{
-									switch(heldItemId)
-									{
-									case Item::saddle_Id:
-										*piUse=IDS_TOOLTIPS_SADDLE;
-										break;
-
-									default:
-										{
-											if (!pig->isInLove() && (pig->getAge() == 0) && pig->isFood(heldItem))
-											{
-												*piUse=IDS_TOOLTIPS_LOVEMODE;
-											}
-										}
-										break;
-									}
-								}
-							}
-						}
-						break;
-
-					case eTYPE_WOLF:
-						// can be tamed, fed, and made to sit/stand, or enter love mode
-						{
-							shared_ptr<Wolf> wolf = dynamic_pointer_cast<Wolf>(hitResult->entity);
-
-							if(player->isAllowedToAttackAnimals()) *piAction=IDS_TOOLTIPS_HIT;
-
-							if (wolf->isLeashed() && wolf->getLeashHolder() == player)
-							{
-								*piUse=IDS_TOOLTIPS_UNLEASH;
-								break;
-							}
-
-							switch(heldItemId)
-							{
-							case Item::nameTag_Id:
-								*piUse=IDS_TOOLTIPS_NAME;
-								break;
-
-							case Item::lead_Id:
-								if (!wolf->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
-								break;
-
-							case Item::bone_Id:
-								if (!wolf->isAngry() && !wolf->isTame())
-								{
-									*piUse=IDS_TOOLTIPS_TAME;
-								}
-								else if (equalsIgnoreCase(player->getUUID(), wolf->getOwnerUUID()))
-								{
-									if(wolf->isSitting())
-									{
-										*piUse=IDS_TOOLTIPS_FOLLOWME;
-									}
-									else
-									{
-										*piUse=IDS_TOOLTIPS_SIT;
-									}
-								}
-
-								break;
-							case Item::enderPearl_Id:
-								// Use is throw, so don't change the tips for the wolf
-								break;
-							case Item::dye_powder_Id:
-								if (wolf->isTame())
-								{
-									if (ColoredTile::getTileDataForItemAuxValue(heldItem->getAuxValue()) != wolf->getCollarColor())
-									{
-										*piUse=IDS_TOOLTIPS_DYECOLLAR;
-									}
-									else if (wolf->isSitting())
-									{
-										*piUse=IDS_TOOLTIPS_FOLLOWME;
-									}
-									else
-									{
-										*piUse=IDS_TOOLTIPS_SIT;
-									}
-								}
-								break;
-							default:
-								if(wolf->isTame())
-								{
-									if(wolf->isFood(heldItem))
-									{
-										if(wolf->GetSynchedHealth() < wolf->getMaxHealth())
-										{
-											*piUse=IDS_TOOLTIPS_HEAL;
-										}
-										else
-										{
-											if(!wolf->isBaby() && !wolf->isInLove() && (wolf->getAge() == 0))
-											{
-												*piUse=IDS_TOOLTIPS_LOVEMODE;
-											}
-										}
-										// break out here
-										break;
-									}
-
-									if (equalsIgnoreCase(player->getUUID(), wolf->getOwnerUUID()))
-									{
-										if(wolf->isSitting())
-										{
-											*piUse=IDS_TOOLTIPS_FOLLOWME;
-										}
-										else
-										{
-											*piUse=IDS_TOOLTIPS_SIT;
-										}
-									}
-								}
-								break;
-							}
-						}
-						break;
-					case eTYPE_OCELOT:
-						{
-							shared_ptr<Ocelot> ocelot = dynamic_pointer_cast<Ocelot>(hitResult->entity);
-
-							if(player->isAllowedToAttackAnimals()) *piAction=IDS_TOOLTIPS_HIT;
-
-							if (ocelot->isLeashed() && ocelot->getLeashHolder() == player)
-							{
-								*piUse = IDS_TOOLTIPS_UNLEASH;
-							}
-							else if (heldItemId == Item::lead_Id)
-							{
-								if (!ocelot->isLeashed()) *piUse = IDS_TOOLTIPS_LEASH;
-							}
-							else if (heldItemId == Item::nameTag_Id)
-							{
-								*piUse = IDS_TOOLTIPS_NAME;
-							}
-							else if(ocelot->isTame())
-							{
-								// 4J-PB - if you have a raw fish in your hand, you will feed the ocelot rather than have it sit/follow
-								if(ocelot->isFood(heldItem))
-								{
-									if(!ocelot->isBaby())
-									{
-										if(!ocelot->isInLove())
-										{
-											if(ocelot->getAge() == 0)
-											{
-												*piUse=IDS_TOOLTIPS_LOVEMODE;
-											}
-										}
-										else
-										{
-											*piUse=IDS_TOOLTIPS_FEED;
-										}
-									}
-
-								}
-								else if (equalsIgnoreCase(player->getUUID(), ocelot->getOwnerUUID()) && !ocelot->isSittingOnTile() )
-								{
-									if(ocelot->isSitting())
-									{
-										*piUse=IDS_TOOLTIPS_FOLLOWME;
-									}
-									else
-									{
-										*piUse=IDS_TOOLTIPS_SIT;
-									}
-								}
-							}
-							else if(heldItemId >= 0)
-							{
-								if (ocelot->isFood(heldItem)) *piUse=IDS_TOOLTIPS_TAME;
-							}
-						}
-						break;
-
-					case eTYPE_PLAYER:
-						{
-							// Fix for #58576 - TU6: Content: Gameplay: Hit button prompt is available when attacking a host who has "Invisible" option turned on
-							shared_ptr<Player> TargetPlayer = dynamic_pointer_cast<Player>(hitResult->entity);
-
-							if(!TargetPlayer->hasInvisiblePrivilege()) // This means they are invisible, not just that they have the privilege
-							{
-								if( app.GetGameHostOption(eGameHostOption_PvP) && player->isAllowedToAttackPlayers())
-								{
-									*piAction=IDS_TOOLTIPS_HIT;
-								}
-							}
-						}
-						break;
-
-					case eTYPE_ITEM_FRAME:
-						{
-							shared_ptr<ItemFrame> itemFrame = dynamic_pointer_cast<ItemFrame>(hitResult->entity);
-
-							// is the frame occupied?
-							if(itemFrame->getItem()!=nullptr)
-							{
-								// rotate the item
-								*piUse=IDS_TOOLTIPS_ROTATE;
-							}
-							else
-							{
-								// is there an object in hand?
-								if(heldItemId >= 0) *piUse=IDS_TOOLTIPS_PLACE;
-							}
-
-							*piAction=IDS_TOOLTIPS_HIT;
-						}
-						break;
-
-					case eTYPE_VILLAGER:
-						{
-							// 4J-JEV: Cannot leash villagers.
-
-							shared_ptr<Villager> villager = dynamic_pointer_cast<Villager>(hitResult->entity);
-							if (!villager->isBaby())
-							{
-								*piUse=IDS_TOOLTIPS_TRADE;
-							}
-							*piAction=IDS_TOOLTIPS_HIT;
-						}
-						break;
-
-					case eTYPE_ZOMBIE:
-						{
-							shared_ptr<Zombie> zomb = dynamic_pointer_cast<Zombie>(hitResult->entity);
-							static GoldenAppleItem *goldapple = static_cast<GoldenAppleItem *>(Item::apple_gold);
-
-							//zomb->hasEffect(MobEffect::weakness) - not present on client.
-							if ( zomb->isVillager() && zomb->isWeakened() && (heldItemId == Item::apple_gold_Id) && !goldapple->isFoil(heldItem) )
-							{
-								*piUse=IDS_TOOLTIPS_CURE;
-							}
-							*piAction=IDS_TOOLTIPS_HIT;
-						}
-						break;
-
-					case eTYPE_HORSE:
-						{
-							shared_ptr<EntityHorse> horse = dynamic_pointer_cast<EntityHorse>(hitResult->entity);
-
-							bool heldItemIsFood = false, heldItemIsLove = false, heldItemIsArmour = false;
-
-							switch( heldItemId )
-							{
-								case Item::wheat_Id:
-								case Item::sugar_Id:
-								case Item::bread_Id:
-								case Tile::hayBlock_Id:
-								case Item::apple_Id:
-									heldItemIsFood = true;
-									break;
-								case Item::carrotGolden_Id:
-								case Item::apple_gold_Id:
-									heldItemIsLove = true;
-									heldItemIsFood = true;
-									break;
-								case Item::horseArmorDiamond_Id:
-								case Item::horseArmorGold_Id:
-								case Item::horseArmorMetal_Id:
-									heldItemIsArmour = true;
-									break;
-							}
-
-							if (horse->isLeashed() && horse->getLeashHolder() == player)
-							{
-								*piUse=IDS_TOOLTIPS_UNLEASH;
-							}
-							else if ( heldItemId == Item::lead_Id)
-							{
-								if (!horse->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
-							}
-							else if (heldItemId == Item::nameTag_Id)
-							{
-								*piUse = IDS_TOOLTIPS_NAME;
-							}
-							else if (horse->isBaby()) // 4J-JEV: Can't ride baby horses due to morals.
-							{
-								if (heldItemIsFood)
-								{
-									// 4j - Can feed foles to speed growth.
-									*piUse = IDS_TOOLTIPS_FEED;
-								}
-							}
-							else if ( !horse->isTamed() )
-							{
-								if (heldItemId == -1)
-								{
-									// 4j - Player not holding anything, ride and attempt to break untamed horse.
-									*piUse = IDS_TOOLTIPS_TAME;
-								}
-								else if (heldItemIsFood)
-								{
-									// 4j - Attempt to make it like you more by feeding it.
-									*piUse = IDS_TOOLTIPS_FEED;
-								}
-							}
-							else if (	player->isSneaking()
-									||	(heldItemId == Item::saddle_Id)
-									||	(horse->canWearArmor() && heldItemIsArmour)
-									)
-							{
-								// 4j - Access horses inventory
-								if (*piUse == -1) *piUse = IDS_TOOLTIPS_OPEN;
-							}
-							else if (	horse->canWearBags()
-									&&	!horse->isChestedHorse()
-									&&	(heldItemId == Tile::chest_Id) )
-							{
-								// 4j - Attach saddle-bags (chest) to donkey or mule.
-								*piUse = IDS_TOOLTIPS_ATTACH;
-							}
-							else if (	horse->isReadyForParenting()
-									&&	heldItemIsLove )
-							{
-								// 4j - Different food to mate horses.
-								*piUse = IDS_TOOLTIPS_LOVEMODE;
-							}
-							else if ( heldItemIsFood && (horse->getHealth() < horse->getMaxHealth()) )
-							{
-								// 4j - Horse is damaged and can eat held item to heal
-								*piUse = IDS_TOOLTIPS_HEAL;
-							}
-							else
-							{
-								// 4j - Ride tamed horse.
-								*piUse = IDS_TOOLTIPS_MOUNT;
-							}
-
-							if (player->isAllowedToAttackAnimals()) *piAction=IDS_TOOLTIPS_HIT;
-						}
-						break;
-
-					case eTYPE_ENDERDRAGON:
-						// 4J-JEV: Enderdragon cannot be named.
-						*piAction = IDS_TOOLTIPS_HIT;
-						break;
-
-					case eTYPE_LEASHFENCEKNOT:
-						*piAction = IDS_TOOLTIPS_UNLEASH;
-						if (heldItemId == Item::lead_Id && LeashItem::bindPlayerMobsTest(player, level, player->x, player->y, player->z))
-						{
-							*piUse = IDS_TOOLTIPS_ATTACH;
-						}
-						else
-						{
-							*piUse = IDS_TOOLTIPS_UNLEASH;
-						}
-						break;
-
-					default:
-						if (  hitResult->entity->instanceof(eTYPE_MOB) )
-						{
-							shared_ptr<Mob> mob = dynamic_pointer_cast<Mob>(hitResult->entity);
-							if (mob->isLeashed() && mob->getLeashHolder() == player)
-							{
-								*piUse=IDS_TOOLTIPS_UNLEASH;
-							}
-							else if (heldItemId == Item::lead_Id)
-							{
-								if (!mob->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
-							}
-							else if (heldItemId == Item::nameTag_Id)
-							{
-								*piUse=IDS_TOOLTIPS_NAME;
-							}
-						}
-						*piAction=IDS_TOOLTIPS_HIT;
-						break;
-					}
-					break;
-				}
-			}
-		}
-
-		// 4J-JEV: Don't set tooltips when we're reloading the skin, it'll crash.
-		if (!ui.IsReloadingSkin()) ui.SetTooltips( iPad, iA, iB, iX, iY, iLT, iRT, iLB, iRB, iLS, iRS);
-
-		int wheel = 0;
-		if (InputManager.GetValue(iPad, MINECRAFT_ACTION_LEFT_SCROLL, true) > 0 && gameMode->isInputAllowed(MINECRAFT_ACTION_LEFT_SCROLL) )
-		{
-			wheel = 1;
-		}
-		else if (InputManager.GetValue(iPad, MINECRAFT_ACTION_RIGHT_SCROLL,true) > 0 && gameMode->isInputAllowed(MINECRAFT_ACTION_RIGHT_SCROLL) )
-		{
-			wheel = -1;
-		}
-
-#ifdef _WINDOWS64
-		if (iPad == 0 && wheel == 0 && g_KBMInput.IsKBMActive())
-		{
-			wheel = g_KBMInput.GetMouseWheel();
-		}
-#endif
-		if (wheel != 0)
-		{
-			player->inventory->swapPaint(wheel);
-
-			if( gameMode != nullptr && gameMode->getTutorial() != nullptr )
-			{
-				// 4J Stu - For the tutorial we want to be able to record what items we are using so that we can give hints
-				gameMode->getTutorial()->onSelectedItemChanged(player->inventory->getSelected());
-			}
-
-			// Update presence
-			player->updateRichPresence();
-
-			if (options->isFlying)
-			{
-				if (wheel > 0) wheel = 1;
-				if (wheel < 0) wheel = -1;
-
-				options->flySpeed += wheel * .25f;
-			}
-		}
-
-		if( gameMode->isInputAllowed(MINECRAFT_ACTION_ACTION) )
-		{
-			if((player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_ACTION)))
-				//if(InputManager.ButtonPressed(iPad, MINECRAFT_ACTION_ACTION) )
-			{
-				//printf("MINECRAFT_ACTION_ACTION ButtonPressed");
-				player->handleMouseClick(0);
-				player->lastClickTick[0] = ticks;
-			}
-
-#ifdef _WINDOWS64
-			bool actionPressed = InputManager.ButtonPressed(iPad, MINECRAFT_ACTION_ACTION) || (iPad == 0 && g_KBMInput.IsKBMActive() && g_KBMInput.IsMouseButtonPressed(KeyboardMouseInput::MOUSE_LEFT));
-			bool actionHeld = InputManager.ButtonDown(iPad, MINECRAFT_ACTION_ACTION) || (iPad == 0 && g_KBMInput.IsKBMActive() && g_KBMInput.IsMouseButtonDown(KeyboardMouseInput::MOUSE_LEFT));
-#else
-			bool actionPressed = InputManager.ButtonPressed(iPad, MINECRAFT_ACTION_ACTION);
-			bool actionHeld = InputManager.ButtonDown(iPad, MINECRAFT_ACTION_ACTION);
-#endif
-
-			if (actionPressed)
-			{
-				//printf("MINECRAFT_ACTION_ACTION ButtonDown");
-				player->handleMouseClick(0);
-				player->lastClickTick[0] = ticks;
-			}
-
-			if(actionHeld)
-			{
-				player->handleMouseDown(0, true );
-			}
-			else
-			{
-				player->handleMouseDown(0, false );
-			}
-		}
-
-		// 4J Stu - This is how we used to handle the USE action. It has now been replaced with the block below which is more like the way the Java game does it,
-		// however we may find that the way we had it previously is more fun to play.
-		/*
-		if ((InputManager.GetValue(iPad, MINECRAFT_ACTION_USE,true)>0) && gameMode->isInputAllowed(MINECRAFT_ACTION_USE) )
-		{
-		handleMouseClick(1);
-		lastClickTick = ticks;
-		}
-		*/
-#ifdef _WINDOWS64
-		bool useHeld = InputManager.ButtonDown(iPad, MINECRAFT_ACTION_USE) || (iPad == 0 && g_KBMInput.IsKBMActive() && g_KBMInput.IsMouseButtonDown(KeyboardMouseInput::MOUSE_RIGHT));
-#else
-		bool useHeld = InputManager.ButtonDown(iPad, MINECRAFT_ACTION_USE);
-#endif
-		if( player->isUsingItem() )
-		{
-			if(!useHeld) gameMode->releaseUsingItem(player);
-		}
-		else if( gameMode->isInputAllowed(MINECRAFT_ACTION_USE) )
-		{
-			if( player->abilities.instabuild )
-			{
-				// 4J - attempt to handle click in special creative mode fashion if possible (used for placing blocks at regular intervals)
-				bool didClick = player->creativeModeHandleMouseClick(1, useHeld );
-				// If this handler has put us in lastClick_oldRepeat mode then it is because we aren't placing blocks - behave largely as the code used to
-				if( player->lastClickState == LocalPlayer::lastClick_oldRepeat )
-				{
-					// If we've already handled the click in creativeModeHandleMouseClick then just record the time of this click
-					if( didClick )
-					{
-						player->lastClickTick[1] = ticks;
-					}
-					else
-					{
-						// Otherwise just the original game code for handling autorepeat
-						if (useHeld && ticks - player->lastClickTick[1] >= timer->ticksPerSecond / 4)
-						{
-							player->handleMouseClick(1);
-							player->lastClickTick[1] = ticks;
-						}
-					}
-				}
-			}
-			else
-			{
-				// Consider as a click if we've had a period of not pressing the button, or we've reached auto-repeat time since the last time
-				// Auto-repeat is only considered if we aren't riding or sprinting, to avoid photo sensitivity issues when placing fire whilst doing fast things
-				// Also disable repeat when the player is sleeping to stop the waking up right after using the bed
-				bool firstClick = ( player->lastClickTick[1] == 0 );
-				bool autoRepeat = ticks - player->lastClickTick[1] >= timer->ticksPerSecond / 4;
-				if ( player->isRiding() || player->isSprinting() || player->isSleeping() ) autoRepeat = false;
-				if (useHeld )
-				{
-					// If the player has just exited a bed, then delay the time before a repeat key is allowed without releasing
-					if(player->isSleeping() ) player->lastClickTick[1] = ticks + (timer->ticksPerSecond * 2);
-					if( firstClick || autoRepeat )
-					{
-						bool wasSleeping = player->isSleeping();
-
-						player->handleMouseClick(1);
-
-						// If the player has just exited a bed, then delay the time before a repeat key is allowed without releasing
-						if(wasSleeping) player->lastClickTick[1] = ticks + (timer->ticksPerSecond * 2);
-						else player->lastClickTick[1] = ticks;
-					}
-				}
-				else
-				{
-					player->lastClickTick[1] = 0;
-				}
-			}
-		}
-
-		if(app.DebugSettingsOn())
-		{
-			if (player->ullButtonsPressed & ( 1LL << MINECRAFT_ACTION_CHANGE_SKIN) )
-			{
-				player->ChangePlayerSkin();
-			}
-		}
-
-		if (player->missTime > 0) player->missTime--;
-
-#ifdef _DEBUG//_MENUS_ENABLED // disable DPad cheats on release builds
-		if(app.DebugSettingsOn())
-		{
-#ifndef __PSVITA__
-			// 4J-PB - debugoverlay for primary player only
-			if(iPad==ProfileManager.GetPrimaryPad())
-			{
-				if((player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_RENDER_DEBUG)) )
-				{
-#ifndef _CONTENT_PACKAGE
-#ifdef _XBOX
-					app.EnableDebugOverlay(options->renderDebug,iPad);
-#else
-					// 4J Stu - The xbox uses a completely different way of navigating to this scene
-					// Always open in the fullscreen group so the overlay spans the full window
-					// regardless of split-screen viewport configuration.
-					ui.NavigateToScene(0, eUIScene_DebugOverlay, nullptr, eUILayer_Debug, eUIGroup_Fullscreen);
-#endif
-#endif
-				}
-
-				if((player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_SPAWN_CREEPER)))
-                {
-#ifndef _CONTENT_PACKAGE
-                    options->renderDebug = !options->renderDebug;
-#endif
-				}
-			}
-
-			if( (player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_FLY_TOGGLE)) )
-			{
-				player->abilities.debugflying = !player->abilities.debugflying;
-				player->abilities.flying = !player->abilities.flying;
-			}
-#endif // PSVITA
-		}
-#endif
-
-		if((player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_RENDER_THIRD_PERSON)) && gameMode->isInputAllowed(MINECRAFT_ACTION_RENDER_THIRD_PERSON))
-		{
-			// 4J-PB - changing this to be per player
-			player->SetThirdPersonView((player->ThirdPersonView()+1)%3);
-			//options->thirdPersonView = !options->thirdPersonView;
-		}
-
-		if((player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_GAME_INFO)) && gameMode->isInputAllowed(MINECRAFT_ACTION_GAME_INFO))
-		{
-			ui.NavigateToScene(iPad,eUIScene_InGameInfoMenu);
-			ui.PlayUISFX(eSFX_Press);
-		}
-
-		if((player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_INVENTORY)) && gameMode->isInputAllowed(MINECRAFT_ACTION_INVENTORY))
-		{
-			shared_ptr<MultiplayerLocalPlayer> player = Minecraft::GetInstance()->player;
-			ui.PlayUISFX(eSFX_Press);
-
-			if(gameMode->isServerControlledInventory())
-			{
-				player->sendOpenInventory();
-			}
-			else
-			{
-				app.LoadInventoryMenu(iPad,player);
-			}
-		}
-
-		if((player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_CRAFTING)) && gameMode->isInputAllowed(MINECRAFT_ACTION_CRAFTING))
-		{
-			shared_ptr<MultiplayerLocalPlayer> player = Minecraft::GetInstance()->player;
-
-			// 4J-PB - reordered the if statement so creative mode doesn't bring up the crafting table
-			// Fix for #39014 - TU5:  Creative Mode:  Pressing X to access the creative menu while looking at a crafting table causes the crafting menu to display
-			if(gameMode->hasInfiniteItems())
-			{
-				// Creative mode
-
-				ui.PlayUISFX(eSFX_Press);
-				app.LoadCreativeMenu(iPad,player);
-			}
-			// 4J-PB - Microsoft request that we use the 3x3 crafting if someone presses X while at the workbench
-			else if ((hitResult!=nullptr) && (hitResult->type == HitResult::TILE) && (level->getTile(hitResult->x, hitResult->y, hitResult->z) == Tile::workBench_Id))
-			{
-				//ui.PlayUISFX(eSFX_Press);
-				//app.LoadXuiCrafting3x3Menu(iPad,player,hitResult->x, hitResult->y, hitResult->z);
-				bool usedItem = false;
-				gameMode->useItemOn(player, level, nullptr, hitResult->x, hitResult->y, hitResult->z, 0, hitResult->pos, false, &usedItem);
-			}
-			else
-			{
-				ui.PlayUISFX(eSFX_Press);
-				app.LoadCrafting2x2Menu(iPad,player);
-			}
-		}
-
-		if ( (player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_PAUSEMENU))
-#ifdef _DURANGO
-			|| (player->ullButtonsPressed&(1LL<<ACTION_MENU_GTC_PAUSE))
-#endif
-			)
-		{
-			app.DebugPrintf("PAUSE PRESS PROCESSING - ipad = %d, NavigateToScene\n",player->GetXboxPad());
-			ui.PlayUISFX(eSFX_Press);
-			ui.NavigateToScene(iPad, eUIScene_PauseMenu, nullptr, eUILayer_Scene);
-		}
-
-		if((player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_DROP)) && gameMode->isInputAllowed(MINECRAFT_ACTION_DROP))
-		{
-			player->drop();
-		}
-
-		uint64_t ullButtonsPressed=player->ullButtonsPressed;
-
-		bool selected = false;
-#ifdef __PSVITA__
-		// 4J-PB - use the touchscreen for quickselect
-		SceTouchData* pTouchData = InputManager.GetTouchPadData(iPad,false);
-
-		if(pTouchData->reportNum==1)
-		{
-			int iHudSize=app.GetGameSettings(iPad,eGameSetting_UISize);
-			int iYOffset = (app.GetGameSettings(ProfileManager.GetPrimaryPad(),eGameSetting_Tooltips) == 0) ? iToolTipOffset : 0;
-			if((pTouchData->report[0].x>QuickSelectRect[iHudSize].left)&&(pTouchData->report[0].x<QuickSelectRect[iHudSize].right) &&
-				(pTouchData->report[0].y>QuickSelectRect[iHudSize].top+iYOffset)&&(pTouchData->report[0].y<QuickSelectRect[iHudSize].bottom+iYOffset))
-			{
-				player->inventory->selected=(pTouchData->report[0].x-QuickSelectRect[iHudSize].left)/QuickSelectBoxWidth[iHudSize];
-				selected = true;
-				app.DebugPrintf("Touch %d\n",player->inventory->selected);
-			}
-		}
-#endif
-		if( selected || wheel != 0 || (player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_DROP)) )
-		{
-			wstring itemName = L"";
-			shared_ptr<ItemInstance> selectedItem = player->getSelectedItem();
-			// Dropping items happens over network, so if we only have one then assume that we dropped it and should hide the item
-			int iCount=0;
-
-			if(selectedItem != nullptr) iCount=selectedItem->GetCount();
-			if(selectedItem != nullptr && !( (player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_DROP)) && selectedItem->GetCount() == 1))
-			{
-				itemName = selectedItem->getHoverName();
-			}
-			if( !(player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_DROP)) || (selectedItem != nullptr && selectedItem->GetCount() <= 1) ) ui.SetSelectedItem( iPad, itemName );
-		}
-	}
-	else
-	{
-		// 4J-PB
-		if (InputManager.GetValue(iPad, ACTION_MENU_CANCEL) > 0 && gameMode->isInputAllowed(ACTION_MENU_CANCEL))
-		{
-			setScreen(nullptr);
-		}
-	}
-
-	// monitor for keyboard input
-	// #ifndef _CONTENT_PACKAGE
-	// 	if(!(ui.GetMenuDisplayed(iPad)))
-	// 	{
-	// 		WCHAR wchInput;
-	// 		if(InputManager.InputDetected(iPad,&wchInput))
-	// 		{
-	// 			printf("Input Detected!\n");
-	//
-	// 			// see if we can react to this
-	// 			if(app.GetXuiAction(iPad)==eAppAction_Idle)
-	// 			{
-	// 				app.SetAction(iPad,eAppAction_DebugText,(LPVOID)wchInput);
-	// 			}
-	// 		}
-	// 	}
-	// #endif
-
-#if 0
-	// 4J - TODO - some replacement for input handling...
-	if (screen == nullptr || screen.passEvents)
-	{
-		while (Mouse.next())
-		{
-			long passedTime = System.currentTimeMillis() - lastTickTime;
-			if (passedTime > 200) continue;
-
-			int wheel = Mouse.getEventDWheel();
-			if (wheel != 0) {
-				player->inventory.swapPaint(wheel);
-
-				if (options.isFlying) {
-					if (wheel > 0) wheel = 1;
-					if (wheel < 0) wheel = -1;
-
-					options.flySpeed += wheel * .25f;
-				}
-			}
-
-			if (screen == null) {
-				if (!mouseGrabbed && Mouse.getEventButtonState()) {
-					grabMouse();
-				} else {
-					if (Mouse.getEventButton() == 0 && Mouse.getEventButtonState()) {
-						handleMouseClick(0);
-						lastClickTick = ticks;
-					}
-					if (Mouse.getEventButton() == 1 && Mouse.getEventButtonState()) {
-						handleMouseClick(1);
-						lastClickTick = ticks;
-					}
-					if (Mouse.getEventButton() == 2 && Mouse.getEventButtonState()) {
-						handleGrabTexture();
-					}
-				}
-			} else if (screen != null) {
-				screen.mouseEvent();
-			}
-		}
-
-		if (missTime > 0) missTime--;
-
-		while (Keyboard.next()) {
-			player->setKey(Keyboard.getEventKey(), Keyboard.getEventKeyState());
-			if (Keyboard.getEventKeyState()) {
-				if (Keyboard.getEventKey() == Keyboard.KEY_F11) {
-					toggleFullScreen();
-					continue;
-				}
-				/*
-				* if (Keyboard.getEventKey() == Keyboard.KEY_F4) { new
-				* PortalForcer().createPortal(level, player); continue; }
-				*/
-
-				/*
-				* if (Keyboard.getEventKey() == Keyboard.KEY_RETURN) {
-				* level.pathFind(); continue; }
-				*/
-
-				if (screen != null) {
-					screen.keyboardEvent();
-				} else {
-					if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
-						pauseGame();
-					}
-
-					if (Keyboard.getEventKey() == Keyboard.KEY_S && Keyboard.isKeyDown(Keyboard.KEY_F3)) {
-						reloadSound();
-					}
-
-					//                        if (Keyboard.getEventKey() == Keyboard.KEY_P) {
-					//                            gameMode = new DemoMode(this);
-					//                            selectLevel(CreateWorldScreen.findAvailableFolderName(getLevelSource(), "Demo"), "Demo World", 0L);
-					//                            setScreen(null);
-					//
-					//                        }
-
-					if (Keyboard.getEventKey() == Keyboard.KEY_F1) {
-						options.hideGui = !options.hideGui;
-					}
-					if (Keyboard.getEventKey() == Keyboard.KEY_F3) {
-						options.renderDebug = !options.renderDebug;
-					}
-					if (Keyboard.getEventKey() == Keyboard.KEY_F5) {
-						options.thirdPersonView = !options.thirdPersonView;
-					}
-					if (Keyboard.getEventKey() == Keyboard.KEY_F8) {
-						options.smoothCamera = !options.smoothCamera;
-					}
-					if (DEADMAU5_CAMERA_CHEATS) {
-						if (Keyboard.getEventKey() == Keyboard.KEY_F6) {
-							options.isFlying = !options.isFlying;
-						}
-						if (Keyboard.getEventKey() == Keyboard.KEY_F9) {
-							options.fixedCamera = !options.fixedCamera;
-						}
-						if (Keyboard.getEventKey() == Keyboard.KEY_ADD) {
-							options.cameraSpeed += .1f;
-						}
-						if (Keyboard.getEventKey() == Keyboard.KEY_SUBTRACT) {
-							options.cameraSpeed -= .1f;
-							if (options.cameraSpeed < 0) {
-								options.cameraSpeed = 0;
-							}
-						}
-					}
-
-					if (Keyboard.getEventKey() == options.keyBuild.key) {
-						setScreen(new InventoryScreen(player));
-					}
-
-					if (Keyboard.getEventKey() == options.keyDrop.key) {
-						player->drop();
-					}
-					if (isClientSide() && Keyboard.getEventKey() == options.keyChat.key) {
-						setScreen(new ChatScreen());
-					}
-				}
-
-				for (int i = 0; i < 9; i++) {
-					if (Keyboard.getEventKey() == Keyboard.KEY_1 + i) player->inventory.selected = i;
-				}
-				if (Keyboard.getEventKey() == options.keyFog.key) {
-					options.toggle(Options.Option.RENDER_DISTANCE, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) ? -1 : 1);
-				}
-			}
-		}
-
-		if (screen == null) {
-			if (Mouse.isButtonDown(0) && ticks - lastClickTick >= timer.ticksPerSecond / 4 && mouseGrabbed) {
-				handleMouseClick(0);
-				lastClickTick = ticks;
-			}
-			if (Mouse.isButtonDown(1) && ticks - lastClickTick >= timer.ticksPerSecond / 4 && mouseGrabbed) {
-				handleMouseClick(1);
-				lastClickTick = ticks;
-			}
-		}
-
-		handleMouseDown(0, screen == null && Mouse.isButtonDown(0) && mouseGrabbed);
-	}
-#endif
-
-	if (level != nullptr)
-	{
-		if (player != nullptr)
-		{
-			recheckPlayerIn++;
-			if (recheckPlayerIn == 30)
-			{
-				recheckPlayerIn = 0;
-				level->ensureAdded(player);
-			}
-		}
-		// 4J Changed - We are setting the difficulty the same as the server so that leaderboard updates work correctly
-		//level->difficulty = options->difficulty;
-		//if (level->isClientSide) level->difficulty = Difficulty::HARD;
-		if( !level->isClientSide )
-		{
-			//app.DebugPrintf("Minecraft::tick - Difficulty = %d",options->difficulty);
-			level->difficulty = options->difficulty;
-		}
-
-		PIXBeginNamedEvent(0,"Game renderer tick");
-		//if (!pause) gameRenderer->tick( bFirst);
-		PIXEndNamedEvent();
-
-		// 4J - we want to tick each level once only per frame, and do it when a player that is actually in that level happens to be active.
-		// This is important as things that get called in the level tick (eg the levellistener) eventually end up working out what the current
-		// level is by determing it from the current player. Use flags here to make sure each level is only ticked the once.
-		static unsigned int levelsTickedFlags;
-		if( bFirst )
-		{
-			levelsTickedFlags = 0;
-
-#ifndef DISABLE_LEVELTICK_THREAD
-			PIXBeginNamedEvent(0,"levelTickEventQueue waitForFinish");
-			levelTickEventQueue->waitForFinish();
-			PIXEndNamedEvent();
-#endif // DISABLE_LEVELTICK_THREAD
-			SparseLightStorage::tick();	// 4J added
-			CompressedTileStorage::tick();	// 4J added
-			SparseDataStorage::tick();		// 4J added
-		}
-
-		for(unsigned int i = 0; i < levels.length; ++i)
-		{
-			if( player->level != levels[i] ) continue;	// Don't tick if the current player isn't in this level
-
-			// 4J - this doesn't fully tick the animateTick here, but does register this player's position. The actual
-			// work is now done in Level::animateTickDoWork() so we can take into account multiple players in the one level.
-			if (!pause && levels[i] != nullptr) levels[i]->animateTick(Mth::floor(player->x), Mth::floor(player->y), Mth::floor(player->z));
-
-			if( levelsTickedFlags & ( 1 << i ) ) continue; // Don't tick further if we've already ticked this level this frame
-			levelsTickedFlags |= (1 << i);
-
-			PIXBeginNamedEvent(0,"Level renderer tick");
-			if (!pause) levelRenderer->tick();
-			PIXEndNamedEvent();
-			// if (!pause && player!=null) {
-			// if (player != null && !level.entities.contains(player)) {
-			// level.addEntity(player);
-			// }
-			// }
-			if( levels[i] != nullptr )
-			{
-				if (!pause)
-				{
-					if (levels[i]->skyFlashTime > 0) levels[i]->skyFlashTime--;
-					PIXBeginNamedEvent(0,"Level entity tick");
-					levels[i]->tickEntities();
-					PIXEndNamedEvent();
-				}
-
-				// optimisation to set the culling off early, in parallel with other stuff
-#if defined __PS3__ && !defined DISABLE_SPU_CODE
-				// kick off the culling for all valid players in this level
-				int currPlayerIdx = getLocalPlayerIdx();
-				for( int idx = 0; idx < XUSER_MAX_COUNT; idx++ )
-				{
-					if(localplayers[idx]!=nullptr)
-					{
-						if( localplayers[idx]->level == levels[i] )
-						{
-							setLocalPlayerIdx(idx);
-							gameRenderer->setupCamera(timer->a, i);
-							Camera::prepare(localplayers[idx], localplayers[idx]->ThirdPersonView() == 2);
-							shared_ptr<LivingEntity> cameraEntity = cameraTargetPlayer;
-							double xOff = cameraEntity->xOld + (cameraEntity->x - cameraEntity->xOld) * timer->a;
-							double yOff = cameraEntity->yOld + (cameraEntity->y - cameraEntity->yOld) * timer->a;
-							double zOff = cameraEntity->zOld + (cameraEntity->z - cameraEntity->zOld) * timer->a;
-							FrustumCuller frustObj;
-							Culler *frustum = &frustObj;
-							MemSect(0);
-							frustum->prepare(xOff, yOff, zOff);
-							levelRenderer->cull_SPU(idx, frustum, 0);
-						}
-					}
-				}
-				setLocalPlayerIdx(currPlayerIdx);
-#endif // __PS3__
-
-				// 4J Stu - We are always online, but still could be paused
-				if (!pause) // || isClientSide())
-				{
-					//app.DebugPrintf("Minecraft::tick spawn settings - Difficulty = %d",options->difficulty);
-					levels[i]->setSpawnSettings(level->difficulty > 0, true);
-					PIXBeginNamedEvent(0,"Level tick");
-#ifdef DISABLE_LEVELTICK_THREAD
-					levels[i]->tick();
-#else
-					levelTickEventQueue->sendEvent(levels[i]);
-#endif // DISABLE_LEVELTICK_THREAD
-					PIXEndNamedEvent();
-				}
-			}
-		}
-
-		if( bFirst )
-		{
-			PIXBeginNamedEvent(0,"Particle tick");
-			if (!pause) particleEngine->tick();
-			PIXEndNamedEvent();
-		}
-
-		// 4J Stu - Keep ticking the connections if paused so that they don't time out
-		if( pause ) tickAllConnections();
-		// player->tick();
-	}
-#ifdef __PS3__
-
-// 	while(!g_tickLevelQueue.empty())
-// 	{
-// 		Level* pLevel = g_tickLevelQueue.front();
-// 		g_tickLevelQueue.pop();
-// 		pLevel->tick();
-// 	};
-
-#endif
-
-	// if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD7) ||
-	// Keyboard.isKeyDown(Keyboard.KEY_Q)) rota++;
-	// if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD9) ||
-	// Keyboard.isKeyDown(Keyboard.KEY_E)) rota--;
-	// 4J removed
-	//lastTickTime = System::currentTimeMillis();
+	
 }
 
 void Minecraft::reloadSound()
@@ -4227,28 +2061,12 @@ void Minecraft::setLevel(MultiPlayerLevel *level, int message /*=-1*/, shared_pt
 	bool playerAdded = false;
 	this->cameraTargetPlayer = nullptr;
 
-	if(progressRenderer != nullptr)
-	{
-		this->progressRenderer->progressStart(message);
-		this->progressRenderer->progressStage(-1);
-	}
-
 	// 4J-PB - since we now play music in the menu, just let it keep playing
 	//soundEngine->playStreaming(L"", 0, 0, 0, 0, 0);
 
 	// 4J - stop update thread from processing this level, which blocks until it is safe to move on - will be re-enabled if we set the level to be non-nullptr
 	gameRenderer->DisableUpdateThread();
 
-	if (level == nullptr || player == nullptr)
-	{
-		for (int i = 0; i < XUSER_MAX_COUNT; ++i)
-		{
-			if (localitemInHandRenderers[i] != nullptr)
-			{
-				localitemInHandRenderers[i]->reset();
-			}
-		}
-	}
 
 	for(unsigned int i = 0; i < levels.length; ++i)
 	{
@@ -4324,8 +2142,6 @@ void Minecraft::setLevel(MultiPlayerLevel *level, int message /*=-1*/, shared_pt
 		// Remove references to player
 		player = nullptr;
 		cameraTargetPlayer = nullptr;
-		EntityRenderDispatcher::instance->cameraEntity = nullptr;
-		TileEntityRenderDispatcher::instance->cameraEntity = nullptr;
 	}
 	this->level = level;
 
@@ -4454,11 +2270,6 @@ void Minecraft::setLevel(MultiPlayerLevel *level, int message /*=-1*/, shared_pt
 
 void Minecraft::prepareLevel(int title)
 {
-	if(progressRenderer != nullptr)
-	{
-		this->progressRenderer->progressStart(title);
-		this->progressRenderer->progressStage(IDS_PROGRESS_BUILDING_TERRAIN);
-	}
 	int r = 128;
 	if (gameMode->isCutScene()) r = 64;
 	int pp = 0;
@@ -4483,22 +2294,9 @@ void Minecraft::prepareLevel(int title)
 	}
 #endif
 
-	for (int x = -r; x <= r; x += 16)
-	{
-		for (int z = -r; z <= r; z += 16)
-		{
-			if(progressRenderer != nullptr) this->progressRenderer->progressStagePercentage((pp++) * 100 / max);
-			level->getTile(spawnPos->x + x, 64, spawnPos->z + z);
-			if (!gameMode->isCutScene()) {
-			}
-		}
-	}
+	
 	delete spawnPos;
-	if (!gameMode->isCutScene())
-	{
-		if(progressRenderer != nullptr) this->progressRenderer->progressStage(IDS_PROGRESS_SIMULATING_WORLD);
-		max = 2000;
-}
+
 }
 
 wstring Minecraft::gatherStats1()
@@ -4688,8 +2486,6 @@ void Minecraft::main()
 		*/
 	}
 
-	// Common for all platforms
-	IUIScene_CreativeMenu::staticCtor();
 
 	// On PS4, we call Minecraft::Start from another thread, as this has been timed taking ~2.5 seconds and we need to do some basic
 	// rendering stuff so that we don't break the TRCs on SubmitDone calls
@@ -5009,7 +2805,6 @@ int Minecraft::InGame_SignInReturned(void *pParam,bool bContinue, int iPad)
 			{
 				UINT uiIDA[1];
 				uiIDA[0]=IDS_OK;
-				ui.RequestErrorMessage(IDS_MULTIPLAYER_FULL_TITLE, IDS_MULTIPLAYER_FULL_TEXT, uiIDA, 1);
 #ifdef _DURANGO
 				ProfileManager.RemoveGamepadFromGame(iPad);
 #endif
@@ -5053,7 +2848,6 @@ int Minecraft::InGame_SignInReturned(void *pParam,bool bContinue, int iPad)
 				//ProfileManager.RequestConvertOfflineToGuestUI( &Minecraft::InGame_SignInReturned, pMinecraftClass,iPad);
 				UINT uiIDA[1];
 				uiIDA[0]=IDS_CONFIRM_OK;
-				ui.RequestErrorMessage( IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE, IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT, uiIDA,1,iPad);
 #ifdef _DURANGO
 				ProfileManager.RemoveGamepadFromGame(iPad);
 #endif

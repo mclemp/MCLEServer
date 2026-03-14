@@ -807,9 +807,6 @@
     <ClInclude Include="Tesselator.h">
       <Filter>net\minecraft\client\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="TileRenderer.h">
-      <Filter>net\minecraft\client\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>net\minecraft\client\model</Filter>
     </ClInclude>
@@ -873,104 +870,8 @@
     <ClInclude Include="Chunk.h">
       <Filter>net\minecraft\client\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="EntityRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="ArrowRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="EntityRenderDispatcher.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="BoatRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="ChickenRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="MobRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="CowRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="CreeperRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="DefaultRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="FallingTileRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="FireballRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="FishingHookRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="GhastRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="GiantMobRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanoidMobRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemSpriteRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="LightningBoltRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="MinecartRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="PaintingRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="PigRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
     <ClInclude Include="LocalPlayer.h">
       <Filter>net\minecraft\client\player</Filter>
-    </ClInclude>
-    <ClInclude Include="SheepRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="SlimeRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="SpiderRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="SquidRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="TntRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="WolfRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="TileEntityRenderer.h">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClInclude>
-    <ClInclude Include="SignRenderer.h">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClInclude>
-    <ClInclude Include="MobSpawnerRenderer.h">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClInclude>
-    <ClInclude Include="TileEntityRenderDispatcher.h">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
     </ClInclude>
     <ClInclude Include="Textures.h">
       <Filter>net\minecraft\client\renderer</Filter>
@@ -988,9 +889,6 @@
       <Filter>net\minecraft\client\skins</Filter>
     </ClInclude>
     <ClInclude Include="HttpTexture.h">
-      <Filter>net\minecraft\client\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemInHandRenderer.h">
       <Filter>net\minecraft\client\renderer</Filter>
     </ClInclude>
     <ClInclude Include="OffsettedRenderList.h">
@@ -1095,9 +993,6 @@
     <ClInclude Include="Minecraft.h">
       <Filter>net\minecraft\client</Filter>
     </ClInclude>
-    <ClInclude Include="ProgressRenderer.h">
-      <Filter>net\minecraft\client</Filter>
-    </ClInclude>
     <ClInclude Include="DemoLevel.h">
       <Filter>net\minecraft\client\level</Filter>
     </ClInclude>
@@ -1105,9 +1000,6 @@
       <Filter>net\minecraft\client</Filter>
     </ClInclude>
     <ClInclude Include="GuiComponent.h">
-      <Filter>net\minecraft\client\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="Gui.h">
       <Filter>net\minecraft\client\gui</Filter>
     </ClInclude>
     <ClInclude Include="GuiMessage.h">
@@ -1266,12 +1158,6 @@
     <ClInclude Include="PlayerChunkMap.h">
       <Filter>net\minecraft\server\level</Filter>
     </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Helper.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_MainMenu.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
     <ClInclude Include="ClientConnection.h">
       <Filter>net\minecraft\client\multiplayer</Filter>
     </ClInclude>
@@ -1296,111 +1182,6 @@
     <ClInclude Include="ReceivingLevelScreen.h">
       <Filter>net\minecraft\client\multiplayer</Filter>
     </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Intro.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Death.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_FullscreenProgress.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_SignEntry.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_HelpAndOptions.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_HelpControls.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_HelpCredits.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Credits</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_HelpHowToPlay.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\How To Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_HowToPlayMenu.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\How To Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_MultiGameJoinLoad.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_MultiGameCreate.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_MultiGameInfo.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_TutorialPopup.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Tutorial</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Leaderboards.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Leaderboards</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_PauseMenu.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Pause</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_InGameInfo.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Debug.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_DebugOverlay.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_ConnectingProgress.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_DLCOffers.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_MinecraftPlayer.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_MinecraftSlot.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_CraftIngredientSlot.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_4JList.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_SliderWrapper.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_PassthroughList.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_SlotList.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_SlotItemCtrlBase.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_SlotItemListItem.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_SlotItem.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_ProgressCtrlBase.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_LoadingProgress.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_FireProgress.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_BurnProgress.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_SocialPost.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Social</Filter>
-    </ClInclude>
     <ClInclude Include="MemTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1410,53 +1191,8 @@
     <ClInclude Include="MobSkinMemTextureProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_TrialExitUpsell.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_PartnernetPassword.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_SaveMessage.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_SettingsAll.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_4JIcon.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_LoadSettings.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_SplashPulser.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_DebugTips.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
-    </ClInclude>
     <ClInclude Include="ServerConnection.h">
       <Filter>net\minecraft\server\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_SkinSelect.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_MinecraftSkinPreview.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="PistonPieceRenderer.h">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_SettingsOptions.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_SettingsAudio.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_SettingsControl.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_SettingsGraphics.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
     </ClInclude>
     <ClInclude Include="ServerPlayerGameMode.h">
       <Filter>net\minecraft\server\level</Filter>
@@ -1503,71 +1239,11 @@
     <ClInclude Include="SuspendedTownParticle.h">
       <Filter>net\minecraft\client\particle</Filter>
     </ClInclude>
-    <ClInclude Include="EntityTileRenderer.h">
-      <Filter>net\minecraft\client\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="EndermanRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="ExperienceOrbRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="SilverfishRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="ChestRenderer.h">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_DebugItemEditor.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_DebugSchematicCreator.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_MultiGameLaunchMoreOptions.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_InGameHostOptions.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_InGamePlayerOptions.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>net\minecraft\client</Filter>
     </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_NewUpdateMessage.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
     <ClInclude Include="ServerInterface.h">
       <Filter>net\minecraft\server</Filter>
-    </ClInclude>
-    <ClInclude Include="BlazeRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="EnderCrystalRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="EnderDragonRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="LavaSlimeRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="MushroomCowRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="SnowManRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="VillagerRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="EnchantTableRenderer.h">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClInclude>
-    <ClInclude Include="TheEndPortalRenderer.h">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>net\minecraft\client\model\geom</Filter>
@@ -1617,29 +1293,8 @@
     <ClInclude Include="Cube.h">
       <Filter>net\minecraft\client\model\geom</Filter>
     </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_EnchantmentBook.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_EnchantButton.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_BrewProgress.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_BubblesProgress.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_EnchantmentButtonText.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_MobEffect.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
     <ClInclude Include="SkinBox.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_Win.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
     </ClInclude>
     <ClInclude Include="extraX64client.h">
       <Filter>Header Files</Filter>
@@ -1815,57 +1470,6 @@
     <ClInclude Include="Common\GameRules\ConsoleGameRulesConstants.h">
       <Filter>Common\Source Files\GameRules</Filter>
     </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_CustomMessages.h">
-      <Filter>Xbox\Source Files\XUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Reinstall.h">
-      <Filter>Xbox\Source Files\XUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_XZP_Icons.h">
-      <Filter>Xbox\Source Files\XUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_BasePlayer.h">
-      <Filter>Xbox\Source Files\XUI\Base Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Chat.h">
-      <Filter>Xbox\Source Files\XUI\Base Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_Base.h">
-      <Filter>Xbox\Source Files\XUI\Base Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_AbstractContainer.h">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_BrewingStand.h">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_Container.h">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_CraftingPanel.h">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_Enchant.h">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_Furnace.h">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_Inventory.h">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_Inventory_Creative.h">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_Trap.h">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Controls.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Ctrl_4JEdit.h">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClInclude>
     <ClInclude Include="AbstractTexturePack.h">
       <Filter>net\minecraft\client\skins</Filter>
     </ClInclude>
@@ -1874,9 +1478,6 @@
     </ClInclude>
     <ClInclude Include="FolderTexturePack.h">
       <Filter>net\minecraft\client\skins</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemFrameRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
     </ClInclude>
     <ClInclude Include="Rect2i.h">
       <Filter>net\minecraft\client\renderer</Filter>
@@ -1907,12 +1508,6 @@
     </ClInclude>
     <ClInclude Include="CompassTexture.h">
       <Filter>net\minecraft\client\renderer\texture\custom</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_SettingsUI.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_TextEntry.h">
-      <Filter>Xbox\Source Files\XUI</Filter>
     </ClInclude>
     <ClInclude Include="PreStitchedTextureMap.h">
       <Filter>net\minecraft\client\renderer\texture</Filter>
@@ -1995,9 +1590,6 @@
     <ClInclude Include="Windows64\Windows64_App.h">
       <Filter>Windows64</Filter>
     </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_HUD.h">
-      <Filter>Xbox\Source Files\XUI\Base Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Common\DLC\DLCUIDataFile.h">
       <Filter>Common\Source Files\DLC</Filter>
     </ClInclude>
@@ -2021,9 +1613,6 @@
     </ClInclude>
     <ClInclude Include="VillagerGolemModel.h">
       <Filter>net\minecraft\client\model</Filter>
-    </ClInclude>
-    <ClInclude Include="VillagerGolemRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
     </ClInclude>
     <ClInclude Include="Windows64\Miles\include\mss.h">
       <Filter>Windows64\Miles Sound System\Include</Filter>
@@ -2079,9 +1668,6 @@
     <ClInclude Include="Common\GameRules\NamedAreaRuleDefinition.h">
       <Filter>Common\Source Files\GameRules\LevelRules\RuleDefinitions</Filter>
     </ClInclude>
-    <ClInclude Include="Common\UI\UIController.h">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Windows64\Iggy\include\gdraw.h">
       <Filter>Windows64\Iggy\include</Filter>
     </ClInclude>
@@ -2100,32 +1686,11 @@
     <ClInclude Include="Windows64\Iggy\gdraw\gdraw_d3d11.h">
       <Filter>Windows64\Iggy\gdraw</Filter>
     </ClInclude>
-    <ClInclude Include="Windows64\Windows64_UIController.h">
-      <Filter>Windows64</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIGroup.h">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UILayer.h">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene.h">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UI.h">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Common\GameRules\BiomeOverride.h">
       <Filter>Common\Source Files\GameRules\LevelGeneration</Filter>
     </ClInclude>
-    <ClInclude Include="SkullTileRenderer.h">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClInclude>
     <ClInclude Include="SkeletonHeadModel.h">
       <Filter>net\minecraft\client\model</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_DebugSetCamera.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
     </ClInclude>
     <ClInclude Include="Common\DLC\DLCAudioFile.h">
       <Filter>Common\Source Files\DLC</Filter>
@@ -2178,158 +1743,14 @@
     <ClInclude Include="Common\Network\NetworkPlayerInterface.h">
       <Filter>Common\Source Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Common\UI\UIBitmapFont.h">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UITTFFont.h">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_DebugOverlay.h">
-      <Filter>Common\Source Files\UI\Scenes\Debug</Filter>
-    </ClInclude>
     <ClInclude Include="Common\Network\SessionInfo.h">
       <Filter>Common\Source Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="Common\Network\GameNetworkManager.h">
       <Filter>Common\Source Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_MainMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_CreativeMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_InventoryMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_ContainerMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_AbstractContainerMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_LoadMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_CreateWorldMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_FullscreenProgress.h">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_HUD.h">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIComponent_Panorama.h">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_LoadOrJoinMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_LaunchMoreOptionsMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_CreativeMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIStructs.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIEnums.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_AbstractContainerMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_ContainerMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_InventoryMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_EnchantingMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_FurnaceMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_DispenserMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_BrewingMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_BrewingStandMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_DispenserMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_FurnaceMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_EnchantingMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_HelpAndOptionsMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_SettingsMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_SettingsOptionsMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_Button.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_CheckBox.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_Slider.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_Label.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_TextInput.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_SlotList.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_Cursor.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_Progress.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_SettingsAudioMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_SettingsControlMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_SettingsGraphicsMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_SettingsUIMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
     <ClInclude Include="Common\Network\PlatformNetworkManagerInterface.h">
       <Filter>Common\Source Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_CraftingMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_DebugOptions.h">
-      <Filter>Common\Source Files\UI\Scenes\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIComponent_DebugUIConsole.h">
-      <Filter>Common\Source Files\UI\Components</Filter>
     </ClInclude>
     <ClInclude Include="Xbox\Network\PlatformNetworkManagerXbox.h">
       <Filter>Xbox\Source Files\Network</Filter>
@@ -2340,194 +1761,20 @@
     <ClInclude Include="Xbox\Network\NetworkPlayerXbox.h">
       <Filter>Xbox\Source Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_ButtonList.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_JoinMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIComponent_Logo.h">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIComponent_Tooltips.h">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_CraftingMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_DeathMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_ConnectingProgress.h">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Common\BuildVer.h">
       <Filter>Common\Source Files\BuildVer</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_SkinSelectMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_PlayerSkinPreview.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
     </ClInclude>
     <ClInclude Include="ArchiveFile.h">
       <Filter>Common\Source Files\UI\All Platforms</Filter>
     </ClInclude>
-    <ClInclude Include="Common\UI\IUIController.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_PauseMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIComponent_TutorialPopup.h">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_Intro.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_SaveMessage.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_HowToPlayMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_SignEntryMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_QuadrantSignin.h">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_PauseMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIComponent_Chat.h">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_MessageBox.h">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_TexturePackList.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
     <ClInclude Include="Common\Leaderboards\LeaderboardManager.h">
       <Filter>Common\Source Files\Leaderboards</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_HowToPlay.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_InGameInfoMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_LeaderboardsMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_LeaderboardList.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
     </ClInclude>
     <ClInclude Include="Windows64\Leaderboards\WindowsLeaderboardManager.h">
       <Filter>Windows64\Source Files\Leaderboards</Filter>
     </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_ControlsMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_DLCMainMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_DLCOffersMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_SaveList.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_PlayerList.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_BitmapIcon.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_Timer.h">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_Base.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_DLCList.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_InGameHostOptionsMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_MinecraftPlayer.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_EnchantmentButton.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_EnchantmentBook.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_EndPoem.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_HTMLLabel.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_InGamePlayerOptionsMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_TrialExitUpsell.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_ReinstallMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_Credits.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIComponent_PressStartToPlay.h">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIComponent_MenuBackground.h">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_EULA.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_DynamicLabel.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_TransferToXboxOne.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="EnderChestRenderer.h">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_TradingMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_TradingMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_DebugSetCamera.h">
-      <Filter>Common\Source Files\UI\Scenes\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_Anvil.h">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_AnvilMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_AnvilMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Scene_Trading.h">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="VillagerZombieModel.h">
       <Filter>net\minecraft\client\model</Filter>
-    </ClInclude>
-    <ClInclude Include="ZombieRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
     </ClInclude>
     <ClInclude Include="ServerCommandDispatcher.h">
       <Filter>net\minecraft\server\commands</Filter>
@@ -2556,44 +1803,14 @@
     <ClInclude Include="Common\GameRules\StartFeature.h">
       <Filter>Common\Source Files\GameRules\LevelGeneration</Filter>
     </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_TeleportMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\XUI\XUI_Teleport.h">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_DebugCreateSchematic.h">
-      <Filter>Common\Source Files\UI\Scenes\Debug</Filter>
-    </ClInclude>
     <ClInclude Include="Common\Telemetry\TelemetryManager.h">
       <Filter>Common\Source Files\Telemetry</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIFontData.h">
-      <Filter>Common\Source Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="Common\Network\Sony\SonyRemoteStorage.h">
       <Filter>Common\Source Files\Network\Sony</Filter>
     </ClInclude>
-    <ClInclude Include="Common\UI\UIComponent_DebugUIMarketingGuide.h">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_Touch.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_StartGame.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_SpaceIndicatorBar.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_InGameSaveManagementMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClInclude>
     <ClInclude Include="Xbox\Network\extra.h">
       <Filter>Xbox\Source Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_Keyboard.h">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Common\Leaderboards\SonyLeaderboardManager.h">
       <Filter>Common\Source Files\Leaderboards</Filter>
@@ -2631,71 +1848,14 @@
     <ClInclude Include="ResourceLocation.h">
       <Filter>net\minecraft\client\resources</Filter>
     </ClInclude>
-    <ClInclude Include="LivingEntityRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="BatRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="CaveSpiderRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="HorseRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="LeashKnotRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="MinecartSpawnerRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="OcelotRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="SkeletonRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="WitchRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="WitherBossRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="WitherSkullRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="TntMinecartRenderer.h">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="BeaconRenderer.h">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClInclude>
     <ClInclude Include="TextureAtlas.h">
       <Filter>net\minecraft\client\renderer\texture</Filter>
     </ClInclude>
     <ClInclude Include="BossMobGuiInfo.h">
       <Filter>net\minecraft\client\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_BeaconMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_CommandBlockMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_HopperMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_HorseInventoryMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
     <ClInclude Include="OcelotModel.h">
       <Filter>net\minecraft\client\model</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_HopperMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_HorseInventoryMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Common\XUI\XUI_Scene_Hopper.h">
       <Filter>Xbox\Source Files\XUI\Containers</Filter>
@@ -2712,41 +1872,14 @@
     <ClInclude Include="Common\XUI\XUI_Ctrl_BeaconButton.h">
       <Filter>Xbox\Source Files\XUI\Controls</Filter>
     </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_FireworksMenu.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
     <ClInclude Include="Common\XUI\XUI_Scene_Fireworks.h">
       <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_BeaconEffectButton.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_BeaconMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_FireworksMenu.h">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\IUIScene_HUD.h">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_LanguageSelector.h">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIString.h">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIControl_MinecraftHorse.h">
-      <Filter>Common\Source Files\UI\Controls</Filter>
     </ClInclude>
     <ClInclude Include="Common\Tutorial\HorseChoiceTask.h">
       <Filter>Common\Source Files\Tutorial\Tasks</Filter>
     </ClInclude>
     <ClInclude Include="Common\Tutorial\RideEntityTask.h">
       <Filter>Common\Source Files\Tutorial\Tasks</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\UI\UIScene_NewUpdateMessage.h">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
     </ClInclude>
     <ClInclude Include="Common\Leaderboards\LeaderboardInterface.h">
       <Filter>Common\Source Files\Leaderboards</Filter>
@@ -2793,9 +1926,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tesselator.cpp">
-      <Filter>net\minecraft\client\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="TileRenderer.cpp">
       <Filter>net\minecraft\client\renderer</Filter>
     </ClCompile>
     <ClCompile Include="Vertex.cpp">
@@ -2861,102 +1991,6 @@
     <ClCompile Include="Chunk.cpp">
       <Filter>net\minecraft\client\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="ArrowRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="EntityRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="EntityRenderDispatcher.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="BoatRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="MobRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="ChickenRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="CowRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="DefaultRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="FallingTileRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="CreeperRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="FireballRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="FishingHookRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="GhastRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="GiantMobRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemSpriteRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="LightningBoltRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="MinecartRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="PaintingRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="PigRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="SheepRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="SlimeRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="SpiderRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="SquidRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="TntRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="WolfRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanoidMobRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="TileEntityRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClCompile>
-    <ClCompile Include="SignRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClCompile>
-    <ClCompile Include="MobSpawnerRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClCompile>
-    <ClCompile Include="TileEntityRenderDispatcher.cpp">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClCompile>
     <ClCompile Include="Textures.cpp">
       <Filter>net\minecraft\client\renderer</Filter>
     </ClCompile>
@@ -2970,9 +2004,6 @@
       <Filter>net\minecraft\client\skins</Filter>
     </ClCompile>
     <ClCompile Include="HttpTexture.cpp">
-      <Filter>net\minecraft\client\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemInHandRenderer.cpp">
       <Filter>net\minecraft\client\renderer</Filter>
     </ClCompile>
     <ClCompile Include="OffsettedRenderList.cpp">
@@ -3077,9 +2108,6 @@
     <ClCompile Include="Minecraft.cpp">
       <Filter>net\minecraft\client</Filter>
     </ClCompile>
-    <ClCompile Include="ProgressRenderer.cpp">
-      <Filter>net\minecraft\client</Filter>
-    </ClCompile>
     <ClCompile Include="DemoLevel.cpp">
       <Filter>net\minecraft\client\level</Filter>
     </ClCompile>
@@ -3091,9 +2119,6 @@
     </ClCompile>
     <ClCompile Include="GuiMessage.cpp">
       <Filter>net\minecraft\client</Filter>
-    </ClCompile>
-    <ClCompile Include="Gui.cpp">
-      <Filter>net\minecraft\client\gui</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>net\minecraft\client\gui</Filter>
@@ -3254,9 +2279,6 @@
     <ClCompile Include="PlayerChunkMap.cpp">
       <Filter>net\minecraft\server\level</Filter>
     </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_MainMenu.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
     <ClCompile Include="ClientConnection.cpp">
       <Filter>net\minecraft\client\multiplayer</Filter>
     </ClCompile>
@@ -3281,152 +2303,11 @@
     <ClCompile Include="ReceivingLevelScreen.cpp">
       <Filter>net\minecraft\client\multiplayer</Filter>
     </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Intro.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Death.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_SignEntry.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_HelpAndOptions.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_HelpControls.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_HelpCredits.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Credits</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_HelpHowToPlay.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\How To Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_HowToPlayMenu.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\How To Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_MultiGameJoinLoad.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_MultiGameCreate.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_MultiGameInfo.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_TutorialPopup.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Tutorial</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Leaderboards.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Leaderboards</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_PauseMenu.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Pause</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_InGameInfo.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_debug.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_DebugOverlay.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_ConnectingProgress.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_DLCOffers.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_MinecraftPlayer.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_MinecraftSlot.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_CraftIngredientSlot.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_4JList.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_SliderWrapper.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_PassThroughList.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_SlotList.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_SlotItemCtrlBase.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_ProgressCtrlBase.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_LoadingProgress.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_FireProgress.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_BurnProgress.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_SocialPost.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Social</Filter>
-    </ClCompile>
     <ClCompile Include="MemTexture.cpp">
       <Filter>net\minecraft\client\renderer</Filter>
     </ClCompile>
     <ClCompile Include="MobSkinMemTextureProcessor.cpp">
       <Filter>net\minecraft\client\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_TrialExitUpsell.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_PartnernetPassword.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_SaveMessage.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_SettingsAll.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_4JIcon.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_LoadSettings.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_SplashPulser.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_DebugTips.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_SkinSelect.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_MinecraftSkinPreview.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="PistonPieceRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_SettingsOptions.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_SettingsAudio.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_SettingsControl.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_SettingsGraphics.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
     </ClCompile>
     <ClCompile Include="ServerPlayerGameMode.cpp">
       <Filter>net\minecraft\server\level</Filter>
@@ -3467,68 +2348,8 @@
     <ClCompile Include="SuspendedTownParticle.cpp">
       <Filter>net\minecraft\client\particle</Filter>
     </ClCompile>
-    <ClCompile Include="EntityTileRenderer.cpp">
-      <Filter>net\minecraft\client\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="EndermanRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="ExperienceOrbRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="SilverfishRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="ChestRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_DebugItemEditor.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_DebugSchematicCreator.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_MultiGameLaunchMoreOptions.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_InGameHostOptions.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_InGamePlayerOptions.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>net\minecraft\client</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_NewUpdateMessage.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="BlazeRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="EnderCrystalRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="EnderDragonRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="LavaSlimeRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="MushroomCowRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="SnowManRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="VillagerRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="EnchantTableRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClCompile>
-    <ClCompile Include="TheEndPortalRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
     </ClCompile>
     <ClCompile Include="DripParticle.cpp">
       <Filter>net\minecraft\client\particle</Filter>
@@ -3574,27 +2395,6 @@
     </ClCompile>
     <ClCompile Include="Cube.cpp">
       <Filter>net\minecraft\client\model\geom</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_EnchantmentBook.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_EnchantButton.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_BrewProgress.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_BubblesProgress.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_EnchantmentButtonText.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_MobEffect.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_Win.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
     </ClCompile>
     <ClCompile Include="Extrax64Stubs.cpp">
       <Filter>Source Files</Filter>
@@ -3737,51 +2537,6 @@
     <ClCompile Include="Common\GameRules\ConsoleGenerateStructure.cpp">
       <Filter>Common\Source Files\GameRules\LevelGeneration</Filter>
     </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Reinstall.cpp">
-      <Filter>Xbox\Source Files\XUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_TextEntry.cpp">
-      <Filter>Xbox\Source Files\XUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_BasePlayer.cpp">
-      <Filter>Xbox\Source Files\XUI\Base Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Chat.cpp">
-      <Filter>Xbox\Source Files\XUI\Base Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_Base.cpp">
-      <Filter>Xbox\Source Files\XUI\Base Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_AbstractContainer.cpp">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_BrewingStand.cpp">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_Container.cpp">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_CraftingPanel.cpp">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_Enchant.cpp">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_Furnace.cpp">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_Inventory.cpp">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_Inventory_Creative.cpp">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_Trap.cpp">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Ctrl_4JEdit.cpp">
-      <Filter>Xbox\Source Files\XUI\Controls</Filter>
-    </ClCompile>
     <ClCompile Include="AbstractTexturePack.cpp">
       <Filter>net\minecraft\client\skins</Filter>
     </ClCompile>
@@ -3790,9 +2545,6 @@
     </ClCompile>
     <ClCompile Include="FolderTexturePack.cpp">
       <Filter>net\minecraft\client\skins</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemFrameRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
     </ClCompile>
     <ClCompile Include="Rect2i.cpp">
       <Filter>net\minecraft\client\renderer</Filter>
@@ -3823,12 +2575,6 @@
     </ClCompile>
     <ClCompile Include="CompassTexture.cpp">
       <Filter>net\minecraft\client\renderer\texture\custom</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_SettingsUI.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Help &amp; Options\Settings</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_FullscreenProgress.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
     </ClCompile>
     <ClCompile Include="TexturePack.cpp">
       <Filter>net\minecraft\client\skins</Filter>
@@ -3866,9 +2612,6 @@
     <ClCompile Include="Windows64\Windows64_App.cpp">
       <Filter>Windows64</Filter>
     </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_HUD.cpp">
-      <Filter>Xbox\Source Files\XUI\Base Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Common\DLC\DLCUIDataFile.cpp">
       <Filter>Common\Source Files\DLC</Filter>
     </ClCompile>
@@ -3880,9 +2623,6 @@
     </ClCompile>
     <ClCompile Include="Common\Consoles_App.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="VillagerGolemRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
     </ClCompile>
     <ClCompile Include="VillagerGolemModel.cpp">
       <Filter>net\minecraft\client\model</Filter>
@@ -3932,35 +2672,14 @@
     <ClCompile Include="Common\GameRules\NamedAreaRuleDefinition.cpp">
       <Filter>Common\Source Files\GameRules\LevelRules\RuleDefinitions</Filter>
     </ClCompile>
-    <ClCompile Include="Common\UI\UIController.cpp">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Windows64\Iggy\gdraw\gdraw_d3d11.cpp">
       <Filter>Windows64\Iggy\gdraw</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows64\Windows64_UIController.cpp">
-      <Filter>Windows64</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIGroup.cpp">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UILayer.cpp">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene.cpp">
-      <Filter>Common\Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Common\GameRules\BiomeOverride.cpp">
       <Filter>Common\Source Files\GameRules\LevelGeneration</Filter>
     </ClCompile>
-    <ClCompile Include="SkullTileRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClCompile>
     <ClCompile Include="SkeletonHeadModel.cpp">
       <Filter>net\minecraft\client\model</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_DebugSetCamera.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Common\DLC\DLCAudioFile.cpp">
       <Filter>Common\Source Files\DLC</Filter>
@@ -4019,146 +2738,8 @@
     <ClCompile Include="Common\zlib\zutil.c">
       <Filter>Common\Source Files\zlib</Filter>
     </ClCompile>
-    <ClCompile Include="Common\UI\UIBitmapFont.cpp">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UITTFFont.cpp">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_DebugOverlay.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="Common\Network\GameNetworkManager.cpp">
       <Filter>Common\Source Files\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_MainMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_CreativeMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_InventoryMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_ContainerMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_AbstractContainerMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_LoadMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_CreateWorldMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_FullscreenProgress.cpp">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_HUD.cpp">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIComponent_Panorama.cpp">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_LoadOrJoinMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_LaunchMoreOptionsMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_CreativeMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_AbstractContainerMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_ContainerMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_InventoryMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_EnchantingMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_FurnaceMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_DispenserMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_BrewingMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_BrewingStandMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_DispenserMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_FurnaceMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_EnchantingMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_HelpAndOptionsMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_SettingsMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_SettingsOptionsMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_Button.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_CheckBox.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_Slider.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_Label.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_TextInput.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_SlotList.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_Cursor.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_Progress.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_SettingsAudioMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_SettingsControlMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_SettingsGraphicsMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_SettingsUIMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_CraftingMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_DebugOptions.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIComponent_DebugUIConsole.cpp">
-      <Filter>Common\Source Files\UI\Components</Filter>
     </ClCompile>
     <ClCompile Include="Xbox\Network\PlatformNetworkManagerXbox.cpp">
       <Filter>Xbox\Source Files\Network</Filter>
@@ -4169,191 +2750,20 @@
     <ClCompile Include="Xbox\Network\NetworkPlayerXbox.cpp">
       <Filter>Xbox\Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_ButtonList.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_JoinMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIComponent_Logo.cpp">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIComponent_Tooltips.cpp">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_CraftingMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_DeathMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_ConnectingProgress.cpp">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_SkinSelectMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_PlayerSkinPreview.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
     <ClCompile Include="ArchiveFile.cpp">
       <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_PauseMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIComponent_TutorialPopup.cpp">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_Intro.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_SaveMessage.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_HowToPlayMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_SignEntryMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_QuadrantSignin.cpp">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_PauseMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIComponent_Chat.cpp">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_MessageBox.cpp">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_TexturePackList.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
     </ClCompile>
     <ClCompile Include="Common\Leaderboards\LeaderboardManager.cpp">
       <Filter>Common\Source Files\Leaderboards</Filter>
     </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_HowToPlay.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_InGameInfoMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_LeaderboardsMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_LeaderboardList.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
     <ClCompile Include="Windows64\Leaderboards\WindowsLeaderboardManager.cpp">
       <Filter>Windows64\Source Files\Leaderboards</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_ControlsMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_DLCMainMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_DLCOffersMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_SaveList.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_PlayerList.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_BitmapIcon.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_Timer.cpp">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_Base.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_DLCList.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_InGameHostOptionsMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_MinecraftPlayer.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_EnchantmentButton.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_EnchantmentBook.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_EndPoem.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_HTMLLabel.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_InGamePlayerOptionsMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_TrialExitUpsell.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_ReinstallMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_Credits.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIComponent_PressStartToPlay.cpp">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIComponent_MenuBackground.cpp">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_EULA.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
     </ClCompile>
     <ClCompile Include="Common\Audio\Consoles_SoundEngine.cpp">
       <Filter>Common\Source Files\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_DynamicLabel.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_TransferToXboxOne.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="EnderChestRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_TradingMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_TradingMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_DebugSetCamera.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_Anvil.cpp">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_AnvilMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_AnvilMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Scene_Trading.cpp">
-      <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="VillagerZombieModel.cpp">
       <Filter>net\minecraft\client\model</Filter>
-    </ClCompile>
-    <ClCompile Include="ZombieRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
     </ClCompile>
     <ClCompile Include="ServerCommandDispatcher.cpp">
       <Filter>net\minecraft\server\commands</Filter>
@@ -4376,56 +2786,20 @@
     <ClCompile Include="Common\GameRules\StartFeature.cpp">
       <Filter>Common\Source Files\GameRules\LevelGeneration</Filter>
     </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_TeleportMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\XUI\XUI_Teleport.cpp">
-      <Filter>Xbox\Source Files\XUI\Menu screens</Filter>
-    </ClCompile>
     <ClCompile Include="Common\Network\Sony\SQRNetworkManager.cpp">
       <Filter>Common\Source Files\Network\Sony</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_DebugCreateSchematic.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Common\Telemetry\TelemetryManager.cpp">
       <Filter>Common\Source Files\Telemetry</Filter>
     </ClCompile>
-    <ClCompile Include="Common\UI\UIFontData.cpp">
-      <Filter>Common\Source Files\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Common\Network\Sony\SonyRemoteStorage.cpp">
       <Filter>Common\Source Files\Network\Sony</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIComponent_DebugUIMarketingGuide.cpp">
-      <Filter>Common\Source Files\UI\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_Touch.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_StartGame.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_SpaceIndicatorBar.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_InGameSaveManagementMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_Keyboard.cpp">
-      <Filter>Common\Source Files\UI\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Common\Leaderboards\SonyLeaderboardManager.cpp">
       <Filter>Common\Source Files\Leaderboards</Filter>
     </ClCompile>
     <ClCompile Include="Common\Leaderboards\base64.cpp">
       <Filter>Common\Source Files\Leaderboards</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_LanguageSelector.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Help &amp; Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIString.cpp">
-      <Filter>Common\Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="DispenserBootstrap.cpp">
       <Filter>net\minecraft\server</Filter>
@@ -4454,71 +2828,14 @@
     <ClCompile Include="FireworksParticles.cpp">
       <Filter>net\minecraft\client\particle</Filter>
     </ClCompile>
-    <ClCompile Include="LivingEntityRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="BatRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="CaveSpiderRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="HorseRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="LeashKnotRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="MinecartSpawnerRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="OcelotRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="SkeletonRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="TntMinecartRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="WitherBossRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="WitherSkullRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="WitchRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="BeaconRenderer.cpp">
-      <Filter>net\minecraft\client\renderer\tileentity</Filter>
-    </ClCompile>
     <ClCompile Include="TextureAtlas.cpp">
       <Filter>net\minecraft\client\renderer\texture</Filter>
     </ClCompile>
     <ClCompile Include="BossMobGuiInfo.cpp">
       <Filter>net\minecraft\client\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_BeaconMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_CommandBlockMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_HopperMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_HorseInventoryMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
     <ClCompile Include="OcelotModel.cpp">
       <Filter>net\minecraft\client\model</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_HopperMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_HorseInventoryMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Common\XUI\XUI_Scene_Hopper.cpp">
       <Filter>Xbox\Source Files\XUI\Containers</Filter>
@@ -4535,35 +2852,14 @@
     <ClCompile Include="Common\XUI\XUI_Ctrl_BeaconButton.cpp">
       <Filter>Xbox\Source Files\XUI\Controls</Filter>
     </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_FireworksMenu.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
     <ClCompile Include="Common\XUI\XUI_Scene_Fireworks.cpp">
       <Filter>Xbox\Source Files\XUI\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_BeaconEffectButton.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_BeaconMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_FireworksMenu.cpp">
-      <Filter>Common\Source Files\UI\Scenes\In-Game Menu Screens\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\IUIScene_HUD.cpp">
-      <Filter>Common\Source Files\UI\All Platforms</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIControl_MinecraftHorse.cpp">
-      <Filter>Common\Source Files\UI\Controls</Filter>
     </ClCompile>
     <ClCompile Include="Common\Tutorial\HorseChoiceTask.cpp">
       <Filter>Common\Source Files\Tutorial\Tasks</Filter>
     </ClCompile>
     <ClCompile Include="Common\Tutorial\RideEntityTask.cpp">
       <Filter>Common\Source Files\Tutorial\Tasks</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\UI\UIScene_NewUpdateMessage.cpp">
-      <Filter>Common\Source Files\UI\Scenes\Frontend Menu screens</Filter>
     </ClCompile>
     <ClCompile Include="Common\Leaderboards\LeaderboardInterface.cpp">
       <Filter>Common\Source Files\Leaderboards</Filter>

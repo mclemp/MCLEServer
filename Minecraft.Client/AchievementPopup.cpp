@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "AchievementPopup.h"
-#include "ItemRenderer.h"
 #include "Font.h"
 #include "Textures.h"
 #include "Lighting.h"
@@ -19,7 +18,6 @@ AchievementPopup::AchievementPopup(Minecraft *mc)
 	isHelper = false;
 
     this->mc = mc;
-    ir = new ItemRenderer();
 }
 
 void AchievementPopup::popup(Achievement *ach)

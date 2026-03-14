@@ -158,26 +158,5 @@ void ChatScreen::render(int xm, int ym, float a)
 
 void ChatScreen::mouseClicked(int x, int y, int buttonNum)
 {
-    if (buttonNum == 0)
-	{
-        if (minecraft->gui->selectedName != L"")	// 4J - was nullptr comparison
-		{
-			if (message.length() > 0 && message[message.length()-1]!=L' ')
-			{
-                message = message.substr(0, cursorIndex) + L" " + message.substr(cursorIndex);
-                cursorIndex++;
-            }
-            size_t nameLen = minecraft->gui->selectedName.length();
-            size_t insertLen = (message.length() + nameLen <= SharedConstants::maxChatLength) ? nameLen : (SharedConstants::maxChatLength - message.length());
-            if (insertLen > 0)
-			{
-                message = message.substr(0, cursorIndex) + minecraft->gui->selectedName.substr(0, insertLen) + message.substr(cursorIndex);
-                cursorIndex += static_cast<int>(insertLen);
-            }
-        }
-		else
-		{
-            Screen::mouseClicked(x, y, buttonNum);
-        }
-    }
+    
 }

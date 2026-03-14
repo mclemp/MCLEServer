@@ -11,7 +11,6 @@ using namespace std;
 #include ".\XUI\XUI_Helper.h"
 #include ".\XUI\XUI_HelpCredits.h"
 #endif
-#include "UI\UIStructs.h"
 
 #include "..\..\Minecraft.World\DisconnectPacket.h"
 #include <xsocialpost.h>
@@ -612,9 +611,6 @@ public:
 	DLC_INFO *GetDLCInfoForFullOfferID(ULONGLONG ullOfferID_Full);
 #endif
 
-	unsigned int GetDLCCreditsCount();
-	SCreditTextItemDef * GetDLCCredits(int iIndex);
-
 	// TMS
 	void ReadDLCFileFromTMS(int iPad,eTMSAction action, bool bCallback=false);
 	void ReadXuidsFileFromTMS(int iPad,eTMSAction action,bool bCallback=false);
@@ -628,8 +624,6 @@ public:
 	virtual void ReadBannedList(int iPad, eTMSAction action=static_cast<eTMSAction>(0), bool bCallback=false)=0;
 
 private:
-
-	std::vector <SCreditTextItemDef *> vDLCCredits;
 
 #if defined(__PS3__) || defined(__ORBIS__) || defined (__PSVITA__)
 	static unordered_map<PlayerUID,MOJANG_DATA *, PlayerUID::Hash > MojangData;

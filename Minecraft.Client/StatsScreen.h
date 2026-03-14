@@ -6,7 +6,6 @@ class ItemStat;
 class StatsScreen : public Screen
 {
 private:
-	static ItemRenderer *itemRenderer;
 
 protected:
 	static const int BUTTON_CANCEL_ID = 0;

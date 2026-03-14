@@ -9,7 +9,6 @@
 #include "Common\DLC\DLCLocalisationFile.h"
 #include "..\Minecraft.World\StringHelpers.h"
 #include "StringTable.h"
-#include "Common/UI/UI.h"
 #include "Common\DLC\DLCAudioFile.h"
 
 
@@ -533,13 +532,7 @@ void DLCTexturePack::loadUI()
 		}
 	}
 #else
-	if(m_archiveFile && m_archiveFile->hasFile(L"skin.swf"))
-	{
-		ui.ReloadSkin();
-		bUILoaded = true;
-	}
 #endif
-	else
 	{		
 		loadDefaultUI();
 		bUILoaded = true;
@@ -547,7 +540,7 @@ void DLCTexturePack::loadUI()
 
 	AbstractTexturePack::loadUI();
 #ifndef _XBOX
-	if(hasAudio()==false && !ui.IsReloadingSkin())
+	if(hasAudio()==false)
 	{
 #ifdef _DURANGO
 		StorageManager.UnmountInstalledDLC(L"TPACK");

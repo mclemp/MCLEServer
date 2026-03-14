@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "GameRenderer.h"
-#include "ItemInHandRenderer.h"
-#include "LevelRenderer.h"
 #include "Frustum.h"
 #include "FrustumCuller.h"
 #include "Textures.h"

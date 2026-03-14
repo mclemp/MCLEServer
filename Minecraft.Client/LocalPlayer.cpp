@@ -15,7 +15,6 @@
 #include "MultiPlayerLocalPlayer.h"
 #include "CreativeMode.h"
 #include "GameRenderer.h"
-#include "ItemInHandRenderer.h"
 #include "..\Minecraft.World\AttributeInstance.h"
 #include "..\Minecraft.World\LevelData.h"
 #include "..\Minecraft.World\net.minecraft.world.damagesource.h"
@@ -56,7 +55,6 @@
 #ifndef _DURANGO
 #include "..\Minecraft.World\CommonStats.h"
 #endif
-extern ConsoleUIController ui;
 
 
 LocalPlayer::LocalPlayer(Minecraft *minecraft, Level *level, User *user, int dimension) : Player(level, user->name)
@@ -578,8 +576,6 @@ void LocalPlayer::closeContainer()
 
 	// 4J - Close any xui here
 	// Fix for #9164 - CRASH: MP: Title crashes upon opening a chest and having another user destroy it.
-	ui.PlayUISFX(eSFX_Back);
-	ui.CloseUIScenes( m_iPad );
 }
 
 void LocalPlayer::openTextEdit(shared_ptr<TileEntity> tileEntity)
@@ -595,14 +591,12 @@ void LocalPlayer::openTextEdit(shared_ptr<TileEntity> tileEntity)
 		success = app.LoadCommandBlockMenu(GetXboxPad(), dynamic_pointer_cast<CommandBlockEntity>(tileEntity));
 	}
 
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	//minecraft->setScreen(new TextEditScreen(sign));
 }
 
 bool LocalPlayer::openContainer(shared_ptr<Container> container)
 {
 	bool success = app.LoadContainerMenu(GetXboxPad(), inventory, container );
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	//minecraft->setScreen(new ContainerScreen(inventory, container));
 	return success;
 }
@@ -611,7 +605,6 @@ bool LocalPlayer::openHopper(shared_ptr<HopperTileEntity> container)
 {
 	//minecraft->setScreen(new HopperScreen(inventory, container));
 	bool success = app.LoadHopperMenu(GetXboxPad(), inventory, container );
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	return success;
 }
 
@@ -619,7 +612,6 @@ bool LocalPlayer::openHopper(shared_ptr<MinecartHopper> container)
 {
 	//minecraft->setScreen(new HopperScreen(inventory, container));
 	bool success = app.LoadHopperMenu(GetXboxPad(), inventory, container );
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	return success;
 }
 
@@ -627,14 +619,12 @@ bool LocalPlayer::openHorseInventory(shared_ptr<EntityHorse> horse, shared_ptr<C
 {
 	//minecraft->setScreen(new HorseInventoryScreen(inventory, container, horse));
 	bool success = app.LoadHorseMenu(GetXboxPad(), inventory, container, horse);
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	return success;
 }
 
 bool LocalPlayer::startCrafting(int x, int y, int z)
 {
 	bool success = app.LoadCrafting3x3Menu(GetXboxPad(), dynamic_pointer_cast<LocalPlayer>( shared_from_this() ), x, y, z );
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	//app.LoadXuiCraftMenu(0,inventory, level, x, y, z);
 	//minecraft->setScreen(new CraftingScreen(inventory, level, x, y, z));
 	return success;
@@ -643,14 +633,12 @@ bool LocalPlayer::startCrafting(int x, int y, int z)
 bool LocalPlayer::openFireworks(int x, int y, int z)
 {
 	bool success = app.LoadFireworksMenu(GetXboxPad(), dynamic_pointer_cast<LocalPlayer>( shared_from_this() ), x, y, z );
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	return success;
 }
 
 bool LocalPlayer::startEnchanting(int x, int y, int z, const wstring &name)
 {
 	bool success = app.LoadEnchantingMenu(GetXboxPad(), inventory, x, y, z, level, name);
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	//minecraft.setScreen(new EnchantmentScreen(inventory, level, x, y, z));
 	return success;
 }
@@ -658,7 +646,6 @@ bool LocalPlayer::startEnchanting(int x, int y, int z, const wstring &name)
 bool LocalPlayer::startRepairing(int x, int y, int z)
 {
 	bool success = app.LoadRepairingMenu(GetXboxPad(), inventory, level, x, y, z );
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	//minecraft.setScreen(new RepairScreen(inventory, level, x, y, z));
 	return success;
 }
@@ -666,7 +653,6 @@ bool LocalPlayer::startRepairing(int x, int y, int z)
 bool LocalPlayer::openFurnace(shared_ptr<FurnaceTileEntity> furnace)
 {
 	bool success = app.LoadFurnaceMenu(GetXboxPad(),inventory, furnace);
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	//minecraft->setScreen(new FurnaceScreen(inventory, furnace));
 	return success;
 }
@@ -674,7 +660,6 @@ bool LocalPlayer::openFurnace(shared_ptr<FurnaceTileEntity> furnace)
 bool LocalPlayer::openBrewingStand(shared_ptr<BrewingStandTileEntity> brewingStand)
 {
 	bool success = app.LoadBrewingStandMenu(GetXboxPad(),inventory, brewingStand);
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	//minecraft.setScreen(new BrewingStandScreen(inventory, brewingStand));
 	return success;
 }
@@ -683,14 +668,12 @@ bool LocalPlayer::openBeacon(shared_ptr<BeaconTileEntity> beacon)
 {
 	//minecraft->setScreen(new BeaconScreen(inventory, beacon));
 	bool success = app.LoadBeaconMenu(GetXboxPad(), inventory, beacon);
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	return success;
 }
 
 bool LocalPlayer::openTrap(shared_ptr<DispenserTileEntity> trap)
 {
 	bool success = app.LoadTrapMenu(GetXboxPad(),inventory, trap);
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	//minecraft->setScreen(new TrapScreen(inventory, trap));
 	return success;
 }
@@ -698,7 +681,6 @@ bool LocalPlayer::openTrap(shared_ptr<DispenserTileEntity> trap)
 bool LocalPlayer::openTrading(shared_ptr<Merchant> traderTarget, const wstring &name)
 {
 	bool success = app.LoadTradingMenu(GetXboxPad(),inventory, traderTarget, level, name);
-	if( success ) ui.PlayUISFX(eSFX_Press);
 	//minecraft.setScreen(new MerchantScreen(inventory, traderTarget, level));
 	return success;
 }
@@ -759,10 +741,6 @@ void LocalPlayer::hurtTo(float newHealth, ETelemetryChallenges damageSource)
 		TelemetryManager->RecordPlayerDiedOrFailed(GetXboxPad(), 0, y, 0, 0, carriedId, 0, damageSource);
 
 		// if there are any xuiscenes up for this player, close them
-		if(ui.GetMenuDisplayed(GetXboxPad()))
-		{
-			ui.CloseUIScenes(GetXboxPad());
-		}
 	}
 
 }
@@ -780,7 +758,7 @@ void LocalPlayer::animateRespawn()
 
 void LocalPlayer::displayClientMessage(int messageId)
 {
-	minecraft->gui->displayClientMessage(messageId, GetXboxPad());
+
 }
 
 void LocalPlayer::awardStat(Stat *stat, byteArray param)
@@ -824,8 +802,7 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 				// We cannot pause the game unless in offline single player, but lets at least do it then
 				if( g_NetworkManager.IsLocalGame() && g_NetworkManager.GetPlayerCount() == 1 && ProfileManager.GetAwardType(ach->getAchievementID() ) != eAwardType_Achievement )
 				{
-					ui.CloseUIScenes(m_iPad);
-					ui.NavigateToScene(m_iPad,eUIScene_PauseMenu);
+
 				}
 			}
 
@@ -1399,11 +1376,6 @@ void LocalPlayer::handleCollectItem(shared_ptr<ItemInstance> item)
 		}
 		TutorialMode *gameMode = static_cast<TutorialMode *>(minecraft->localgameModes[m_iPad]);
 		gameMode->getTutorial()->onTake(item, itemCountAnyAux, itemCountThisAux);
-	}
-
-	if(ui.IsContainerMenuDisplayed(m_iPad))
-	{
-		ui.HandleInventoryUpdated(m_iPad);
 	}
 }
 

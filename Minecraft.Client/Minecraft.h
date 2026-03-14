@@ -29,10 +29,8 @@ class Entity;
 class AchievementPopup;
 class WaterTexture;
 class LavaTexture;
-class Gui;
 class ClientConnection;
 class ConsoleSaveFile;
-class ItemInHandRenderer;
 class LevelSettings;
 class ColourTable;
 class MultiPlayerGameMode;
@@ -101,7 +99,6 @@ public:
 	shared_ptr<MultiplayerLocalPlayer> localplayers[XUSER_MAX_COUNT];
 	MultiPlayerGameMode *localgameModes[XUSER_MAX_COUNT];
 	int localPlayerIdx;
-	ItemInHandRenderer *localitemInHandRenderers[XUSER_MAX_COUNT];
 	// 4J-PB - so we can have debugoptions in the server
 	unsigned int	uiDebugOptionsA[XUSER_MAX_COUNT];
 
@@ -151,7 +148,6 @@ private:
 public:
 	AchievementPopup *achievementPopup;
 public:
-	Gui *gui;
 	// 4J - move to the per player structure?
 	bool noRender;
 

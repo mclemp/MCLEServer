@@ -7,7 +7,6 @@
 #include "Lighting.h"
 #include "Textures.h"
 #include "StatsCounter.h"
-#include "ItemRenderer.h"
 #include "..\Minecraft.World\System.h"
 #include "..\Minecraft.World\net.minecraft.locale.h"
 #include "..\Minecraft.World\net.minecraft.world.level.tile.h"

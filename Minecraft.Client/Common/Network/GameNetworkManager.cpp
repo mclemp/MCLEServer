@@ -15,7 +15,6 @@
 #include "..\..\ServerPlayer.h"
 #include "..\..\PlayerConnection.h"
 #include "..\..\MultiPlayerLevel.h"
-#include "..\..\ProgressRenderer.h"
 #include "..\..\MultiPlayerLocalPlayer.h"
 #include "..\..\..\Minecraft.World\DisconnectPacket.h"
 #include "..\..\..\Minecraft.World\compression.h"
@@ -23,7 +22,6 @@
 #include "..\..\TexturePackRepository.h"
 #include "..\..\TexturePack.h"
 
-#include "..\..\Gui.h"
 #include "..\..\LevelRenderer.h"
 #include "..\..\..\Minecraft.World\IntCache.h"
 #include "..\GameRules\ConsoleGameRules.h"
@@ -32,8 +30,6 @@
 #ifdef _XBOX
 #include "Common\XUI\XUI_PauseMenu.h"
 #else
-#include "Common\UI\UI.h"
-#include "Common\UI\UIScene_PauseMenu.h"
 #include "..\..\Xbox\Network\NetworkPlayerXbox.h"
 #endif
 
@@ -185,7 +181,6 @@ bool CGameNetworkManager::_RunNetworkGame(LPVOID lpParameter)
 	// 4J-PB - if this is the trial game, start the trial timer
 	if(!ProfileManager.IsFullVersion())
 	{
-		ui.SetTrialTimerLimitSecs(MinecraftDynamicConfigurations::GetTrialTime());
 		app.SetTrialTimerStart();
 	}
 	//app.CloseXuiScenes(ProfileManager.GetPrimaryPad());
@@ -327,13 +322,7 @@ bool	CGameNetworkManager::StartNetworkGame(Minecraft *minecraft, LPVOID lpParame
 	while(!IsReadyToPlayOrIdle())
 	{
 		changedMessage = true;
-		pMinecraft->progressRenderer->progressStage( g_NetworkManager.CorrectErrorIDS(IDS_PROGRESS_SAVING_TO_DISC) );		// "Finalizing..." vaguest message I could find
-		pMinecraft->progressRenderer->progressStagePercentage( g_NetworkManager.GetJoiningReadyPercentage() );
 		Sleep(10);
-	}
-	if( changedMessage )
-	{
-		pMinecraft->progressRenderer->progressStagePercentage( 100 );
 	}
 #endif
 
@@ -405,11 +394,7 @@ bool	CGameNetworkManager::StartNetworkGame(Minecraft *minecraft, LPVOID lpParame
 	// (1) Creating the ClientConnection sends a prelogin packet to the server
 	// (2) the server sends a prelogin back, which is handled by the clientConnection, and returns a login packet
 	// (3) the server sends a login back, which is handled by the client connection to start the game
-	if( !g_NetworkManager.IsHost() )
-	{
-		Minecraft::GetInstance()->progressRenderer->progressStart(IDS_PROGRESS_CONNECTING);
-	}
-	else
+
 	{
 		// 4J Stu - Host needs to generate a unique multiplayer id for sentient telemetry reporting
 		INT multiplayerInstanceId = TelemetryManager->GenerateMultiplayerInstanceId();
@@ -424,8 +409,7 @@ bool	CGameNetworkManager::StartNetworkGame(Minecraft *minecraft, LPVOID lpParame
 		// 4J Stu - We were ticking this way too fast which could cause the connection to time out
 		// The connections should tick at 20 per second
 		Sleep(50);
-	} while ( (IsInSession() && !connection->isStarted() && !connection->isClosed() && !g_NetworkManager.IsLeavingGame()) || tPack->isLoadingData() || (Minecraft::GetInstance()->skins->needsUIUpdate() || ui.IsReloadingSkin()) );
-	ui.CleanUpSkinReload();
+	} while ( (IsInSession() && !connection->isStarted() && !connection->isClosed() && !g_NetworkManager.IsLeavingGame()) || tPack->isLoadingData() || Minecraft::GetInstance()->skins->needsUIUpdate() );
 
 	// 4J Stu - Fix for #11279 - CRASH: TCR 001: BAS Game Stability: Signing out of game will cause title to crash
 	// We need to break out of the above loop if m_bLeavingGame is set, and close the connection
@@ -761,7 +745,6 @@ void CGameNetworkManager::CancelJoinGame(LPVOID lpParam)
 
 bool CGameNetworkManager::LeaveGame(bool bMigrateHost)
 {
-	Minecraft::GetInstance()->gui->clearMessages();
 	return s_pPlatformNetworkManager->LeaveGame( bMigrateHost );
 }
 
@@ -816,13 +799,11 @@ int CGameNetworkManager::JoinFromInvite_SignInReturned(void *pParam,bool bContin
 				int messageText = IDS_NO_USER_CREATED_CONTENT_PRIVILEGE_SINGLE_LOCAL;
 				if(joiningUsers > 1) messageText = IDS_NO_USER_CREATED_CONTENT_PRIVILEGE_ALL_LOCAL;
 
-				ui.RequestUGCMessageBox(IDS_CONNECTION_FAILED, messageText);
 			}
 			else if(noPrivileges)
 			{
 				UINT uiIDA[1];
 				uiIDA[0]=IDS_CONFIRM_OK;
-				ui.RequestErrorMessage( IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE, IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT, uiIDA,1,ProfileManager.GetPrimaryPad());
 			}
 			else
 			{
@@ -907,11 +888,10 @@ int CGameNetworkManager::RunNetworkGameThreadProc( void* lpParameter )
 	if( !success)
 	{
 		TexturePack *tPack = Minecraft::GetInstance()->skins->getSelected();
-		while ( tPack->isLoadingData() || (Minecraft::GetInstance()->skins->needsUIUpdate() || ui.IsReloadingSkin()) )
+		while ( tPack->isLoadingData() || (Minecraft::GetInstance()->skins->needsUIUpdate()) )
 		{
 			Sleep(1);
 		}
-		ui.CleanUpSkinReload();
 		if(app.GetDisconnectReason() == DisconnectPacket::eDisconnect_None)
 		{
 			app.SetDisconnectReason( DisconnectPacket::eDisconnect_ConnectionCreationFailed );
@@ -944,7 +924,7 @@ int CGameNetworkManager::ServerThreadProc( void* lpParameter )
 		// 4J Stu - If we are loading a DLC save that's separate from the texture pack, load
 		if (param != nullptr && param->levelGen != nullptr && param->levelGen->isFromDLC())
 		{
-			while((Minecraft::GetInstance()->skins->needsUIUpdate() || ui.IsReloadingSkin()))
+			while((Minecraft::GetInstance()->skins->needsUIUpdate()))
 			{
 				Sleep(1);
 			}
@@ -989,7 +969,6 @@ int	CGameNetworkManager::ExitAndJoinFromInviteThreadProc( void* lpParam )
 	Compression::UseDefaultThreadStorage();
 
 	//app.SetGameStarted(false);
-	UIScene_PauseMenu::_ExitWorld(nullptr);
 
 	while( g_NetworkManager.IsInSession() )
 	{
@@ -1181,8 +1160,7 @@ int CGameNetworkManager::ChangeSessionTypeThreadProc( void* lpParam )
 	}
 
 #else
-	pMinecraft->progressRenderer->progressStartNoAbort( g_NetworkManager.CorrectErrorIDS(IDS_CONNECTION_LOST_LIVE_NO_EXIT) );
-	pMinecraft->progressRenderer->progressStage( IDS_PROGRESS_CONVERTING_TO_OFFLINE_GAME );
+
 #endif
 
 	while( app.GetXuiServerAction(ProfileManager.GetPrimaryPad() ) != eXuiServerAction_Idle && !MinecraftServer::serverHalted() )
@@ -1210,11 +1188,8 @@ int CGameNetworkManager::ChangeSessionTypeThreadProc( void* lpParam )
 		pMinecraft->progressRenderer->progressStage( IDS_PROGRESS_CONVERTING_TO_OFFLINE_GAME );
 	}
 #else
-	pMinecraft->progressRenderer->progressStartNoAbort( g_NetworkManager.CorrectErrorIDS(IDS_CONNECTION_LOST_LIVE_NO_EXIT) );
-	pMinecraft->progressRenderer->progressStage( IDS_PROGRESS_CONVERTING_TO_OFFLINE_GAME );
 #endif
 
-	pMinecraft->progressRenderer->progressStagePercentage(25);
 
 #ifdef _XBOX_ONE
 	// wait for any players that were being added, to finish doing this. On XB1, if we don't do this then there's an async thread running doing this,
@@ -1259,7 +1234,6 @@ int CGameNetworkManager::ChangeSessionTypeThreadProc( void* lpParam )
 	g_NetworkManager.m_bLastDisconnectWasLostRoomOnly = false;
 	g_NetworkManager.m_bFullSessionMessageOnNextSessionChange = false;
 
-	pMinecraft->progressRenderer->progressStagePercentage(50);
 
 	// Defaulting to making this a local game
 	g_NetworkManager.SetLocalGame(true);
@@ -1278,7 +1252,6 @@ int CGameNetworkManager::ChangeSessionTypeThreadProc( void* lpParam )
 
 	s_pPlatformNetworkManager->_HostGame( localUsersMask );
 
-	pMinecraft->progressRenderer->progressStagePercentage(75);
 
 	// Wait for all the local players to rejoin the session
 	while( g_NetworkManager.GetPlayerCount() < numLocalPlayers )
@@ -1321,7 +1294,6 @@ int CGameNetworkManager::ChangeSessionTypeThreadProc( void* lpParam )
 		}
 	}
 
-	pMinecraft->progressRenderer->progressStagePercentage(100);
 
 #ifndef _XBOX
 	// Make sure that we have transitioned through any joining/creating stages so we're actually ready to set to play
@@ -1332,14 +1304,6 @@ int CGameNetworkManager::ChangeSessionTypeThreadProc( void* lpParam )
 #endif
 
 	s_pPlatformNetworkManager->_StartGame();
-
-#ifndef _XBOX
-	// Wait until the message box has been closed
-	while(ui.IsSceneInStack(XUSER_INDEX_ANY, eUIScene_MessageBox))
-	{
-		Sleep(10);
-	}
-#endif
 
 	// Start the game again
 	app.SetGameStarted(true);
@@ -1396,15 +1360,6 @@ void CGameNetworkManager::StateChange_AnyToJoining()
 	app.DebugPrintf("Disabling Guest Signin\n");
 	XEnableGuestSignin(FALSE);
 	Minecraft::GetInstance()->clearPendingClientTextureRequests();
-
-	ConnectionProgressParams *param = new ConnectionProgressParams();
-	param->iPad = ProfileManager.GetPrimaryPad();
-	param->stringId = -1;
-	param->showTooltips = false;
-	param->setFailTimer = true;
-	param->timerTime = CONNECTING_PROGRESS_CHECK_TIME;
-
-	ui.NavigateToScene(ProfileManager.GetPrimaryPad(), eUIScene_ConnectingProgress, param);
 }
 
 void CGameNetworkManager::StateChange_JoiningToIdle(CPlatformNetworkManager::eJoinFailedReason reason)
@@ -1428,25 +1383,7 @@ void CGameNetworkManager::StateChange_JoiningToIdle(CPlatformNetworkManager::eJo
 
 void CGameNetworkManager::StateChange_AnyToStarting()
 {
-#if defined __PS3__ || defined __ORBIS__ || defined __PSVITA__
- 	app.getRemoteStorage()->shutdown();			// shut the remote storage lib down and hopefully get our 7mb back
-#endif
 
-	if(!g_NetworkManager.IsHost())
-	{
-		LoadingInputParams *loadingParams = new LoadingInputParams();
-		loadingParams->func = &CGameNetworkManager::RunNetworkGameThreadProc;
-		loadingParams->lpParam = nullptr;
-
-		UIFullscreenProgressCompletionData *completionData = new UIFullscreenProgressCompletionData();
-		completionData->bShowBackground=TRUE;
-		completionData->bShowLogo=TRUE;
-		completionData->type = e_ProgressCompletion_CloseAllPlayersUIScenes;
-		completionData->iPad = ProfileManager.GetPrimaryPad();
-		loadingParams->completionData = completionData;
-
-		ui.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_FullscreenProgress, loadingParams);
-	}
 }
 
 void CGameNetworkManager::StateChange_AnyToEnding(bool bStateWasPlaying)
@@ -1465,7 +1402,6 @@ void CGameNetworkManager::StateChange_AnyToEnding(bool bStateWasPlaying)
 		}
 	}
 
-	Minecraft::GetInstance()->gui->clearMessages();
 
 	if(!g_NetworkManager.IsHost() && !g_NetworkManager.IsLeavingGame() )
 	{
@@ -1812,7 +1748,6 @@ void CGameNetworkManager::GameInviteReceived( int userIndex, const INVITE_INFO *
 		int messageText = IDS_NO_USER_CREATED_CONTENT_PRIVILEGE_SINGLE_LOCAL;
 		if(joiningUsers > 1) messageText = IDS_NO_USER_CREATED_CONTENT_PRIVILEGE_ALL_LOCAL;
 
-		ui.RequestUGCMessageBox(IDS_CONNECTION_FAILED, messageText, XUSER_INDEX_ANY);
 #endif
 	}
 #if defined(__PS3__) || defined __PSVITA__
@@ -1831,7 +1766,6 @@ void CGameNetworkManager::GameInviteReceived( int userIndex, const INVITE_INFO *
 
 		// 4J-PB - it's possible there is no primary pad here, when accepting an invite from the dashboard
 		//StorageManager.RequestMessageBox( IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE, IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT, uiIDA,1,ProfileManager.GetPrimaryPad(),nullptr,nullptr, app.GetStringTable());
-		ui.RequestErrorMessage( IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE, IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT, uiIDA,1,XUSER_INDEX_ANY);
 	}
 	else
 	{
@@ -1934,7 +1868,6 @@ void CGameNetworkManager::HandleInviteWhenInMenus( int userIndex, const INVITE_I
 			{
 				UINT uiIDA[1];
 				uiIDA[0]=IDS_CONFIRM_OK;
-				ui.RequestErrorMessage( IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE, IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT, uiIDA,1,ProfileManager.GetPrimaryPad());
 			}
 			else
 			{
@@ -1964,17 +1897,7 @@ void CGameNetworkManager::HandleInviteWhenInMenus( int userIndex, const INVITE_I
 		}
 		else
 		{
-			// the FromInvite will make the lib decide how many panes to display based on connected pads/signed in players
-#ifdef _XBOX
-			ProfileManager.RequestSignInUI(true, false, false, false, false,&CGameNetworkManager::JoinFromInvite_SignInReturned, (LPVOID)pInviteInfo,userIndex);
-#else
-			SignInInfo info;
-			info.Func = &CGameNetworkManager::JoinFromInvite_SignInReturned;
-			info.lpParam = (LPVOID)pInviteInfo;
-			info.requireOnline = true;
-			app.DebugPrintf("Using fullscreen layer\n");
-			ui.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_QuadrantSignin,&info,eUILayer_Alert,eUIGroup_Fullscreen);
-#endif
+
 		}
 	}
 }

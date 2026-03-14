@@ -44,7 +44,6 @@
 #include "..\GameRenderer.h"
 #include "Network\WinsockNetLayer.h"
 #include "Windows64_Xuid.h"
-#include "Common/UI/UI.h"
 #include "Windows64_Minecraft.h"
 
 // Forward-declare the internal Renderer class and its global instance from 4J_Render_PC_d.lib.

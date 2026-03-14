@@ -4,8 +4,6 @@
 #include "TextureAtlas.h"
 #include "Tesselator.h"
 #include "Chunk.h"
-#include "EntityRenderDispatcher.h"
-#include "TileEntityRenderDispatcher.h"
 #include "DistanceChunkSorter.h"
 #include "DirtyChunkSorter.h"
 #include "MobSkinTextureProcessor.h"
@@ -61,7 +59,6 @@
 #include "..\Minecraft.World\SoundTypes.h"
 #include "FrustumCuller.h"
 #include "..\Minecraft.World\BasicTypeContainers.h"
-#include "Common/UI/UIScene_SettingsGraphicsMenu.h"	
 
 //#define DISABLE_SPU_CODE
 
@@ -194,7 +191,7 @@ void LevelRenderer::setLevel(int playerIndex, MultiPlayerLevel *level)
 	{
 		delete tileRenderer[playerIndex];
 	}
-	tileRenderer[playerIndex] = new TileRenderer(level);
+	//tileRenderer[playerIndex] = new TileRenderer(level);
 	if (level != nullptr)
 	{
 		// If we're the only player referencing this level, add a new listener for it
@@ -273,11 +270,11 @@ void LevelRenderer::allChanged(int playerIndex)
 	Tile::leaves->setFancy(mc->options->fancyGraphics);
 	lastViewDistance = mc->options->viewDistance;
 
-	int realviewDistance = UIScene_SettingsGraphicsMenu::LevelToDistance(3 - mc->options->viewDistance) + 2;
-	int realrenderArea = (realviewDistance * realviewDistance * 4);
+	//int realviewDistance = UIScene_SettingsGraphicsMenu::LevelToDistance(3 - mc->options->viewDistance) + 2;
+	//int realrenderArea = (realviewDistance * realviewDistance * 4);
 
 	// Calculate size of area we can render based on number of players we need to render for
-	int dist = static_cast<int>(sqrtf(static_cast<float>(realrenderArea) / static_cast<float>(activePlayers())));
+	//int dist = static_cast<int>(sqrtf(static_cast<float>(realrenderArea) / static_cast<float>(activePlayers())));
 
 	// AP - poor little Vita just can't cope with such a big area
 #ifdef __PSVITA__
@@ -286,9 +283,9 @@ void LevelRenderer::allChanged(int playerIndex)
 
 	lastPlayerCount[playerIndex] = activePlayers();
 
-	xChunks = dist;
+	//xChunks = dist;
 	yChunks = Level::maxBuildHeight / CHUNK_SIZE;
-	zChunks = dist;
+	//zChunks = dist;
 
 	if( chunks[playerIndex].data != nullptr )
 	{
@@ -904,7 +901,7 @@ void LevelRenderer::renderDestroyAnimation(Tesselator *t, shared_ptr<Player> pla
 				int tileId = level[iPad]->getTile(block->getX(), block->getY(), block->getZ());
 				Tile *tile = tileId > 0 ? Tile::tiles[tileId] : nullptr;
 				if (tile == nullptr) tile = Tile::stone;
-				tileRenderer[iPad]->tesselateInWorldFixedTexture(tile, block->getX(), block->getY(), block->getZ(), breakingTextures[block->getProgress()]);	// 4J renamed to differentiate from tesselateInWorld
+				//tileRenderer[iPad]->tesselateInWorldFixedTexture(tile, block->getX(), block->getY(), block->getZ(), breakingTextures[block->getProgress()]);	// 4J renamed to differentiate from tesselateInWorld
 			}
 			++it;
 		}
@@ -1240,7 +1237,7 @@ void LevelRenderer::playStreamingMusic(const wstring& name, int x, int y, int z)
 {
 	if (name != L"")
 	{
-		mc->gui->setNowPlaying(L"C418 - " + name);
+		//mc->gui->setNowPlaying(L"C418 - " + name);
 	}
 	mc->soundEngine->playStreaming(name, static_cast<float>(x), static_cast<float>(y), static_cast<float>(z), 1, 1);
 }

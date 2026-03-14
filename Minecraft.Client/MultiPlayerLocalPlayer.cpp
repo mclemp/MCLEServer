@@ -370,18 +370,7 @@ void MultiplayerLocalPlayer::ride(shared_ptr<Entity> e)
 
 	Minecraft *pMinecraft = Minecraft::GetInstance();
 	
-	if( pMinecraft->localgameModes[m_iPad] != nullptr )
-	{
-		TutorialMode *gameMode = static_cast<TutorialMode *>(pMinecraft->localgameModes[m_iPad]);
-		if(wasRiding && !isRiding)
-		{
-			gameMode->getTutorial()->changeTutorialState(e_Tutorial_State_Gameplay);
-		}
-		else if (!wasRiding && isRiding)
-		{
-			gameMode->getTutorial()->onRideEntity(e);
-		}
-	}
+
 }
 
 void MultiplayerLocalPlayer::StopSleeping()

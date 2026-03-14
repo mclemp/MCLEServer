@@ -112,30 +112,5 @@ void GuiComponent::drawStringLiteral(Font *font, const wstring& str, int x, int 
 
 void GuiComponent::blit(int x, int y, int sx, int sy, int w, int h)
 {
-    float us = 1 / 256.0f;
-    float vs = 1 / 256.0f;
-    Tesselator *t = Tesselator::getInstance();
-    t->begin();
-
-	// This is a bit of a mystery. In general this ought to be 0.5 to match the centre of texels & pixels in the DX9 version of things. However, when scaling the GUI by a factor of 1.5, I'm
-	// really not sure how exactly point sampled rasterisation works, but when shifting by 0.5 we get a discontinuity down the diagonal of quads. Setting this shift to 0.75 in all cases seems to work fine.
-	const float extraShift = 0.75f;
-
-	// 4J - subtracting extraShift (actual screen pixels, so need to compensate for physical & game width) from each x & y coordinate to compensate for centre of pixels in directx vs openGL
-	float dx = ( extraShift * static_cast<float>(Minecraft::GetInstance()->width) ) / static_cast<float>(Minecraft::GetInstance()->width_phys);
-	// 4J - Also factor in the scaling from gui coordinate space to the screen. This varies based on user-selected gui scale, and whether we are in a viewport mode or not
-	dx /= Gui::currentGuiScaleFactor;
-	float dy = extraShift / Gui::currentGuiScaleFactor;
-	// Ensure that the x/y, width and height are actually pixel aligned at our current scale factor - in particular, for split screen mode with the default (3X)
-	// scale, we have an overall scale factor of 3 * 0.5 = 1.5, and so any odd pixels won't align
-	float fx = (floorf(static_cast<float>(x) * Gui::currentGuiScaleFactor)) / Gui::currentGuiScaleFactor;
-	float fy = (floorf(static_cast<float>(y) * Gui::currentGuiScaleFactor)) / Gui::currentGuiScaleFactor;
-	float fw = (floorf(static_cast<float>(w) * Gui::currentGuiScaleFactor)) / Gui::currentGuiScaleFactor;
-	float fh = (floorf(static_cast<float>(h) * Gui::currentGuiScaleFactor)) / Gui::currentGuiScaleFactor;
-
-    t->vertexUV(fx + 0 - dx,  fy + fh - dy, static_cast<float>(blitOffset), static_cast<float>((sx + 0) * us), static_cast<float>((sy + h) * vs));
-    t->vertexUV(fx + fw - dx, fy + fh - dy, static_cast<float>(blitOffset), static_cast<float>((sx + w) * us), static_cast<float>((sy + h) * vs));
-    t->vertexUV(fx + fw - dx, fy + 0 - dy, static_cast<float>(blitOffset), static_cast<float>((sx + w) * us), static_cast<float>((sy + 0) * vs));
-    t->vertexUV(fx + 0 - dx,  fy + 0 - dy, static_cast<float>(blitOffset), static_cast<float>((sx + 0) * us), static_cast<float>((sy + 0) * vs));
-    t->end();
+    
 }

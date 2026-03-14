@@ -6,7 +6,6 @@
 #include "..\..\..\Minecraft.World\StringHelpers.h"
 #include "..\..\Minecraft.h"
 #include "..\..\TexturePackRepository.h"
-#include "Common/UI/UI.h"
 
 const WCHAR *DLCManager::wchTypeNamesA[]=
 {
@@ -298,12 +297,11 @@ DWORD DLCManager::checkForCorruptDLCAndAlert(bool showMessage /*= true*/)
 			WCHAR wchFormat[132];
 			swprintf(wchFormat, 132, L"%ls\n\n%%ls", firstCorruptPack->getName().c_str());
 
-			C4JStorage::EMessageResult result = ui.RequestErrorMessage( IDS_CORRUPT_DLC_TITLE, IDS_CORRUPT_DLC, uiIDA,1,ProfileManager.GetPrimaryPad(),nullptr,nullptr,wchFormat);
 
 		}
 		else
 		{
-			C4JStorage::EMessageResult result = ui.RequestErrorMessage( IDS_CORRUPT_DLC_TITLE, IDS_CORRUPT_DLC_MULTIPLE, uiIDA,1,ProfileManager.GetPrimaryPad());
+
 		}
 	}
 

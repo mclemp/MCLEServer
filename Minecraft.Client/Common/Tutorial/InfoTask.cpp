@@ -8,7 +8,6 @@
 #include "InfoTask.h"
 #include "..\..\..\Minecraft.World\Material.h"
 #include "..\..\Windows64\KeyboardMouseInput.h"
-#include "Common/UI/UI.h"
 
 InfoTask::InfoTask(Tutorial *tutorial, int descriptionId, int promptId /*= -1*/, bool requiresUserInput /*= false*/,
                    int iMapping /*= 0*/, ETelemetryChallenges telemetryEvent /*= eTelemetryTutorial_NoEvent*/)
@@ -44,46 +43,7 @@ bool InfoTask::isCompleted()
 	// If the player is under water then allow all keypresses so they can jump out
 	if( pMinecraft->localplayers[tutorial->getPad()]->isUnderLiquid(Material::water) ) return false;
 
-	if(ui.GetMenuDisplayed(tutorial->getPad()))
-	{
-		// If a menu is displayed, then we use the handleUIInput to complete the task
-		bAllComplete = true;
-		for( auto& it : completedMappings )
-		{
-			bool current = it.second;
-			if(!current)
-			{
-				bAllComplete = false;
-				break;
-			}
-		}
-	}
-	else
-	{
-		int iCurrent=0;
-
-		for( auto& it : completedMappings )
-		{
-			bool current = it.second;
-			if(!current)
-			{
-#ifdef _WINDOWS64
-				if (InputManager.GetValue(pMinecraft->player->GetXboxPad(), it.first) > 0 || g_KBMInput.IsKeyDown(VK_SPACE))
-#else
-				if( InputManager.GetValue(pMinecraft->player->GetXboxPad(), it.first) > 0)
-#endif
-				{
-					it.second = true;
-					bAllComplete=true;
-				}
-				else
-				{
-					bAllComplete = false;
-				}
-			}
-			iCurrent++;
-		}
-	}
+	
 
 	if(bAllComplete==true)
 	{

@@ -2,8 +2,6 @@
 #include "DLCManager.h"
 #include "DLCSkinFile.h"
 #include "..\..\ModelPart.h"
-#include "..\..\EntityRenderer.h"
-#include "..\..\EntityRenderDispatcher.h"
 #include "..\..\..\Minecraft.World\Player.h"
 #include "..\..\..\Minecraft.World\StringHelpers.h"
 

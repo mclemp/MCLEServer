@@ -5,7 +5,6 @@
 #include "..\Minecraft.World\ByteBuffer.h"
 #include "Minecraft.h"
 #include "LevelRenderer.h"
-#include "EntityRenderDispatcher.h"
 #include "Stitcher.h"
 #include "StitchSlot.h"
 #include "StitchedTexture.h"
@@ -55,7 +54,6 @@ void PreStitchedTextureMap::stitch()
 		}
 
 		Minecraft::GetInstance()->levelRenderer->registerTextures(this);
-		EntityRenderDispatcher::instance->registerTerrainTextures(this);
 	}
 
 	//for (Item item : Item.items)

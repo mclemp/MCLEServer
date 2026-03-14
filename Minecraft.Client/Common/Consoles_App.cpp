@@ -9,7 +9,6 @@
 #include "..\MinecraftServer.h"
 #include "..\MultiPlayerLevel.h"
 #include "..\GameRenderer.h"
-#include "..\ProgressRenderer.h"
 #include "..\LevelRenderer.h"
 #include "..\MobSkinMemTextureProcessor.h"
 #include "..\Minecraft.h"
@@ -34,7 +33,6 @@
 #include "..\User.h"
 #include "..\..\Minecraft.World\LevelData.h"
 #include "..\..\Minecraft.World\net.minecraft.world.entity.player.h"
-#include "..\EntityRenderDispatcher.h"
 #include "..\..\Minecraft.World\compression.h"
 #include "..\TexturePackRepository.h"
 #include "..\DLCTexturePack.h"
@@ -51,8 +49,6 @@
 #include "XUI\XUI_XZP_Icons.h"
 #include "XUI\XUI_PauseMenu.h"
 #else
-#include "UI\UI.h"
-#include "UI\UIScene_PauseMenu.h"
 #endif
 #ifdef __PS3__
 #include <sys/tty.h>
@@ -291,10 +287,7 @@ void CMinecraftApp::DebugPrintf(int user, const char *szFormat, ...)
 	OutputDebugStringA(buf);
 #endif
 #ifndef _XBOX
-	if(user == USER_UI)
-	{
-		ui.logDebugString(buf);
-	}
+
 #endif
 #endif
 }
@@ -377,44 +370,12 @@ bool CMinecraftApp::LoadInventoryMenu(int iPad,shared_ptr<LocalPlayer> player,bo
 {
 	bool success = true;
 
-	InventoryScreenInput* initData = new InventoryScreenInput();
-	initData->player = player;
-	initData->bNavigateBack=bNavigateBack;
-	initData->iPad = iPad;
-
-	if(app.GetLocalPlayerCount()>1)
-	{
-		initData->bSplitscreen=true;
-		success = ui.NavigateToScene(iPad,eUIScene_InventoryMenu,initData);
-	}
-	else
-	{
-		initData->bSplitscreen=false;
-		success = ui.NavigateToScene(iPad,eUIScene_InventoryMenu,initData);
-	}
-
 	return success;
 }
 
 bool CMinecraftApp::LoadCreativeMenu(int iPad,shared_ptr<LocalPlayer> player,bool bNavigateBack)
 {
 	bool success = true;
-
-	InventoryScreenInput* initData = new InventoryScreenInput();
-	initData->player = player;
-	initData->bNavigateBack=bNavigateBack;
-	initData->iPad = iPad;
-
-	if(app.GetLocalPlayerCount()>1)
-	{
-		initData->bSplitscreen=true;
-		success = ui.NavigateToScene(iPad,eUIScene_CreativeMenu,initData);
-	}
-	else
-	{
-		initData->bSplitscreen=false;
-		success = ui.NavigateToScene(iPad,eUIScene_CreativeMenu,initData);
-	}
 
 	return success;
 }
@@ -423,50 +384,12 @@ bool CMinecraftApp::LoadCrafting2x2Menu(int iPad,shared_ptr<LocalPlayer> player)
 {
 	bool success = true;
 
-	CraftingPanelScreenInput* initData = new CraftingPanelScreenInput();
-	initData->player = player;
-	initData->iContainerType=RECIPE_TYPE_2x2;
-	initData->iPad = iPad;
-	initData->x = 0;
-	initData->y = 0;
-	initData->z = 0;
-
-	if(app.GetLocalPlayerCount()>1)
-	{
-		initData->bSplitscreen=true;
-		success = ui.NavigateToScene(iPad,eUIScene_Crafting2x2Menu, initData);
-	}
-	else
-	{
-		initData->bSplitscreen=false;
-		success = ui.NavigateToScene(iPad,eUIScene_Crafting2x2Menu, initData);
-	}
-
 	return success;
 }
 
 bool CMinecraftApp::LoadCrafting3x3Menu(int iPad,shared_ptr<LocalPlayer> player, int x, int y, int z)
 {
 	bool success = true;
-
-	CraftingPanelScreenInput* initData = new CraftingPanelScreenInput();
-	initData->player = player;
-	initData->iContainerType=RECIPE_TYPE_3x3;
-	initData->iPad = iPad;
-	initData->x = x;
-	initData->y = y;
-	initData->z = z;
-
-	if(app.GetLocalPlayerCount()>1)
-	{
-		initData->bSplitscreen=true;
-		success = ui.NavigateToScene(iPad,eUIScene_Crafting3x3Menu, initData);
-	}
-	else
-	{
-		initData->bSplitscreen=false;
-		success = ui.NavigateToScene(iPad,eUIScene_Crafting3x3Menu, initData);
-	}
 
 	return success;
 }
@@ -475,50 +398,12 @@ bool CMinecraftApp::LoadFireworksMenu(int iPad,shared_ptr<LocalPlayer> player, i
 {
 	bool success = true;
 
-	FireworksScreenInput* initData = new FireworksScreenInput();
-	initData->player = player;
-	initData->iPad = iPad;
-	initData->x = x;
-	initData->y = y;
-	initData->z = z;
-
-	if(app.GetLocalPlayerCount()>1)
-	{
-		initData->bSplitscreen=true;
-		success = ui.NavigateToScene(iPad,eUIScene_FireworksMenu, initData);
-	}
-	else
-	{
-		initData->bSplitscreen=false;
-		success = ui.NavigateToScene(iPad,eUIScene_FireworksMenu, initData);
-	}
-
 	return success;
 }
 
 bool CMinecraftApp::LoadEnchantingMenu(int iPad,shared_ptr<Inventory> inventory, int x, int y, int z, Level *level, const wstring &name)
 {
 	bool success = true;
-
-	EnchantingScreenInput* initData = new EnchantingScreenInput();
-	initData->inventory = inventory;
-	initData->level = level;
-	initData->x = x;
-	initData->y = y;
-	initData->z = z;
-	initData->iPad = iPad;
-	initData->name = name;
-
-	if(app.GetLocalPlayerCount()>1)
-	{
-		initData->bSplitscreen=true;
-		success = ui.NavigateToScene(iPad,eUIScene_EnchantingMenu, initData);
-	}
-	else
-	{
-		initData->bSplitscreen=false;
-		success = ui.NavigateToScene(iPad,eUIScene_EnchantingMenu, initData);
-	}
 
 	return success;
 }
@@ -527,48 +412,12 @@ bool CMinecraftApp::LoadFurnaceMenu(int iPad,shared_ptr<Inventory> inventory, sh
 {
 	bool success = true;
 
-	FurnaceScreenInput* initData = new FurnaceScreenInput();
-
-	initData->furnace = furnace;
-	initData->inventory = inventory;
-	initData->iPad = iPad;
-
-	// Load the scene.
-	if(app.GetLocalPlayerCount()>1)
-	{
-		initData->bSplitscreen=true;
-		success = ui.NavigateToScene(iPad,eUIScene_FurnaceMenu, initData);
-	}
-	else
-	{
-		initData->bSplitscreen=false;
-		success = ui.NavigateToScene(iPad,eUIScene_FurnaceMenu, initData);
-	}
-
 	return success;
 }
 
 bool CMinecraftApp::LoadBrewingStandMenu(int iPad,shared_ptr<Inventory> inventory, shared_ptr<BrewingStandTileEntity> brewingStand)
 {
 	bool success = true;
-
-	BrewingScreenInput* initData = new BrewingScreenInput();
-
-	initData->brewingStand = brewingStand;
-	initData->inventory = inventory;
-	initData->iPad = iPad;
-
-	// Load the scene.
-	if(app.GetLocalPlayerCount()>1)
-	{
-		initData->bSplitscreen=true;
-		success = ui.NavigateToScene(iPad,eUIScene_BrewingStandMenu, initData);
-	}
-	else
-	{
-		initData->bSplitscreen=false;
-		success = ui.NavigateToScene(iPad,eUIScene_BrewingStandMenu, initData);
-	}
 
 	return success;
 }
@@ -578,57 +427,12 @@ bool CMinecraftApp::LoadContainerMenu(int iPad,shared_ptr<Container> inventory, 
 {
 	bool success = true;
 
-	ContainerScreenInput* initData = new ContainerScreenInput();
-
-	initData->inventory = inventory;
-	initData->container = container;
-	initData->iPad		= iPad;
-
-	// Load the scene.
-	if(app.GetLocalPlayerCount()>1)
-	{
-		initData->bSplitscreen=true;
-
-		bool bLargeChest = (initData->container->getContainerSize() > 3*9)?true:false;
-		if(bLargeChest)
-		{
-			success = ui.NavigateToScene(iPad,eUIScene_LargeContainerMenu,initData);
-		}
-		else
-		{
-			success = ui.NavigateToScene(iPad,eUIScene_ContainerMenu,initData);
-		}
-	}
-	else
-	{
-		initData->bSplitscreen=false;
-		success = ui.NavigateToScene(iPad,eUIScene_ContainerMenu,initData);
-	}
-
 	return success;
 }
 
 bool CMinecraftApp::LoadTrapMenu(int iPad,shared_ptr<Container> inventory, shared_ptr<DispenserTileEntity> trap)
 {
 	bool success = true;
-
-	TrapScreenInput* initData = new TrapScreenInput();
-
-	initData->inventory = inventory;
-	initData->trap = trap;
-	initData->iPad = iPad;
-
-	// Load the scene.
-	if(app.GetLocalPlayerCount()>1)
-	{
-		initData->bSplitscreen=true;
-		success = ui.NavigateToScene(iPad,eUIScene_DispenserMenu, initData);
-	}
-	else
-	{
-		initData->bSplitscreen=false;
-		success = ui.NavigateToScene(iPad,eUIScene_DispenserMenu, initData);
-	}
 
 	return success;
 }
@@ -637,33 +441,12 @@ bool CMinecraftApp::LoadSignEntryMenu(int iPad,shared_ptr<SignTileEntity> sign)
 {
 	bool success = true;
 
-	SignEntryScreenInput* initData = new SignEntryScreenInput();
-
-	initData->sign = sign;
-	initData->iPad = iPad;
-
-	success = ui.NavigateToScene(iPad,eUIScene_SignEntryMenu, initData);
-
-	delete initData;
-
 	return success;
 }
 
 bool CMinecraftApp::LoadRepairingMenu(int iPad,shared_ptr<Inventory> inventory, Level *level, int x, int y, int z)
 {
 	bool success = true;
-
-	AnvilScreenInput *initData = new AnvilScreenInput();
-	initData->inventory = inventory;
-	initData->level = level;
-	initData->x = x;
-	initData->y = y;
-	initData->z = z;
-	initData->iPad = iPad;
-	if(app.GetLocalPlayerCount()>1) initData->bSplitscreen=true;
-	else initData->bSplitscreen=false;
-
-	success = ui.NavigateToScene(iPad,eUIScene_AnvilMenu, initData);
 
 	return success;
 }
@@ -672,16 +455,6 @@ bool CMinecraftApp::LoadTradingMenu(int iPad, shared_ptr<Inventory> inventory, s
 {
 	bool success = true;
 
-	TradingScreenInput *initData = new TradingScreenInput();
-	initData->inventory = inventory;
-	initData->trader = trader;
-	initData->level = level;
-	initData->iPad = iPad;
-	if(app.GetLocalPlayerCount()>1) initData->bSplitscreen=true;
-	else initData->bSplitscreen=false;
-
-	success = ui.NavigateToScene(iPad,eUIScene_TradingMenu, initData);
-
 	return success;
 }
 
@@ -689,30 +462,12 @@ bool CMinecraftApp::LoadHopperMenu(int iPad ,shared_ptr<Inventory> inventory, sh
 {
 	bool success = true;
 
-	HopperScreenInput *initData = new HopperScreenInput();
-	initData->inventory = inventory;
-	initData->hopper = hopper;
-	initData->iPad = iPad;
-	if(app.GetLocalPlayerCount()>1) initData->bSplitscreen=true;
-	else initData->bSplitscreen=false;
-
-	success = ui.NavigateToScene(iPad,eUIScene_HopperMenu, initData);
-
 	return success;
 }
 
 bool CMinecraftApp::LoadHopperMenu(int iPad ,shared_ptr<Inventory> inventory, shared_ptr<MinecartHopper> hopper)
 {
 	bool success = true;
-
-	HopperScreenInput *initData = new HopperScreenInput();
-	initData->inventory = inventory;
-	initData->hopper = dynamic_pointer_cast<Container>(hopper);
-	initData->iPad = iPad;
-	if(app.GetLocalPlayerCount()>1) initData->bSplitscreen=true;
-	else initData->bSplitscreen=false;
-
-	success = ui.NavigateToScene(iPad,eUIScene_HopperMenu, initData);
 
 	return success;
 }
@@ -722,31 +477,12 @@ bool CMinecraftApp::LoadHorseMenu(int iPad ,shared_ptr<Inventory> inventory, sha
 {
 	bool success = true;
 
-	HorseScreenInput *initData = new HorseScreenInput();
-	initData->inventory = inventory;
-	initData->container = container;
-	initData->horse = horse;
-	initData->iPad = iPad;
-	if(app.GetLocalPlayerCount()>1) initData->bSplitscreen=true;
-	else initData->bSplitscreen=false;
-
-	success = ui.NavigateToScene(iPad,eUIScene_HorseMenu, initData);
-
 	return success;
 }
 
 bool CMinecraftApp::LoadBeaconMenu(int iPad ,shared_ptr<Inventory> inventory, shared_ptr<BeaconTileEntity> beacon)
 {
 	bool success = true;
-
-	BeaconScreenInput *initData = new BeaconScreenInput();
-	initData->inventory = inventory;
-	initData->beacon = beacon;
-	initData->iPad = iPad;
-	if(app.GetLocalPlayerCount()>1) initData->bSplitscreen=true;
-	else initData->bSplitscreen=false;
-
-	success = ui.NavigateToScene(iPad,eUIScene_BeaconMenu, initData);
 
 	return success;
 }
@@ -1381,8 +1117,6 @@ void CMinecraftApp::ActionGameSettings(int iPad,eGameSetting eVal)
         {
             int dist = (GameSettingsA[iPad]->uiBitmaskValues >> 16) & 0xFF;
 
-            int level = UIScene_SettingsGraphicsMenu::DistanceToLevel(dist);
-            pMinecraft->options->set(Options::Option::RENDER_DISTANCE, 3 - level);
         };
 		break;
 	case eGameSetting_Gamma:
@@ -1507,39 +1241,17 @@ void CMinecraftApp::ActionGameSettings(int iPad,eGameSetting eVal)
 		break;
 
 	case eGameSetting_DisplaySplitscreenGamertags:
-		for( BYTE idx = 0; idx < XUSER_MAX_COUNT; ++idx)
-		{
-			if(pMinecraft->localplayers[idx] != nullptr)
-			{
-				if(pMinecraft->localplayers[idx]->m_iScreenSection==C4JRender::VIEWPORT_TYPE_FULLSCREEN)
-				{
-					ui.DisplayGamertag(idx,false);
-				}
-				else
-				{
-					ui.DisplayGamertag(idx,true);
-				}
-			}
-		}
 
 		break;
 	case eGameSetting_InterfaceOpacity:
 		// update the tooltips display
-		ui.RefreshTooltips( iPad);
 
 		break;
 	case eGameSetting_Hints:
 		//nothing to do here
 		break;
 	case eGameSetting_Tooltips:
-		if((GameSettingsA[iPad]->usBitmaskValues&0x8000)!=0)
-		{
-			ui.SetEnableTooltips(iPad,TRUE);
-		}
-		else
-		{
-			ui.SetEnableTooltips(iPad,FALSE);
-		}
+
 		break;
 	case eGameSetting_Clouds:
 		//nothing to do here
@@ -2623,25 +2335,11 @@ void CMinecraftApp::ActionDebugMask(int iPad,bool bSetAllClear)
 			//	break;
 
 		case eDebugSetting_ShowUIConsole:
-			if(ulBitmask&(1<<i))
-			{
-				ui.ShowUIDebugConsole(true);
-			}
-			else
-			{
-				ui.ShowUIDebugConsole(false);
-			}
+			
 			break;
 
 		case eDebugSetting_ShowUIMarketingGuide:
-			if(ulBitmask&(1<<i))
-			{
-				ui.ShowUIDebugMarketingGuide(true);
-			}
-			else
-			{
-				ui.ShowUIDebugMarketingGuide(false);
-			}
+			
 			break;
 
 		case eDebugSetting_MobsDontAttack:
@@ -2683,10 +2381,6 @@ void CMinecraftApp::ActionDebugMask(int iPad,bool bSetAllClear)
 
 int CMinecraftApp::DisplaySavingMessage(void *pParam, C4JStorage::ESavingMessage eVal, int iPad)
 {
-	//CMinecraftApp* pClass = (CMinecraftApp*)pParam;
-
-	ui.ShowSavingMessage(iPad, eVal);
-
 	return 0;
 }
 
@@ -2716,8 +2410,6 @@ void CMinecraftApp::HandleXuiActions(void)
 			{
 				UINT uiIDA[1];
 				uiIDA[0]=IDS_CONFIRM_OK;
-				C4JStorage::EMessageResult result = ui.RequestErrorMessage( IDS_CANT_PLACE_NEAR_SPAWN_TITLE, IDS_CANT_PLACE_NEAR_SPAWN_TEXT, uiIDA,1,XUSER_INDEX_ANY);
-				if(result != C4JStorage::EMessage_Busy) SetGlobalXuiAction(eAppAction_Idle);
 
 			}
 			break;
@@ -2773,16 +2465,7 @@ void CMinecraftApp::HandleXuiActions(void)
 					}
 					pMinecraft->options->hideGui=bKeepHiding;
 
-					// Facebook Share
-
-					if(app.GetLocalPlayerCount()>1)
-					{
-						ui.NavigateToScene(i,eUIScene_SocialPost);
-					}
-					else
-					{
-						ui.NavigateToScene(i,eUIScene_SocialPost);
-					}
+					
 				}
 				break;
 			case eAppAction_SaveGame:
@@ -2803,7 +2486,6 @@ void CMinecraftApp::HandleXuiActions(void)
 						UINT uiIDA[2];
 						uiIDA[0]=IDS_CONFIRM_OK;
 						uiIDA[1]=IDS_CONFIRM_CANCEL;
-						ui.RequestErrorMessage(IDS_UNLOCK_TITLE, IDS_UNLOCK_TOSAVE_TEXT, uiIDA, 2,i,&CMinecraftApp::UnlockFullSaveReturned,this);
 					}
 				}
 
@@ -2836,97 +2518,14 @@ void CMinecraftApp::HandleXuiActions(void)
 				}
 				else*/
 				{
-					// turn off the gamertags in splitscreen for the primary player, since they are about to be made fullscreen
-					ui.HideAllGameUIElements();
-
-					// Hide the other players scenes
-					ui.ShowOtherPlayersBaseScene(ProfileManager.GetPrimaryPad(), false);
-
-					//INT saveOrCheckpointId = 0;
-					//bool validSave = StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);
-					//SentientManager.RecordLevelSaveOrCheckpoint(ProfileManager.GetPrimaryPad(), saveOrCheckpointId);
-
-					LoadingInputParams *loadingParams = new LoadingInputParams();
-					loadingParams->func = &UIScene_PauseMenu::SaveWorldThreadProc;
-					loadingParams->lpParam = static_cast<LPVOID>(false);
-
-					// 4J-JEV - PS4: Fix for #5708 - [ONLINE] - If the user pulls their network cable out while saving the title will hang.
-					loadingParams->waitForThreadToDelete = true;
-
-					UIFullscreenProgressCompletionData *completionData = new UIFullscreenProgressCompletionData();
-					completionData->bShowBackground=TRUE;
-					completionData->bShowLogo=TRUE;
-					completionData->type = e_ProgressCompletion_NavigateBackToScene;
-					completionData->iPad = ProfileManager.GetPrimaryPad();
-
-					if( ui.IsSceneInStack( ProfileManager.GetPrimaryPad(), eUIScene_EndPoem ) )
-					{
-						completionData->scene = eUIScene_EndPoem;
-					}
-					else
-					{
-						completionData->scene = eUIScene_PauseMenu;
-					}
-
-					loadingParams->completionData = completionData;
-
-					// 4J Stu - Xbox only
-#ifdef _XBOX
-					// Temporarily make this scene fullscreen
-					CXuiSceneBase::SetPlayerBaseScenePosition( ProfileManager.GetPrimaryPad(), CXuiSceneBase::e_BaseScene_Fullscreen );
-#endif
-
-					ui.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_FullscreenProgress, loadingParams , eUILayer_Fullscreen, eUIGroup_Fullscreen);
-
+					
 				}
 				break;
 			case eAppAction_AutosaveSaveGameCapturedThumbnail:
 
 				{
 					app.SetAutosaveTimerTime();
-					SetAction(i,eAppAction_Idle);
-
-#if defined(_XBOX_ONE) || defined(__ORBIS__)
-					app.SetXuiServerAction(ProfileManager.GetPrimaryPad(),eXuiServerAction_AutoSaveGame);
-
-					if(app.GetGameHostOption(eGameHostOption_DisableSaving)) StorageManager.SetSaveDisabled(true);
-#else
-					// turn off the gamertags in splitscreen for the primary player, since they are about to be made fullscreen
-					ui.HideAllGameUIElements();
-
-					//app.CloseAllPlayersXuiScenes();
-					// Hide the other players scenes
-					ui.ShowOtherPlayersBaseScene(ProfileManager.GetPrimaryPad(), false);
-
-					// This just allows it to be shown
-					if(pMinecraft->localgameModes[ProfileManager.GetPrimaryPad()] != nullptr) pMinecraft->localgameModes[ProfileManager.GetPrimaryPad()]->getTutorial()->showTutorialPopup(false);
-
-					//INT saveOrCheckpointId = 0;
-					//bool validSave = StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);
-					//SentientManager.RecordLevelSaveOrCheckpoint(ProfileManager.GetPrimaryPad(), saveOrCheckpointId);
-
-
-					LoadingInputParams *loadingParams = new LoadingInputParams();
-					loadingParams->func = &UIScene_PauseMenu::SaveWorldThreadProc;
-
-					loadingParams->lpParam = (LPVOID)(true);
-
-					UIFullscreenProgressCompletionData *completionData = new UIFullscreenProgressCompletionData();
-					completionData->bShowBackground=TRUE;
-					completionData->bShowLogo=TRUE;
-					completionData->type = e_ProgressCompletion_AutosaveNavigateBack;
-					completionData->iPad = ProfileManager.GetPrimaryPad();
-					//completionData->bAutosaveWasMenuDisplayed=ui.GetMenuDisplayed(ProfileManager.GetPrimaryPad());
-					loadingParams->completionData = completionData;
-
-					// 4J Stu - Xbox only
-#ifdef _XBOX
-					// Temporarily make this scene fullscreen
-					CXuiSceneBase::SetPlayerBaseScenePosition( ProfileManager.GetPrimaryPad(), CXuiSceneBase::e_BaseScene_Fullscreen );
-#endif
-
-					ui.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_FullscreenProgress, loadingParams , eUILayer_Fullscreen, eUIGroup_Fullscreen);
-#endif
+					SetAction(i,eAppAction_Idle);		
 				}
 				break;
 			case eAppAction_ExitPlayer:
@@ -2960,8 +2559,6 @@ void CMinecraftApp::HandleXuiActions(void)
 
 					// if there are any tips showing, we need to close them
 
-					pMinecraft->gui->clearMessages(i);
-
 					// Make sure we've not got this player selected as current - this shouldn't be the case anyway
 					pMinecraft->setLocalPlayerIdx(ProfileManager.GetPrimaryPad());
 					pMinecraft->removeLocalPlayerIdx(i);
@@ -2983,8 +2580,7 @@ void CMinecraftApp::HandleXuiActions(void)
 #endif
 
 #ifndef _XBOX
-					// Wipe out the tooltips
-					ui.SetTooltips(i, -1);
+					
 #endif
 
 					// Change the presence info
@@ -3042,7 +2638,6 @@ void CMinecraftApp::HandleXuiActions(void)
 #endif
 					// if there are any tips showing, we need to close them
 
-					pMinecraft->gui->clearMessages(i);
 
 					// Make sure we've not got this player selected as current - this shouldn't be the case anyway
 					pMinecraft->setLocalPlayerIdx(ProfileManager.GetPrimaryPad());
@@ -3065,8 +2660,7 @@ void CMinecraftApp::HandleXuiActions(void)
 #endif
 
 #ifndef _XBOX
-					// Wipe out the tooltips
-					ui.SetTooltips(i, -1);
+
 #endif
 
 					// Change the presence info
@@ -3153,19 +2747,6 @@ void CMinecraftApp::HandleXuiActions(void)
 					break;
 				}
 
-				pMinecraft->gui->clearMessages();
-
-				// turn off the gamertags in splitscreen for the primary player, since they are about to be made fullscreen
-				ui.HideAllGameUIElements();
-
-				// reset the flag stopping new dlc message being shown if you've seen the message before
-				DisplayNewDLCTipAgain();
-
-				// clear the autosave timer that might be on screen
-				ui.ShowAutosaveCountdownTimer(false);
-
-				// Hide the selected item text
-				ui.HideAllGameUIElements();
 
 				// Since the player forced the exit, let's flush any profile writes, and hope we're not breaking TCR 136...
 #if (defined __PS3__ || defined __ORBIS__  || defined _DURANGO  || defined __PSVITA__)
@@ -3212,7 +2793,6 @@ void CMinecraftApp::HandleXuiActions(void)
 					UINT uiIDA[2];
 					uiIDA[0]=IDS_CONFIRM_OK;
 					uiIDA[1]=IDS_CONFIRM_CANCEL;
-					ui.RequestErrorMessage(IDS_UNLOCK_TITLE, IDS_UNLOCK_TOSAVE_TEXT, uiIDA, 2, i,&CMinecraftApp::UnlockFullExitReturned,this);
 				}
 
 				// Change the presence info
@@ -3259,10 +2839,7 @@ void CMinecraftApp::HandleXuiActions(void)
 					SetGameStarted(false);
 					SetChangingSessionType(true); // Added to stop handling ethernet disconnects
 
-					ui.CloseAllPlayersScenes();
-
-					// turn off the gamertags in splitscreen for the primary player, since they are about to be made fullscreen
-					ui.HideAllGameUIElements();
+					
 
 					// 4J Stu - Fix for #12368 - Crash: Game crashes when saving then exiting and selecting to save
 					for(unsigned int idx = 0; idx < XUSER_MAX_COUNT; ++idx)
@@ -3275,38 +2852,15 @@ void CMinecraftApp::HandleXuiActions(void)
 						// It doesn't matter if they were in the tutorial already
 						pMinecraft->playerLeftTutorial( idx );
 					}
-
-					LoadingInputParams *loadingParams = new LoadingInputParams();
-					loadingParams->func = &UIScene_PauseMenu::ExitWorldThreadProc;
-					loadingParams->lpParam = param;
-
-					UIFullscreenProgressCompletionData *completionData = new UIFullscreenProgressCompletionData();
-					// If param is non-null then this is a forced exit by the server, so make sure the player knows why
-					// 4J Stu - Changed - Don't use the FullScreenProgressScreen for action, use a dialog instead
-					completionData->bRequiresUserAction = FALSE;//(param != nullptr) ? TRUE : FALSE;
-					completionData->bShowTips = (param != nullptr) ? FALSE : TRUE;
-					completionData->bShowBackground=TRUE;
-					completionData->bShowLogo=TRUE;
-					completionData->type = e_ProgressCompletion_NavigateToHomeMenu;
-					completionData->iPad = DEFAULT_XUI_MENU_USER;
-					loadingParams->completionData = completionData;
-
-					ui.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_FullscreenProgress, loadingParams);
 				}
 				break;
 			case eAppAction_ExitWorldTrial:
 				{
 					SetAction(i,eAppAction_Idle);
 
-					pMinecraft->gui->clearMessages();
-
-					// turn off the gamertags in splitscreen for the primary player, since they are about to be made fullscreen
-					ui.HideAllGameUIElements();
-
 					// Stop app running
 					SetGameStarted(false);
 
-					ui.CloseAllPlayersScenes();
 
 					// 4J Stu - Fix for #12368 - Crash: Game crashes when saving then exiting and selecting to save
 					for(unsigned int idx = 0; idx < XUSER_MAX_COUNT; ++idx)
@@ -3320,18 +2874,6 @@ void CMinecraftApp::HandleXuiActions(void)
 						pMinecraft->playerLeftTutorial( idx );
 					}
 
-					LoadingInputParams *loadingParams = new LoadingInputParams();
-					loadingParams->func = &UIScene_PauseMenu::ExitWorldThreadProc;
-					loadingParams->lpParam = param;
-
-					UIFullscreenProgressCompletionData *completionData = new UIFullscreenProgressCompletionData();
-					completionData->bShowBackground=TRUE;
-					completionData->bShowLogo=TRUE;
-					completionData->type = e_ProgressCompletion_NavigateToHomeMenu;
-					completionData->iPad = DEFAULT_XUI_MENU_USER;
-					loadingParams->completionData = completionData;
-
-					ui.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_FullscreenProgress, loadingParams);
 				}
 
 				break;
@@ -3344,15 +2886,6 @@ void CMinecraftApp::HandleXuiActions(void)
 				if(player != nullptr && player->GetPlayerRespawned())
 				{
 					SetAction(i,eAppAction_Idle);
-
-					if(ui.IsSceneInStack(i, eUIScene_EndPoem))
-					{
-						ui.NavigateBack(i,false,eUIScene_EndPoem);
-					}
-					else
-					{
-						ui.CloseUIScenes(i);
-					}
 
 					// clear the progress messages
 
@@ -3369,7 +2902,6 @@ void CMinecraftApp::HandleXuiActions(void)
 				if(player != nullptr && player->connection && player->connection->isStarted())
 				{
 					SetAction(i,eAppAction_Idle);
-					ui.CloseUIScenes(i);
 				}
 				else if(!g_NetworkManager.IsInGameplay())
 				{
@@ -3379,9 +2911,6 @@ void CMinecraftApp::HandleXuiActions(void)
 			case eAppAction_PrimaryPlayerSignedOut:
 				{
 					//SetAction(i,eAppAction_Idle);
-
-					// clear the autosavetimer that might be displayed
-					ui.ShowAutosaveCountdownTimer(false);
 
 					// If the player signs out before the game started the server can be killed a bit earlier to stop
 					// the loading or saving of a new game continuing running while the UI/Guide is up
@@ -3460,7 +2989,6 @@ void CMinecraftApp::HandleXuiActions(void)
 									UINT uiIDA[1];
 									uiIDA[0]=IDS_CONFIRM_OK;
 
-									ui.RequestErrorMessage(g_NetworkManager.CorrectErrorIDS(IDS_CONNECTION_LOST), g_NetworkManager.CorrectErrorIDS(IDS_CONNECTION_LOST_LIVE), uiIDA, 1, i,&CMinecraftApp::EthernetDisconnectReturned,this);
 								}
 								else
 								{
@@ -3487,8 +3015,7 @@ void CMinecraftApp::HandleXuiActions(void)
 							UINT uiIDA[1];
 							uiIDA[0]=IDS_CONFIRM_OK;
 
-							ui.RequestErrorMessage(g_NetworkManager.CorrectErrorIDS(IDS_CONNECTION_LOST), g_NetworkManager.CorrectErrorIDS(IDS_CONNECTION_LOST_LIVE), uiIDA, 1, i,&CMinecraftApp::EthernetDisconnectReturned,this);
-
+							
 							}
 						}
 					}
@@ -3500,10 +3027,6 @@ void CMinecraftApp::HandleXuiActions(void)
 				{
 					SetAction(i,eAppAction_Idle);
 
-					pMinecraft->gui->clearMessages();
-
-					// turn off the gamertags in splitscreen for the primary player, since they are about to be made fullscreen
-					ui.HideAllGameUIElements();
 
 					// set the state back to pre-game
 					ProfileManager.ResetProfileProcessState();
@@ -3512,8 +3035,8 @@ void CMinecraftApp::HandleXuiActions(void)
 					if( g_NetworkManager.IsLeavingGame() )
 					{
 						// 4J Stu - If we are already leaving the game, then we just need to signal that the player signed out to stop saves
-						pMinecraft->progressRenderer->progressStartNoAbort( IDS_EXITING_GAME );
-						pMinecraft->progressRenderer->progressStage(-1);
+						//pMinecraft->progressRenderer->progressStartNoAbort( IDS_EXITING_GAME );
+						//pMinecraft->progressRenderer->progressStage(-1);
 						// This has no effect on client machines
 						MinecraftServer::HaltServer(true);
 					}
@@ -3523,9 +3046,6 @@ void CMinecraftApp::HandleXuiActions(void)
 						SetGameStarted(false);
 
 						// turn off the gamertags in splitscreen for the primary player, since they are about to be made fullscreen
-						ui.HideAllGameUIElements();
-
-						ui.CloseAllPlayersScenes();
 
 						// 4J Stu - Fix for #12368 - Crash: Game crashes when saving then exiting and selecting to save
 						for(unsigned int idx = 0; idx < XUSER_MAX_COUNT; ++idx)
@@ -3539,17 +3059,6 @@ void CMinecraftApp::HandleXuiActions(void)
 							pMinecraft->playerLeftTutorial( idx );
 						}
 
-						LoadingInputParams *loadingParams = new LoadingInputParams();
-						loadingParams->func = &CMinecraftApp::SignoutExitWorldThreadProc;
-
-						UIFullscreenProgressCompletionData *completionData = new UIFullscreenProgressCompletionData();
-						completionData->bShowBackground=TRUE;
-						completionData->bShowLogo=TRUE;
-						completionData->iPad=DEFAULT_XUI_MENU_USER;
-						completionData->type = e_ProgressCompletion_NavigateToHomeMenu;
-						loadingParams->completionData = completionData;
-
-						ui.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_FullscreenProgress, loadingParams);
 					}
 				}
 				break;
@@ -3560,20 +3069,11 @@ void CMinecraftApp::HandleXuiActions(void)
 				// clear the save device
 				StorageManager.SetSaveDeviceSelected(i,false);
 
-				ui.UpdatePlayerBasePositions();
-				// there are multiple layers in the help menu, so a navigate back isn't enough
-				ui.NavigateToHomeMenu();
-
 				break;
 			case eAppAction_EthernetDisconnectedReturned_Menus:
 				SetAction(i,eAppAction_Idle);
 				// set the state back to pre-game
 				ProfileManager.ResetProfileProcessState();
-
-				ui.UpdatePlayerBasePositions();
-
-				// there are multiple layers in the help menu, so a navigate back isn't enough
-				ui.NavigateToHomeMenu();
 
 				break;
 
@@ -3584,7 +3084,6 @@ void CMinecraftApp::HandleXuiActions(void)
 					uiIDA[0]=IDS_UNLOCK_TITLE;
 					uiIDA[1]=IDS_EXIT_GAME;
 
-					ui.RequestErrorMessage(IDS_TRIALOVER_TITLE, IDS_TRIALOVER_TEXT, uiIDA, 2, i,&CMinecraftApp::TrialOverReturned,this);
 				}
 				break;
 
@@ -3598,7 +3097,6 @@ void CMinecraftApp::HandleXuiActions(void)
 					uiIDA[0]=IDS_CONFIRM_OK;
 					uiIDA[1]=IDS_CONFIRM_CANCEL;
 
-					ui.RequestErrorMessage(IDS_UNLOCK_TITLE, IDS_UNLOCK_ACCEPT_INVITE, uiIDA, 2, i,&CMinecraftApp::UnlockFullInviteReturned,this);
 				}
 				break;
 			case eAppAction_ExitAndJoinFromInvite:
@@ -3626,7 +3124,6 @@ void CMinecraftApp::HandleXuiActions(void)
 						uiIDA[1]=IDS_EXIT_GAME_SAVE;
 						uiIDA[2]=IDS_EXIT_GAME_NO_SAVE;
 
-						ui.RequestAlertMessage(IDS_EXIT_GAME, IDS_CONFIRM_LEAVE_VIA_INVITE, uiIDA, 3, i,&CMinecraftApp::ExitAndJoinFromInviteSaveDialogReturned,this);
 					}
 					else
 #endif
@@ -3638,13 +3135,11 @@ void CMinecraftApp::HandleXuiActions(void)
 							// upsell
 							uiIDA[0]=IDS_CONFIRM_OK;
 							uiIDA[1]=IDS_CONFIRM_CANCEL;
-							ui.RequestErrorMessage(IDS_UNLOCK_TITLE, IDS_UNLOCK_ACCEPT_INVITE, uiIDA, 2, i,&CMinecraftApp::UnlockFullInviteReturned,this);
 						}
 						else
 						{
 							uiIDA[0]=IDS_CONFIRM_CANCEL;
 							uiIDA[1]=IDS_CONFIRM_OK;
-							ui.RequestAlertMessage(IDS_EXIT_GAME, IDS_CONFIRM_LEAVE_VIA_INVITE, uiIDA, 2,i,&CMinecraftApp::ExitAndJoinFromInvite,this);
 						}
 					}
 				}
@@ -3653,15 +3148,8 @@ void CMinecraftApp::HandleXuiActions(void)
 				{
 					SetAction(i,eAppAction_Idle);
 
-					pMinecraft->gui->clearMessages();
-
-					// turn off the gamertags in splitscreen for the primary player, since they are about to be made fullscreen
-					ui.HideAllGameUIElements();
-
 					// Stop app running
 					SetGameStarted(false);
-
-					ui.CloseAllPlayersScenes();
 
 					// 4J Stu - Fix for #12368 - Crash: Game crashes when saving then exiting and selecting to save
 					for(unsigned int idx = 0; idx < XUSER_MAX_COUNT; ++idx)
@@ -3736,18 +3224,6 @@ void CMinecraftApp::HandleXuiActions(void)
 					}
 #endif
 
-                    LoadingInputParams *loadingParams = new LoadingInputParams();
-                    loadingParams->func = &CGameNetworkManager::ExitAndJoinFromInviteThreadProc;
-                    loadingParams->lpParam = static_cast<LPVOID>(&m_InviteData);
-
-					UIFullscreenProgressCompletionData *completionData = new UIFullscreenProgressCompletionData();
-					completionData->bShowBackground=TRUE;
-					completionData->bShowLogo=TRUE;
-					completionData->iPad=DEFAULT_XUI_MENU_USER;
-					completionData->type = e_ProgressCompletion_NoAction;
-					loadingParams->completionData = completionData;
-
-					ui.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_FullscreenProgress, loadingParams);
 				}
 
 				break;
@@ -3799,10 +3275,6 @@ void CMinecraftApp::HandleXuiActions(void)
 						// 4J Stu - Copied this from XUI_FullScreenProgress to properly handle the fail case, as the thread will no longer be failing
 						UINT uiIDA[1];
 						uiIDA[0]=IDS_CONFIRM_OK;
-						ui.RequestErrorMessage( IDS_CONNECTION_FAILED, IDS_CONNECTION_LOST_SERVER, uiIDA,1,ProfileManager.GetPrimaryPad());
-
-						ui.NavigateToHomeMenu();
-						ui.UpdatePlayerBasePositions();
 					}
 				}
 				break;
@@ -3822,43 +3294,11 @@ void CMinecraftApp::HandleXuiActions(void)
 							SetReallyChangingSessionType(true);
 
 							// turn off the gamertags in splitscreen for the primary player, since they are about to be made fullscreen
-							ui.HideAllGameUIElements();
-
-							if( !ui.IsSceneInStack( ProfileManager.GetPrimaryPad(), eUIScene_EndPoem ) )
-							{
-								ui.CloseAllPlayersScenes();
-							}
-							ui.ShowOtherPlayersBaseScene(ProfileManager.GetPrimaryPad(), true);
 
 							// Remove this line to fix:
 							// #49084 - TU5: Code: Gameplay: The title crashes every time client navigates to 'Play game' menu and loads/creates new game after a "Connection to Xbox LIVE was lost" message has appeared.
 							//app.NavigateToScene(0,eUIScene_Main);
 
-							LoadingInputParams *loadingParams = new LoadingInputParams();
-							loadingParams->func = &CGameNetworkManager::ChangeSessionTypeThreadProc;
-							loadingParams->lpParam = nullptr;
-
-							UIFullscreenProgressCompletionData *completionData = new UIFullscreenProgressCompletionData();
-#ifdef __PS3__
-							completionData->bRequiresUserAction=FALSE;
-#else
-							completionData->bRequiresUserAction=TRUE;
-#endif
-							completionData->bShowBackground=TRUE;
-							completionData->bShowLogo=TRUE;
-							completionData->iPad=DEFAULT_XUI_MENU_USER;
-							if( ui.IsSceneInStack( ProfileManager.GetPrimaryPad(), eUIScene_EndPoem ) )
-							{
-								completionData->type = e_ProgressCompletion_NavigateBackToScene;
-								completionData->scene = eUIScene_EndPoem;
-							}
-							else
-							{
-								completionData->type = e_ProgressCompletion_CloseAllPlayersUIScenes;
-							}
-							loadingParams->completionData = completionData;
-
-							ui.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_FullscreenProgress, loadingParams);
 						}
 					}
 					else if( g_NetworkManager.IsLeavingGame() )
@@ -3907,38 +3347,6 @@ void CMinecraftApp::HandleXuiActions(void)
 
 					SetAction(i,eAppAction_WaitRemoteServerSaveComplete);
 
-					for(unsigned int i = 0; i < XUSER_MAX_COUNT; ++i)
-					{
-						ui.CloseUIScenes(i, true);
-					}
-
-					// turn off the gamertags in splitscreen for the primary player, since they are about to be made fullscreen
-					ui.HideAllGameUIElements();
-
-					LoadingInputParams *loadingParams = new LoadingInputParams();
-					loadingParams->func = &CMinecraftApp::RemoteSaveThreadProc;
-					loadingParams->lpParam = nullptr;			
-
-					UIFullscreenProgressCompletionData *completionData = new UIFullscreenProgressCompletionData();
-					completionData->bRequiresUserAction=FALSE;
-					completionData->bShowBackground=TRUE;
-					completionData->bShowLogo=TRUE;
-					completionData->iPad=DEFAULT_XUI_MENU_USER;
-					if( ui.IsSceneInStack( ProfileManager.GetPrimaryPad(), eUIScene_EndPoem ) )
-					{
-						completionData->type = e_ProgressCompletion_NavigateBackToScene;
-						completionData->scene = eUIScene_EndPoem;
-					}
-					else
-					{
-						completionData->type = e_ProgressCompletion_CloseAllPlayersUIScenes;
-					}
-					loadingParams->completionData = completionData;
-
-					loadingParams->cancelFunc = &CMinecraftApp::ExitGameFromRemoteSave;
-					loadingParams->cancelText = IDS_TOOLTIPS_EXIT;
-
-					ui.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_FullscreenProgress, loadingParams);
 				}
 				break;
 			case eAppAction_WaitRemoteServerSaveComplete:
@@ -3948,8 +3356,6 @@ void CMinecraftApp::HandleXuiActions(void)
 				{
 					UINT uiIDA[1];
 					uiIDA[0]=IDS_CONFIRM_OK;
-					C4JStorage::EMessageResult result = ui.RequestErrorMessage( IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE, IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT, uiIDA,1,ProfileManager.GetPrimaryPad());
-					if(result != C4JStorage::EMessage_Busy) SetAction(i,eAppAction_Idle);
 				}
 				break;
 			case eAppAction_ProfileReadError:
@@ -4012,8 +3418,6 @@ void CMinecraftApp::HandleXuiActions(void)
 					{
 						swprintf(wchFormat, 40, L"%ls\n\n%%ls",player->GetOnlineName());
 
-						C4JStorage::EMessageResult result = ui.RequestErrorMessage( IDS_BANNED_LEVEL_TITLE, IDS_PLAYER_BANNED_LEVEL, uiIDA,2,i,&CMinecraftApp::BannedLevelDialogReturned,this, wchFormat);
-						if(result != C4JStorage::EMessage_Busy) SetAction(i,eAppAction_Idle);
 					}
 					else
 					{
@@ -4076,12 +3480,7 @@ void CMinecraftApp::HandleXuiActions(void)
 
 					SetAction(i,eAppAction_Idle);
 
-					ui.SetTooltips(i, -1);
-
-					ui.ReloadSkin();
-					ui.StartReloadSkinThread();
-
-					ui.setCleanupOnReload();
+					
 #endif
 				}
 				break;
@@ -4108,7 +3507,6 @@ void CMinecraftApp::HandleXuiActions(void)
 					uiIDA[1]=IDS_TEXTURE_PACK_TRIALVERSION;
 
 					// Give the player a warning about the texture pack missing
-					ui.RequestErrorMessage(IDS_DLC_TEXTUREPACK_NOT_PRESENT_TITLE, IDS_DLC_TEXTUREPACK_NOT_PRESENT, uiIDA, 2, ProfileManager.GetPrimaryPad(),&CMinecraftApp::TexturePackDialogReturned,this);
 					SetAction(i,eAppAction_Idle);
 #endif
 				}
@@ -4513,7 +3911,7 @@ int CMinecraftApp::SignoutExitWorldThreadProc( void* lpParameter )
 			default:
 				exitReasonStringId = IDS_DISCONNECTED;
 			}
-			pMinecraft->progressRenderer->progressStartNoAbort( exitReasonStringId );
+			//pMinecraft->progressRenderer->progressStartNoAbort( exitReasonStringId );
 			// 4J - Force a disconnection, this handles the situation that the server has already disconnected
 			if( pMinecraft->levels[0] != nullptr ) pMinecraft->levels[0]->disconnect(false);
 			if( pMinecraft->levels[1] != nullptr ) pMinecraft->levels[1]->disconnect(false);
@@ -4521,7 +3919,7 @@ int CMinecraftApp::SignoutExitWorldThreadProc( void* lpParameter )
 		else
 		{
 			exitReasonStringId = IDS_EXITING_GAME;
-			pMinecraft->progressRenderer->progressStartNoAbort( IDS_EXITING_GAME );
+			//pMinecraft->progressRenderer->progressStartNoAbort( IDS_EXITING_GAME );
 
 			if( pMinecraft->levels[0] != nullptr ) pMinecraft->levels[0]->disconnect();
 			if( pMinecraft->levels[1] != nullptr ) pMinecraft->levels[1]->disconnect();
@@ -4573,7 +3971,7 @@ int CMinecraftApp::SignoutExitWorldThreadProc( void* lpParameter )
 			default:
 				exitReasonStringId = IDS_DISCONNECTED;
 			}
-			pMinecraft->progressRenderer->progressStartNoAbort( exitReasonStringId );
+			//pMinecraft->progressRenderer->progressStartNoAbort( exitReasonStringId );
 		}
 	}
 	pMinecraft->setLevel(nullptr,exitReasonStringId,nullptr,saveStats,true);
@@ -4922,7 +4320,6 @@ void CMinecraftApp::SignInChangeCallback(LPVOID pParam,bool bPrimaryPlayerChange
 				{
 					UINT uiIDA[1];
 					uiIDA[0]=IDS_CONFIRM_OK;
-					ui.RequestErrorMessage(IDS_GUEST_ORDER_CHANGED_TITLE, IDS_GUEST_ORDER_CHANGED_TEXT, uiIDA, 1, ProfileManager.GetPrimaryPad());
 				}
 
 				// 4J Stu - On PS4 we can also cause to exit players if they are signed out here, but we shouldn't do that if
@@ -5072,13 +4469,7 @@ void CMinecraftApp::NotificationsCallback(LPVOID pParam,DWORD dwNotification, un
 		{
 			for(unsigned int i = 0; i < XUSER_MAX_COUNT; ++i)
 			{
-				if(!InputManager.IsPadConnected(i) &&
-					Minecraft::GetInstance()->localplayers[i] != nullptr &&
-					!ui.IsPauseMenuDisplayed(i) && !ui.IsSceneInStack(i, eUIScene_EndPoem) )
-				{
-					ui.CloseUIScenes(i);
-					ui.NavigateToScene(i,eUIScene_PauseMenu);
-				}
+				
 			}
 		}
 		break;
@@ -5088,8 +4479,6 @@ void CMinecraftApp::NotificationsCallback(LPVOID pParam,DWORD dwNotification, un
 			//app.m_dlcManager.SetNeedsUpdated(true);
 			// Clear the DLC installed flag to cause a GetDLC to run if it's called
 			app.ClearDLCInstalled();
-
-			ui.HandleDLCInstalled(ProfileManager.GetPrimaryPad());
 		}
 		break;
 	case XN_SYS_STORAGEDEVICESCHANGED:
@@ -5362,7 +4751,6 @@ void CMinecraftApp::MountNextDLC(int iPad)
 		m_bDLCInstallPending = false;
 		m_bDLCInstallProcessCompleted=true;
 
-		ui.HandleDLCMountingComplete();
 
 #if defined(_XBOX_ONE) || defined(__ORBIS__)
 		// Check if the current texture pack is now installed
@@ -5946,9 +5334,7 @@ int CMinecraftApp::ExitAndJoinFromInviteSaveDialogReturned(void *pParam,int iPad
 					uiIDA[0]=IDS_CONFIRM_OK;
 					uiIDA[1]=IDS_CONFIRM_CANCEL;
 
-					// Give the player a warning about the trial version of the texture pack
-					ui.RequestErrorMessage(IDS_WARNING_DLC_TRIALTEXTUREPACK_TITLE, IDS_WARNING_DLC_TRIALTEXTUREPACK_TEXT, uiIDA, 2, iPad,&CMinecraftApp::WarningTrialTexturePackReturned,pClass);
-
+					
 					return S_OK;
 				}
 			}
@@ -5963,7 +5349,6 @@ int CMinecraftApp::ExitAndJoinFromInviteSaveDialogReturned(void *pParam,int iPad
 				UINT uiIDA[2];
 				uiIDA[0]=IDS_CONFIRM_CANCEL;
 				uiIDA[1]=IDS_CONFIRM_OK;
-				ui.RequestErrorMessage(IDS_TITLE_SAVE_GAME, IDS_CONFIRM_SAVE_GAME, uiIDA, 2, ProfileManager.GetPrimaryPad(),&CMinecraftApp::ExitAndJoinFromInviteAndSaveReturned,pClass);
 				return 0;
 			}
 			else
@@ -5981,7 +5366,6 @@ int CMinecraftApp::ExitAndJoinFromInviteSaveDialogReturned(void *pParam,int iPad
 			UINT uiIDA[2];
 			uiIDA[0]=IDS_CONFIRM_CANCEL;
 			uiIDA[1]=IDS_CONFIRM_OK;
-			ui.RequestErrorMessage(IDS_TITLE_DECLINE_SAVE_GAME, IDS_CONFIRM_DECLINE_SAVE_GAME, uiIDA, 2, ProfileManager.GetPrimaryPad(),&CMinecraftApp::ExitAndJoinFromInviteDeclineSaveReturned,pClass);
 			return 0;
 		}
 
@@ -6151,9 +5535,6 @@ int CMinecraftApp::ExitAndJoinFromInviteAndSaveReturned(void *pParam,int iPad,C4
 				UINT uiIDA[2];
 				uiIDA[0]=IDS_CONFIRM_OK;
 				uiIDA[1]=IDS_CONFIRM_CANCEL;
-
-				// Give the player a warning about the trial version of the texture pack
-				ui.RequestErrorMessage(IDS_WARNING_DLC_TRIALTEXTUREPACK_TITLE, IDS_WARNING_DLC_TRIALTEXTUREPACK_TEXT, uiIDA, 2, iPad,&CMinecraftApp::WarningTrialTexturePackReturned,nullptr);
 
 				return S_OK;
 			}
@@ -6612,7 +5993,6 @@ wstring CMinecraftApp::GetActionReplacement(int iPad, unsigned char ucAction)
 	int size = 30;
 #elif defined _WIN64
 	int size = 45;
-	if(ui.getScreenHeight() < 1080) size = 30;
 #else
 	int size = 45;
 #endif
@@ -6741,7 +6121,6 @@ wstring CMinecraftApp::GetVKReplacement(unsigned int uiVKey)
 	int size = 30;
 #elif defined _WIN64
 	int size = 45;
-	if(ui.getScreenHeight() < 1080) size = 30;
 #else
 	int size = 45;
 #endif
@@ -6772,7 +6151,6 @@ wstring CMinecraftApp::GetIconReplacement(unsigned int uiIcon)
 	int size = 22;
 #elif defined _WIN64
 	int size = 33;
-	if(ui.getScreenHeight() < 1080) size = 22;
 #else
 	int size = 33;
 #endif
@@ -7425,9 +6803,9 @@ int CMinecraftApp::RemoteSaveThreadProc( void* lpParameter )
 
 	Minecraft *pMinecraft = Minecraft::GetInstance();
 
-	pMinecraft->progressRenderer->progressStartNoAbort( IDS_PROGRESS_HOST_SAVING );
-	pMinecraft->progressRenderer->progressStage( -1 );
-	pMinecraft->progressRenderer->progressStagePercentage(0);
+	//pMinecraft->progressRenderer->progressStartNoAbort( IDS_PROGRESS_HOST_SAVING );
+	//pMinecraft->progressRenderer->progressStage( -1 );
+	//pMinecraft->progressRenderer->progressStagePercentage(0);
 
 	while( !app.GetGameStarted() && app.GetXuiAction( ProfileManager.GetPrimaryPad() ) == eAppAction_WaitRemoteServerSaveComplete )
 	{
@@ -7443,7 +6821,6 @@ int CMinecraftApp::RemoteSaveThreadProc( void* lpParameter )
 	}
 	app.SetAction(ProfileManager.GetPrimaryPad(),eAppAction_Idle);
 
-	ui.UpdatePlayerBasePositions();
 
 	Tile::ReleaseThreadStorage();
 
@@ -7458,7 +6835,6 @@ void CMinecraftApp::ExitGameFromRemoteSave( LPVOID lpParameter )
 	uiIDA[0]=IDS_CONFIRM_CANCEL;
 	uiIDA[1]=IDS_CONFIRM_OK;
 
-	ui.RequestAlertMessage(IDS_EXIT_GAME, IDS_CONFIRM_EXIT_GAME, uiIDA, 2, primaryPad,&CMinecraftApp::ExitGameFromRemoteSaveDialogReturned,nullptr);
 }
 
 int CMinecraftApp::ExitGameFromRemoteSaveDialogReturned(void *pParam,int iPad,C4JStorage::EMessageResult result)
@@ -7474,15 +6850,7 @@ int CMinecraftApp::ExitGameFromRemoteSaveDialogReturned(void *pParam,int iPad,C4
 	{
 #ifndef _XBOX
 		// Inform fullscreen progress scene that it's not being cancelled after all
-		UIScene_FullscreenProgress *pScene = static_cast<UIScene_FullscreenProgress *>(ui.FindScene(eUIScene_FullscreenProgress));
-#ifdef __PS3__
-		if(pScene!=nullptr)
-#else
-		if (pScene != nullptr)
-#endif
-		{
-			pScene->SetWasCancelled(false);
-		}
+		
 #else
 		// Don't have to worry about this on Xbox
 #endif
@@ -7660,16 +7028,7 @@ void CMinecraftApp::RemoveLevelFromBannedLevelList(int iPad, PlayerUID xuid, cha
 // function to add credits for the DLC packs
 void CMinecraftApp::AddCreditText(LPCWSTR lpStr)
 {
-	DebugPrintf("ADDING CREDIT - %ls\n",lpStr);
-	// add a string from the DLC to a credits vector
-	SCreditTextItemDef *pCreditStruct = new SCreditTextItemDef;
-	pCreditStruct->m_eType=eSmallText;
-	pCreditStruct->m_iStringID[0]=NO_TRANSLATED_STRING;
-	pCreditStruct->m_iStringID[1]=NO_TRANSLATED_STRING;
-	pCreditStruct->m_Text=new WCHAR [wcslen(lpStr)+1];
-	wcscpy((WCHAR *)pCreditStruct->m_Text,lpStr);
-
-	vDLCCredits.push_back(pCreditStruct);
+	
 }
 
 bool CMinecraftApp::AlreadySeenCreditText(const wstring &wstemp)
@@ -7689,16 +7048,6 @@ bool CMinecraftApp::AlreadySeenCreditText(const wstring &wstemp)
 	// add this text
 	m_vCreditText.push_back((WCHAR * )wstemp.c_str());
 	return false;
-}
-
-unsigned int CMinecraftApp::GetDLCCreditsCount()
-{
-	return static_cast<unsigned int>(vDLCCredits.size());
-}
-
-SCreditTextItemDef * CMinecraftApp::GetDLCCredits(int iIndex)
-{
-	return vDLCCredits.at(iIndex);
 }
 
 // Game Host options
@@ -9121,61 +8470,12 @@ bool CMinecraftApp::DLCContentRetrieved(eDLCMarketplaceType eType)
 
 void CMinecraftApp::SetAdditionalSkinBoxes(DWORD dwSkinID, SKIN_BOX *SkinBoxA, DWORD dwSkinBoxC)
 {
-	EntityRenderer *renderer = EntityRenderDispatcher::instance->getRenderer(eTYPE_PLAYER);
-	Model *pModel = renderer->getModel();
-	vector<ModelPart *> *pvModelPart = new vector<ModelPart *>;
-	vector<SKIN_BOX *> *pvSkinBoxes = new vector<SKIN_BOX *>;
-
-	EnterCriticalSection( &csAdditionalModelParts );
-	EnterCriticalSection( &csAdditionalSkinBoxes );
-
-	app.DebugPrintf("*** SetAdditionalSkinBoxes - Inserting model parts for skin %d from array of Skin Boxes\n",dwSkinID&0x0FFFFFFF);
-
-	// convert the skin boxes into model parts, and add to the humanoid model
-	for(unsigned int i=0;i<dwSkinBoxC;i++)
-	{
-		if(pModel)
-		{
-			ModelPart *pModelPart=pModel->AddOrRetrievePart(&SkinBoxA[i]);
-			pvModelPart->push_back(pModelPart);
-			pvSkinBoxes->push_back(&SkinBoxA[i]);
-		}
-	}
-
-
-	m_AdditionalModelParts.insert( std::pair<DWORD, vector<ModelPart *> *>(dwSkinID, pvModelPart) );
-	m_AdditionalSkinBoxes.insert( std::pair<DWORD, vector<SKIN_BOX *> *>(dwSkinID, pvSkinBoxes) );
-
-	LeaveCriticalSection( &csAdditionalSkinBoxes );
-	LeaveCriticalSection( &csAdditionalModelParts );
 
 }
 
 vector<ModelPart *> * CMinecraftApp::SetAdditionalSkinBoxes(DWORD dwSkinID, vector<SKIN_BOX *> *pvSkinBoxA)
 {
-	EntityRenderer *renderer = EntityRenderDispatcher::instance->getRenderer(eTYPE_PLAYER);
-	Model *pModel = renderer->getModel();
 	vector<ModelPart *> *pvModelPart = new vector<ModelPart *>;
-
-	EnterCriticalSection( &csAdditionalModelParts );
-	EnterCriticalSection( &csAdditionalSkinBoxes );
-	app.DebugPrintf("*** SetAdditionalSkinBoxes - Inserting model parts for skin %d from array of Skin Boxes\n",dwSkinID&0x0FFFFFFF);
-
-	// convert the skin boxes into model parts, and add to the humanoid model
-	for( auto& it : *pvSkinBoxA )
-	{
-		if(pModel)
-		{
-			ModelPart *pModelPart=pModel->AddOrRetrievePart(it);
-			pvModelPart->push_back(pModelPart);
-		}
-	}
-
-	m_AdditionalModelParts.emplace(dwSkinID, pvModelPart);
-	m_AdditionalSkinBoxes.emplace(dwSkinID, pvSkinBoxA);
-
-	LeaveCriticalSection( &csAdditionalSkinBoxes );
-	LeaveCriticalSection( &csAdditionalModelParts );
 	return pvModelPart;
 }
 

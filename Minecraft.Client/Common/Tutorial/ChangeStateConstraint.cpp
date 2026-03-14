@@ -85,7 +85,6 @@ void ChangeStateConstraint::tick(int iPad)
 	{
 		m_bHasChanged = true;
 		m_changedFromState = m_tutorial->getCurrentState();
-		m_tutorial->changeTutorialState(m_targetState);
 
 		if(m_changeGameMode)
 		{
@@ -113,7 +112,6 @@ void ChangeStateConstraint::tick(int iPad)
 	else if( m_bHasChanged && movementArea->contains( minecraft->localplayers[iPad]->getPos(1) ) != contains )
 	{
 		m_bHasChanged = false;
-		m_tutorial->changeTutorialState(m_changedFromState);
 
 		if(m_changeGameMode)
 		{

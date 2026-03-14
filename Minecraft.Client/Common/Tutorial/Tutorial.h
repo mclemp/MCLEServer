@@ -110,12 +110,6 @@ private:
 	bool hasRequestedUI;
 	bool uiTempDisabled;
 
-#ifdef _XBOX
-	CXuiScene *m_UIScene;
-#else
-	UIScene *m_UIScene;
-#endif
-
 	int m_iPad;
 public:
 	bool m_allTutorialsComplete;
@@ -138,11 +132,6 @@ public:
 	void setCompleted( int completableId );
 	bool getCompleted( int completableId );
 
-#ifdef _XBOX
-	void changeTutorialState(eTutorial_State newState, CXuiScene *scene = nullptr);
-#else
-	void changeTutorialState(eTutorial_State newState, UIScene *scene = nullptr);
-#endif
 	bool isSelectedItemState();
 
 	bool setMessage(PopupMessageDetails *message);
@@ -185,11 +174,6 @@ public:
 	vector<TutorialTask *> *getTasks();
 	unsigned int getCurrentTaskIndex();
 
-#ifdef _XBOX
-	CXuiScene *getScene() { return m_UIScene; }
-#else
-	UIScene *getScene() { return m_UIScene; }
-#endif
 	eTutorial_State getCurrentState() { return m_CurrentState; }
 
 	// These are required so that we have a consistent mapping of the completion bits stored in the profile data

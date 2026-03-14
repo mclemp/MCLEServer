@@ -1,6 +1,5 @@
 #pragma once
 
-#include "..\..\Common\UI\UIEnums.h"
 
 class CTelemetryManager
 {
@@ -18,7 +17,6 @@ public:
 	virtual bool RecordLevelResume(int iPad, ESen_FriendOrMatch friendsOrMatch, ESen_CompeteOrCoop competeOrCoop, int difficulty, int numberOfLocalPlayers, int numberOfOnlinePlayers, int saveOrCheckPointID);
 	virtual bool RecordPauseOrInactive(int iPad);
 	virtual bool RecordUnpauseOrActive(int iPad);
-	virtual bool RecordMenuShown(int iPad, EUIScene menuID, int optionalMenuSubID);
 	virtual bool RecordAchievementUnlocked(int iPad, int achievementID, int achievementGamerscore);
 	virtual bool RecordMediaShareUpload(int iPad, ESen_MediaDestination mediaDestination, ESen_MediaType mediaType);
 	virtual bool RecordUpsellPresented(int iPad, ESen_UpsellID upsellId, int marketplaceOfferID);

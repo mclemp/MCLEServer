@@ -8,7 +8,6 @@ class Minecraft;
 class Entity;
 class Random;
 class FloatBuffer;
-class ItemInHandRenderer;
 class DataLayer;
 class SparseLightStorage;
 class CompressedTileStorage;
