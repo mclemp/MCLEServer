@@ -1902,9 +1902,6 @@
     <ClInclude Include="Windows64\Windows64_Minecraft.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ServerIncludes\Windows64_ServerLink.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2880,9 +2877,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Windows64\Windows64_Minecraft.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ServerIncludes\Windows64_ServerLink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

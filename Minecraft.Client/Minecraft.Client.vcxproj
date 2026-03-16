@@ -1808,7 +1808,7 @@ xcopy /q /y /i /s /e $(ProjectDir)DurangoMedia\CU  $(LayoutDir)Image\Loose\CU</C
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <StringPooling>true</StringPooling>
       <AdditionalOptions>/FS /Ob3 %(AdditionalOptions)</AdditionalOptions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -5435,7 +5435,6 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
     <ClInclude Include="ResourceLocation.h" />
     <ClInclude Include="ServerCommandDispatcher.h" />
     <ClInclude Include="ServerConnection.h" />
-    <ClInclude Include="ServerIncludes\Windows64_ServerLink.h" />
     <ClInclude Include="ServerInterface.h" />
     <ClInclude Include="ServerPlayerGameMode.h" />
     <ClInclude Include="ServerLevelListener.h" />
@@ -9344,7 +9343,6 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
     <ClCompile Include="ServerChunkCache.cpp" />
     <ClCompile Include="ServerCommandDispatcher.cpp" />
     <ClCompile Include="ServerConnection.cpp" />
-    <ClCompile Include="ServerIncludes\Windows64_ServerLink.cpp" />
     <ClCompile Include="ServerPlayerGameMode.cpp" />
     <ClCompile Include="ServerLevel.cpp" />
     <ClCompile Include="ServerLevelListener.cpp" />

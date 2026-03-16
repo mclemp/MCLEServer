@@ -122,7 +122,7 @@ public:
 
 private:
 	// 4J Added
-	//int m_lastSentDifficulty;
+	int m_lastSentDifficulty;
 
 public:
 	// 4J Stu - This value should be incremented every time the list of players with friends-only UGC settings changes

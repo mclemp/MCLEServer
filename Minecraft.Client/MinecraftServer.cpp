@@ -60,6 +60,7 @@
 #ifdef _XBOX_ONE
 #include "Durango\Network\NetworkPlayerDurango.h"
 #endif
+#include "../Minecraft.Server/Utils/Logger.h"
 
 #define DEBUG_SERVER_DONT_SPAWN_MOBS 0
 
@@ -627,6 +628,8 @@ bool MinecraftServer::initServer(int64_t seed, NetworkGameInitData *initData, DW
 	app.DebugPrintf("ServerSettings: tnt explodes is %s\n",(app.GetGameHostOption(eGameHostOption_TNT)>0)?"on":"off");
 	app.DebugPrintf("\n");
 
+	this->setSaveOnExit(true);
+
 	// TODO 4J Stu - Init a load of settings based on data passed as params
 	//settings->setBooleanAndSave( L"host-friends-only", (app.GetGameHostOption(eGameHostOption_FriendsOfFriends)>0) );
 
@@ -743,8 +746,11 @@ bool MinecraftServer::initServer(int64_t seed, NetworkGameInitData *initData, DW
 		}
 	}
 #endif
-	//        logger.info("Preparing level \"" + levelName + "\"");
+	__int64 levelStartTime = System::currentRealTimeMillis();
+	Logger::Info("Preparing Level"); //todo: level names
 	m_bLoaded = loadLevel(new McRegionLevelStorageSource(File(L".")), levelName, seed, pLevelType, initData);
+
+	Logger::Info(("Level Loaded In: " + std::to_string((System::currentRealTimeMillis() - levelStartTime) / 1000.0) + "s").c_str());
 	//        logger.info("Done (" + (System.nanoTime() - levelNanoTime) + "ns)! For help, type \"help\" or \"?\"");
 
 	// 4J delete passed in save data now - this is only required for the tutorial which is loaded by passing data directly in rather than using the storage manager
@@ -965,7 +971,7 @@ bool MinecraftServer::loadLevel(LevelStorageSource *storageSource, const wstring
 		// 4J Stu - We set the levels difficulty based on the minecraft options
 		//levels[i]->difficulty = settings->getBoolean(L"spawn-monsters", true) ? Difficulty::EASY : Difficulty::PEACEFUL;
 		Minecraft *pMinecraft = Minecraft::GetInstance();
-		//		m_lastSentDifficulty = pMinecraft->options->difficulty;
+		m_lastSentDifficulty = pMinecraft->options->difficulty;
 		levels[i]->difficulty = app.GetGameHostOption(eGameHostOption_Difficulty); //pMinecraft->options->difficulty;
 		app.DebugPrintf("MinecraftServer::loadLevel - Difficulty = %d\n",levels[i]->difficulty);
 
@@ -2069,11 +2075,12 @@ void MinecraftServer::tick()
 	// 4J We need to update client difficulty levels based on the servers
 	Minecraft *pMinecraft = Minecraft::GetInstance();
 	// 4J-PB - sending this on the host changing the difficulty in the menus
-	/*	if(m_lastSentDifficulty != pMinecraft->options->difficulty)
+	// we readd this cause its dedicated hosting and theres no menus
+	if(m_lastSentDifficulty != pMinecraft->options->difficulty)
 	{
-	m_lastSentDifficulty = pMinecraft->options->difficulty;
-	players->broadcastAll( shared_ptr<ServerSettingsChangedPacket>( new ServerSettingsChangedPacket( ServerSettingsChangedPacket::HOST_DIFFICULTY, pMinecraft->options->difficulty) ) );
-	}*/
+		m_lastSentDifficulty = pMinecraft->options->difficulty;
+		players->broadcastAll( shared_ptr<ServerSettingsChangedPacket>( new ServerSettingsChangedPacket( ServerSettingsChangedPacket::HOST_DIFFICULTY, pMinecraft->options->difficulty) ) );
+	}
 
 	for (unsigned int i = 0; i < levels.length; i++)
 	{

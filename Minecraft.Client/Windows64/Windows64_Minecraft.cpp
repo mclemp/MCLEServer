@@ -172,39 +172,38 @@ static int HeadlessServerConsoleThreadProc(void* lpParameter)
 	return 0;
 }
 
-static int RunHeadlessServer()
-{
-	Logger::Info("test log");
+void Windows64Minecraft::StartDedicatedServer() {
+	__int64 startupTime = System::currentRealTimeMillis();
 
 	Settings serverSettings(new File(L"server.properties"));
 	const wstring configuredBindIp = serverSettings.getString(L"server-ip", L"");
 
-	const char* bindIp = "*";
+	const char* bindIp = "0.0.0.0";
+
 	if (g_Win64DedicatedServerBindIP[0] != 0)
-	{
 		bindIp = g_Win64DedicatedServerBindIP;
-	}
 	else if (!configuredBindIp.empty())
-	{
 		bindIp = wstringtochararray(configuredBindIp);
-	}
 
 	const int port = g_Win64DedicatedServerPort > 0 ? g_Win64DedicatedServerPort : serverSettings.getInt(L"server-port", WIN64_NET_DEFAULT_PORT);
+	const std::string addressCombo = std::string(bindIp) + ":" + std::to_string(port);
 
-	printf("Starting headless server on %s:%d\n", bindIp, port);
-	fflush(stdout);
+	Logger::Info(("Starting QuadA On " + addressCombo).c_str());
+
+	strncpy_s(g_Win64Username, sizeof(g_Win64Username), "Player", _TRUNCATE);
+	MultiByteToWideChar(CP_ACP, 0, g_Win64Username, -1, g_Win64UsernameW, 17);
 
 	const Minecraft* pMinecraft = InitialiseMinecraftRuntime();
 	if (pMinecraft == nullptr)
 	{
-		fprintf(stderr, "Failed to initialise the Minecraft runtime.\n");
-		return 1;
+		Logger::Error("Failed To Initialise Minecraft Runtime");
+		return;
 	}
 
 	app.SetGameHostOption(eGameHostOption_Difficulty, serverSettings.getInt(L"difficulty", 1));
-	app.SetGameHostOption(eGameHostOption_Gamertags, 1);
+	app.SetGameHostOption(eGameHostOption_Gamertags, serverSettings.getBoolean(L"show-gamertags", true) ? 1 : 0);
 	app.SetGameHostOption(eGameHostOption_GameType, serverSettings.getInt(L"gamemode", 0));
-	app.SetGameHostOption(eGameHostOption_LevelType, 0);
+	app.SetGameHostOption(eGameHostOption_LevelType, serverSettings.getBoolean(L"superflat", false) ? 1 : 0);
 	app.SetGameHostOption(eGameHostOption_Structures, serverSettings.getBoolean(L"generate-structures", true) ? 1 : 0);
 	app.SetGameHostOption(eGameHostOption_BonusChest, serverSettings.getBoolean(L"bonus-chest", false) ? 1 : 0);
 	app.SetGameHostOption(eGameHostOption_PvP, serverSettings.getBoolean(L"pvp", true) ? 1 : 0);
@@ -214,27 +213,54 @@ static int RunHeadlessServer()
 	app.SetGameHostOption(eGameHostOption_HostCanFly, 1);
 	app.SetGameHostOption(eGameHostOption_HostCanChangeHunger, 1);
 	app.SetGameHostOption(eGameHostOption_HostCanBeInvisible, 1);
-	app.SetGameHostOption(eGameHostOption_MobGriefing, 1);
-	app.SetGameHostOption(eGameHostOption_KeepInventory, 0);
+	app.SetGameHostOption(eGameHostOption_MobGriefing, serverSettings.getBoolean(L"mob-griefing", true) ? 1 : 0);
+	app.SetGameHostOption(eGameHostOption_KeepInventory, serverSettings.getBoolean(L"keep-inventory", false) ? 1 : 0);
 	app.SetGameHostOption(eGameHostOption_DoMobSpawning, 1);
 	app.SetGameHostOption(eGameHostOption_DoMobLoot, 1);
 	app.SetGameHostOption(eGameHostOption_DoTileDrops, 1);
-	app.SetGameHostOption(eGameHostOption_NaturalRegeneration, 1);
-	app.SetGameHostOption(eGameHostOption_DoDaylightCycle, 1);
+	app.SetGameHostOption(eGameHostOption_NaturalRegeneration, serverSettings.getBoolean(L"natural-regeneration", true) ? 1 : 0);
+	app.SetGameHostOption(eGameHostOption_DoDaylightCycle, serverSettings.getBoolean(L"daylight-cycle", true) ? 1 : 0);
+
 
 	MinecraftServer::resetFlags();
 	g_NetworkManager.HostGame(0, false, true, MINECRAFT_NET_MAX_PLAYERS, 0);
 
 	if (!WinsockNetLayer::IsActive())
 	{
-		fprintf(stderr, "Failed to bind the server socket on %s:%d.\n", bindIp, port);
-		return 1;
+		Logger::Error(("Failed To Activate Socket Binding On" + addressCombo).c_str());
+		return;
 	}
 
 	g_NetworkManager.FakeLocalPlayerJoined();
 
 	NetworkGameInitData* param = new NetworkGameInitData();
-	param->seed = 0;
+	param->seed = serverSettings.getInt(L"seed", 0);
+
+	std::wstring WorldSize = serverSettings.getString(L"world-size", L"small");
+
+	if (WorldSize == L"classic") {
+		param->hellScale = HELL_LEVEL_SCALE_CLASSIC;
+		param->xzSize = LEVEL_WIDTH_CLASSIC;
+		app.SetGameHostOption(eGameHostOption_WorldSize, 1);
+	}
+	else if (WorldSize == L"small") {
+		param->hellScale = HELL_LEVEL_SCALE_SMALL;
+		param->xzSize = LEVEL_WIDTH_SMALL;
+		app.SetGameHostOption(eGameHostOption_WorldSize, 2);
+	}
+	else if (WorldSize == L"medium") {
+		param->hellScale = HELL_LEVEL_SCALE_MEDIUM;
+		param->xzSize = LEVEL_WIDTH_MEDIUM;
+		app.SetGameHostOption(eGameHostOption_WorldSize, 3);
+	}
+	else if (WorldSize == L"large") {
+		param->hellScale = HELL_LEVEL_SCALE_LARGE;
+		param->xzSize = LEVEL_WIDTH_LARGE;
+		app.SetGameHostOption(eGameHostOption_WorldSize, 4);
+	}
+
+	//param->savePlatform = SAVE_FILE_PLATFORM_X360;
+
 	param->settings = app.GetGameHostOption(eGameHostOption_All);
 
 	g_NetworkManager.ServerStoppedCreate(true);
@@ -249,17 +275,17 @@ static int RunHeadlessServer()
 
 	if (MinecraftServer::serverHalted())
 	{
-		fprintf(stderr, "The server halted during startup.\n");
+		Logger::Error("MinecraftServer Has Haulted During Startup");
 		g_NetworkManager.LeaveGame(false);
-		return 1;
+		return;
 	}
 
 	app.SetGameStarted(true);
 	g_NetworkManager.DoWork();
 
-	printf("Server ready on %s:%d\n", bindIp, port);
-	printf("Type 'help' for server commands.\n");
-	fflush(stdout);
+	double finishedStartupTime = ((System::currentRealTimeMillis() - startupTime) / 1000.0);
+
+	Logger::Info(("Server Has Started In: " + std::to_string(finishedStartupTime)).c_str());
 
 	C4JThread* consoleThread = new C4JThread(&HeadlessServerConsoleThreadProc, nullptr, "Server console", 128 * 1024);
 	consoleThread->Run();
@@ -289,28 +315,7 @@ static int RunHeadlessServer()
 	app.m_bShutdown = true;
 	MinecraftServer::HaltServer();
 	g_NetworkManager.LeaveGame(false);
-	return 0;
-}
-
-void Windows64Minecraft::StartDedicatedServer() {
-	// 4J-Win64: set CWD to exe dir so asset paths resolve correctly
-	{
-		char szExeDir[MAX_PATH] = {};
-		GetModuleFileNameA(nullptr, szExeDir, MAX_PATH);
-		char* pSlash = strrchr(szExeDir, '\\');
-		if (pSlash) { *(pSlash + 1) = '\0'; SetCurrentDirectoryA(szExeDir); }
-	}
-
-	// If no username, let's fall back
-	if (g_Win64Username[0] == 0)
-	{
-		// Default username will be "Player"
-		strncpy_s(g_Win64Username, sizeof(g_Win64Username), "Player", _TRUNCATE);
-	}
-
-	MultiByteToWideChar(CP_ACP, 0, g_Win64Username, -1, g_Win64UsernameW, 17);
-
-	RunHeadlessServer();
+	return;
 }
 
 #ifdef MEMORY_TRACKING

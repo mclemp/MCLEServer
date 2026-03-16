@@ -1,0 +1,1 @@
+D:\LCEServerTest\Minecraft.ServerAPI\x64_Release\Minecraft.ExampleAddon.lib

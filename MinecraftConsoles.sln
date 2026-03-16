@@ -10,11 +10,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Minecraft.Client", "Minecra
 		{F046C3CE-9749-4823-B32B-D9CC10B1A2C8} = {F046C3CE-9749-4823-B32B-D9CC10B1A2C8}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Minecraft.Server", "Minecraft.Server\Minecraft.Server.vcxproj", "{D24DD83B-D7A1-42EC-92CC-CF1B72472C31}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Minecraft.ServerLauncher", "Minecraft.Server\Minecraft.Server.vcxproj", "{D24DD83B-D7A1-42EC-92CC-CF1B72472C31}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1B9A8C38-DD48-448C-AA24-E1A35E0089A3} = {1B9A8C38-DD48-448C-AA24-E1A35E0089A3}
 		{F046C3CE-9749-4823-B32B-D9CC10B1A2C8} = {F046C3CE-9749-4823-B32B-D9CC10B1A2C8}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Minecraft.ExampleAddon", "Minecraft.ServerAPI\Minecraft.ServerAPI.vcxproj", "{958FB311-863C-4407-9FBB-D2AB24847AD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{D24DD83B-D7A1-42EC-92CC-CF1B72472C31}.Debug|Windows64.Build.0 = Debug|x64
 		{D24DD83B-D7A1-42EC-92CC-CF1B72472C31}.Release|Windows64.ActiveCfg = Release|x64
 		{D24DD83B-D7A1-42EC-92CC-CF1B72472C31}.Release|Windows64.Build.0 = Release|x64
+		{958FB311-863C-4407-9FBB-D2AB24847AD5}.Debug|Windows64.ActiveCfg = Debug|x64
+		{958FB311-863C-4407-9FBB-D2AB24847AD5}.Debug|Windows64.Build.0 = Debug|x64
+		{958FB311-863C-4407-9FBB-D2AB24847AD5}.Release|Windows64.ActiveCfg = Release|x64
+		{958FB311-863C-4407-9FBB-D2AB24847AD5}.Release|Windows64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
