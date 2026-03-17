@@ -31,6 +31,10 @@ private:
 
 	// 4J Added
 	vector<PlayerUID> m_bannedXuids;
+
+	deque<BYTE> m_smallIdsToBan;
+	CRITICAL_SECTION m_banPlayersCS;
+
 	deque<BYTE> m_smallIdsToKick;
 	CRITICAL_SECTION m_kickPlayersCS;
 	deque<BYTE> m_smallIdsToClose;
@@ -132,8 +136,11 @@ public:
 
 	// 4J Added
 	void kickPlayerByShortId(BYTE networkSmallId);
+	void banPlayerByShortId(BYTE networkSmallId);
 	void closePlayerConnectionBySmallId(BYTE networkSmallId);
 	void queueSmallIdForRecycle(BYTE smallId);
+	void setBannedXUIDList(std::vector<PlayerUID>& newList);
+	std::vector<PlayerUID> getBannedXUIDList();
 	bool isXuidBanned(PlayerUID xuid);
 	// AP added for Vita so the range can be increased once the level starts
 	void setViewDistance(int newViewDistance);

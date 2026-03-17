@@ -1,18 +1,12 @@
 #pragma once
 using namespace std;
 
-#include "CommandsEnum.h"
 #include "Packet.h"
 
 class GameCommandPacket : public Packet, public enable_shared_from_this<GameCommandPacket>
 {
 public:
-	EGameCommand command;
-	int length;
-	byteArray data;
-
 	GameCommandPacket();
-	GameCommandPacket(EGameCommand command, byteArray data);
 	~GameCommandPacket();
 
 	virtual void read(DataInputStream *dis);

@@ -125,7 +125,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Minecraft.Client\;$(SolutionDir)Minecraft.World\</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -136,11 +136,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Registries\CommandRegistry.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseClasses\Command.h" />
+    <ClInclude Include="BaseClasses\CommandSender.h" />
+    <ClInclude Include="Registries\CommandRegistry.h" />
+    <ClInclude Include="Commands\TeleportCommand.h" />
     <ClInclude Include="includes\Events\BaseEvent.h" />
     <ClInclude Include="includes\Events\Packet\PacketEvent.h" />
     <ClInclude Include="stdafx.h" />

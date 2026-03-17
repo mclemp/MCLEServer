@@ -735,6 +735,24 @@
     <Filter Include="include\lce_filesystem">
       <UniqueIdentifier>{70b1f1aa-fe50-4aab-9a6c-14df8cb1f231}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ExampleAddon">
+      <UniqueIdentifier>{ba8312f8-f2a9-44e6-8b5d-75c1cc241f47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExampleAddon\Command">
+      <UniqueIdentifier>{7b446921-d75b-4978-867a-161683156df0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExampleAddon\AntiCheat">
+      <UniqueIdentifier>{b58409c8-d240-4b93-90c9-66e0e5dfd599}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExampleAddon\AntiCheat\Movement">
+      <UniqueIdentifier>{5b067d45-4a5c-4594-973b-c2c386cea000}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExampleAddon\Command\Default">
+      <UniqueIdentifier>{187b7904-a74e-4770-bcea-d6e5a0db6688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExampleAddon\Command\AntiCheat">
+      <UniqueIdentifier>{126e6028-55c6-4c4f-a274-c904623adbee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -1776,12 +1794,6 @@
     <ClInclude Include="VillagerZombieModel.h">
       <Filter>net\minecraft\client\model</Filter>
     </ClInclude>
-    <ClInclude Include="ServerCommandDispatcher.h">
-      <Filter>net\minecraft\server\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="TeleportCommand.h">
-      <Filter>net\minecraft\server\commands</Filter>
-    </ClInclude>
     <ClInclude Include="Common\Network\Sony\SQRNetworkPlayer.h">
       <Filter>Common\Source Files\Network\Sony</Filter>
     </ClInclude>
@@ -1901,6 +1913,33 @@
     </ClInclude>
     <ClInclude Include="Windows64\Windows64_Minecraft.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandDispatcher.h">
+      <Filter>ExampleAddon\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="GenericCommand.h">
+      <Filter>ExampleAddon\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="CallbackHelper.h">
+      <Filter>ExampleAddon</Filter>
+    </ClInclude>
+    <ClInclude Include="AntiFlightFeature.h">
+      <Filter>ExampleAddon\AntiCheat\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="AntiCheatFeature.h">
+      <Filter>ExampleAddon\AntiCheat</Filter>
+    </ClInclude>
+    <ClInclude Include="TeleportCommand.h">
+      <Filter>ExampleAddon\Command\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="StopCommand.h">
+      <Filter>ExampleAddon\Command\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveCommand.h">
+      <Filter>ExampleAddon\Command\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="OPCommand.h">
+      <Filter>ExampleAddon\Command\Default</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2765,12 +2804,6 @@
     <ClCompile Include="VillagerZombieModel.cpp">
       <Filter>net\minecraft\client\model</Filter>
     </ClCompile>
-    <ClCompile Include="ServerCommandDispatcher.cpp">
-      <Filter>net\minecraft\server\commands</Filter>
-    </ClCompile>
-    <ClCompile Include="TeleportCommand.cpp">
-      <Filter>net\minecraft\server\commands</Filter>
-    </ClCompile>
     <ClCompile Include="Common\Network\Sony\NetworkPlayerSony.cpp">
       <Filter>Common\Source Files\Network\Sony</Filter>
     </ClCompile>
@@ -2878,6 +2911,12 @@
     </ClCompile>
     <ClCompile Include="Windows64\Windows64_Minecraft.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandDispatcher.cpp">
+      <Filter>ExampleAddon\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="CallbackHelper.cpp">
+      <Filter>ExampleAddon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

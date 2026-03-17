@@ -783,7 +783,7 @@ void ConsoleSaveFileOriginal::Flush(bool autosave, bool updateThumbnail )
 			hasSeed = true;
 		}
 
-		int iTextMetadataBytes = app.CreateImageTextData(bTextMetadata, seed, hasSeed, app.GetGameHostOption(eGameHostOption_All), Minecraft::GetInstance()->getCurrentTexturePackId());
+		int iTextMetadataBytes = app.CreateImageTextData(bTextMetadata, seed, hasSeed, app.GetGameHostOption(eGameHostOption_All), 0);
 
 		INT saveOrCheckpointId = 0;
 		bool validSave = StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);

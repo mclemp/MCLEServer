@@ -63,6 +63,7 @@ PlayerList::PlayerList(MinecraftServer *server)
 	maxPlayers = static_cast<unsigned int>(Mth::clamp(rawMax, 1, MINECRAFT_NET_MAX_PLAYERS));
 	doWhiteList = false;
 	InitializeCriticalSection(&m_kickPlayersCS);
+	InitializeCriticalSection(&m_banPlayersCS);
 	InitializeCriticalSection(&m_closePlayersCS);
 }
 
@@ -76,6 +77,7 @@ PlayerList::~PlayerList()
 	}
 
 	DeleteCriticalSection(&m_kickPlayersCS);
+	DeleteCriticalSection(&m_banPlayersCS);
 	DeleteCriticalSection(&m_closePlayersCS);
 }
 
@@ -1016,6 +1018,42 @@ void PlayerList::tick()
 	}
 	LeaveCriticalSection(&m_closePlayersCS);
 
+	EnterCriticalSection(&m_banPlayersCS);
+	while (!m_smallIdsToBan.empty()) {
+		BYTE smallId = m_smallIdsToBan.front();
+		m_smallIdsToBan.pop_front();
+		INetworkPlayer* selectedPlayer = g_NetworkManager.GetPlayerBySmallId(smallId);
+		if (selectedPlayer != nullptr)
+		{
+			if (selectedPlayer->IsLocal() != TRUE)
+			{
+				PlayerUID xuid = selectedPlayer->GetUID();
+				shared_ptr<ServerPlayer> player = nullptr;
+
+				for (unsigned int i = 0; i < players.size(); i++)
+				{
+					shared_ptr<ServerPlayer> p = players.at(i);
+					PlayerUID playersXuid = p->getOnlineXuid();
+					if (p != nullptr && ProfileManager.AreXUIDSEqual(playersXuid, xuid))
+					{
+						player = p;
+						break;
+					}
+				}
+
+				if (player != nullptr)
+				{
+					m_bannedXuids.push_back(player->getOnlineXuid());
+					player->enableAllPlayerPrivileges(false);
+					player->connection->setWasKicked();
+					player->connection->send(std::make_shared<DisconnectPacket>(DisconnectPacket::eDisconnect_Banned));
+				}
+			}
+		}
+	}
+	LeaveCriticalSection(&m_banPlayersCS);
+
+
 	EnterCriticalSection(&m_kickPlayersCS);
 	while(!m_smallIdsToKick.empty())
 	{
@@ -1026,9 +1064,7 @@ void PlayerList::tick()
 		{
 			if( selectedPlayer->IsLocal() != TRUE )
 			{
-				//#ifdef _XBOX
 				PlayerUID xuid = selectedPlayer->GetUID();
-				// Kick this player from the game
 				shared_ptr<ServerPlayer> player = nullptr;
 
 				for(unsigned int i = 0; i < players.size(); i++)
@@ -1044,13 +1080,11 @@ void PlayerList::tick()
 
 				if (player != nullptr)
 				{
-					m_bannedXuids.push_back( player->getOnlineXuid() );
 					// 4J Stu - If we have kicked a player, make sure that they have no privileges if they later try to join the world when trust players is off
 					player->enableAllPlayerPrivileges( false );
 					player->connection->setWasKicked();
 					player->connection->send(std::make_shared<DisconnectPacket>(DisconnectPacket::eDisconnect_Kicked));
 				}
-				//#endif
 			}
 		}
 	}
@@ -1645,6 +1679,13 @@ void PlayerList::kickPlayerByShortId(BYTE networkSmallId)
 	LeaveCriticalSection(&m_kickPlayersCS);
 }
 
+void PlayerList::banPlayerByShortId(BYTE networkSmallId)
+{
+	EnterCriticalSection(&m_banPlayersCS);
+	m_smallIdsToBan.push_back(networkSmallId);
+	LeaveCriticalSection(&m_banPlayersCS);
+}
+
 void  PlayerList::closePlayerConnectionBySmallId(BYTE networkSmallId)
 {
 	EnterCriticalSection(&m_closePlayersCS);
@@ -1657,6 +1698,14 @@ void PlayerList::queueSmallIdForRecycle(BYTE smallId)
 	EnterCriticalSection(&m_closePlayersCS);
 	m_smallIdsToClose.push_back(smallId);
 	LeaveCriticalSection(&m_closePlayersCS);
+}
+
+void PlayerList::setBannedXUIDList(std::vector<PlayerUID>& newList) {
+	m_bannedXuids = std::move(newList);
+}
+
+std::vector<PlayerUID> PlayerList::getBannedXUIDList() {
+	return m_bannedXuids;
 }
 
 bool PlayerList::isXuidBanned(PlayerUID xuid)

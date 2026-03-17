@@ -1,12 +1,12 @@
 #pragma once
+#include "GenericCommand.h"
 
-#include "..\Minecraft.World\Command.h"
-
-class TeleportCommand : public Command
-{
+class TeleportCommand : public GenericCommand {
 public:
-	virtual EGameCommand getId();
-	virtual void execute(shared_ptr<CommandSender> source, byteArray commandData);
+	TeleportCommand(const wchar_t* _name, const wchar_t* _description) : GenericCommand(_name, _description) {};
 
-	static shared_ptr<GameCommandPacket> preparePacket(PlayerUID subject, PlayerUID destination);
+	void Execute(CommandSenderType senderType, std::vector<std::wstring>& args, std::shared_ptr<ServerPlayer> player) override {
+		player->sendMessage(L"This Be A Working Command Callback");
+
+	}
 };

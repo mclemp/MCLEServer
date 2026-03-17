@@ -2396,7 +2396,6 @@
     <ClInclude Include="AddPaintingPacket.h" />
     <ClInclude Include="AddPlayerPacket.h" />
     <ClInclude Include="AddSnowLayer.h" />
-    <ClInclude Include="AdminLogCommand.h" />
     <ClInclude Include="AgableMob.h" />
     <ClInclude Include="AirTile.h" />
     <ClInclude Include="AmbientCreature.h" />
@@ -2540,10 +2539,6 @@
     <ClInclude Include="ColoredTileItem.h" />
     <ClInclude Include="CombatEntry.h" />
     <ClInclude Include="CombatTracker.h" />
-    <ClInclude Include="Command.h" />
-    <ClInclude Include="CommandDispatcher.h" />
-    <ClInclude Include="CommandSender.h" />
-    <ClInclude Include="CommandsEnum.h" />
     <ClInclude Include="CommonStats.h" />
     <ClInclude Include="CompassItem.h" />
     <ClInclude Include="CompressedTileStorage.h" />
@@ -2558,7 +2553,6 @@
     <ClInclude Include="DamageSource.h" />
     <ClInclude Include="DefaultDispenseItemBehavior.h" />
     <ClInclude Include="BehaviorRegistry.h" />
-    <ClInclude Include="DefaultGameModeCommand.h" />
     <ClInclude Include="DefendVillageTargetGoal.h" />
     <ClInclude Include="DelayedRelease.h" />
     <ClInclude Include="DerivedLevelData.h" />
@@ -2603,12 +2597,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="EatTileGoal.h" />
-    <ClInclude Include="EffectCommand.h" />
     <ClInclude Include="EggTile.h" />
     <ClInclude Include="DigDurabilityEnchantment.h" />
     <ClInclude Include="DiggingEnchantment.h" />
     <ClInclude Include="EnchantedBookItem.h" />
-    <ClInclude Include="EnchantItemCommand.h" />
     <ClInclude Include="Enchantment.h" />
     <ClInclude Include="EnchantmentCategory.h" />
     <ClInclude Include="EnchantmentContainer.h" />
@@ -2627,7 +2619,6 @@
     <ClInclude Include="EndPodiumFeature.h" />
     <ClInclude Include="EntityHorse.h" />
     <ClInclude Include="EntitySelector.h" />
-    <ClInclude Include="ExperienceCommand.h" />
     <ClInclude Include="ExperienceItem.h" />
     <ClInclude Include="EyeOfEnderSignal.h" />
     <ClInclude Include="FacingEnum.h" />
@@ -2640,11 +2631,7 @@
     <ClInclude Include="FollowOwnerGoal.h" />
     <ClInclude Include="FollowParentGoal.h" />
     <ClInclude Include="GameCommandPacket.h" />
-    <ClInclude Include="GameDifficultyCommand.h" />
-    <ClInclude Include="GameModeCommand.h" />
-    <ClInclude Include="GameRuleCommand.h" />
     <ClInclude Include="GenericStats.h" />
-    <ClInclude Include="GiveItemCommand.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="GoalSelector.h" />
     <ClInclude Include="GoldenAppleItem.h" />
@@ -2666,7 +2653,6 @@
     <ClInclude Include="JumpControl.h" />
     <ClInclude Include="JungleBiome.h" />
     <ClInclude Include="KickPlayerPacket.h" />
-    <ClInclude Include="KillCommand.h" />
     <ClInclude Include="KnockbackEnchantment.h" />
     <ClInclude Include="LavaSlime.h" />
     <ClInclude Include="LeapAtTargetGoal.h" />
@@ -2726,8 +2712,6 @@
     <ClInclude Include="MushroomIslandBiome.h" />
     <ClInclude Include="MycelTile.h" />
     <ClInclude Include="NearestAttackableTargetGoal.h" />
-    <ClInclude Include="net.minecraft.commands.common.h" />
-    <ClInclude Include="net.minecraft.commands.h" />
     <ClInclude Include="net.minecraft.world.entity.ai.attributes.h" />
     <ClInclude Include="net.minecraft.world.entity.ai.control.h" />
     <ClInclude Include="net.minecraft.world.entity.ai.goal.h" />
@@ -2764,7 +2748,6 @@
     <ClInclude Include="PlayerEnderChestContainer.h" />
     <ClInclude Include="PlayerSelector.h" />
     <ClInclude Include="PlayGoal.h" />
-    <ClInclude Include="PlaySoundCommand.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="PositionImpl.h" />
     <ClInclude Include="PotatoTile.h" />
@@ -2799,18 +2782,15 @@
     <ClInclude Include="SetDisplayObjectivePacket.h" />
     <ClInclude Include="SetObjectivePacket.h" />
     <ClInclude Include="SetPlayerTeamPacket.h" />
-    <ClInclude Include="SetPlayerTimeoutCommand.h" />
     <ClInclude Include="SetScorePacket.h" />
     <ClInclude Include="SharedKeyPacket.h" />
     <ClInclude Include="SharedMonsterAttributes.h" />
-    <ClInclude Include="ShowSeedCommand.h" />
     <ClInclude Include="SitGoal.h" />
     <ClInclude Include="SkullItem.h" />
     <ClInclude Include="SkullTile.h" />
     <ClInclude Include="SkullTileEntity.h" />
     <ClInclude Include="Source.h" />
     <ClInclude Include="SparseDataStorage.h" />
-    <ClInclude Include="SpreadPlayersCommand.h" />
     <ClInclude Include="StainedGlassBlock.h" />
     <ClInclude Include="StainedGlassPaneBlock.h" />
     <ClInclude Include="StoneButtonTile.h" />
@@ -2827,8 +2807,6 @@
     <ClInclude Include="TileDestructionPacket.h" />
     <ClInclude Include="TileEditorOpenPacket.h" />
     <ClInclude Include="TileEventData.h" />
-    <ClInclude Include="TimeCommand.h" />
-    <ClInclude Include="ToggleDownfallCommand.h" />
     <ClInclude Include="TradeWithPlayerGoal.h" />
     <ClInclude Include="TripWireSourceTile.h" />
     <ClInclude Include="TripWireTile.h" />
@@ -2839,7 +2817,6 @@
     <ClInclude Include="VillageSiege.h" />
     <ClInclude Include="VinesFeature.h" />
     <ClInclude Include="WallTile.h" />
-    <ClInclude Include="WeatherCommand.h" />
     <ClInclude Include="WeighedTreasure.h" />
     <ClInclude Include="WeightedPressurePlateTile.h" />
     <ClInclude Include="Witch.h" />
@@ -3653,8 +3630,6 @@
     <ClCompile Include="ColoredTileItem.cpp" />
     <ClCompile Include="CombatEntry.cpp" />
     <ClCompile Include="CombatTracker.cpp" />
-    <ClCompile Include="Command.cpp" />
-    <ClCompile Include="CommandDispatcher.cpp" />
     <ClCompile Include="CommonStats.cpp" />
     <ClCompile Include="CompassItem.cpp" />
     <ClCompile Include="ComplexItem.cpp" />
@@ -3682,7 +3657,6 @@
     <ClCompile Include="CraftingMenu.cpp" />
     <ClCompile Include="DefaultDispenseItemBehavior.cpp" />
     <ClCompile Include="BehaviorRegistry.cpp" />
-    <ClCompile Include="DefaultGameModeCommand.cpp" />
     <ClCompile Include="DispenseItemBehavior.cpp" />
     <ClCompile Include="DurangoStats.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ContentPackage|PS3'">true</ExcludedFromBuild>
@@ -3735,18 +3709,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='CONTENTPACKAGE_SYMBOLS|ARM64EC'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='CONTENTPACKAGE_SYMBOLS|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="EffectCommand.cpp" />
-    <ClCompile Include="EnchantItemCommand.cpp" />
     <ClCompile Include="EntityHorse.cpp" />
     <ClCompile Include="EntitySelector.cpp" />
-    <ClCompile Include="ExperienceCommand.cpp" />
     <ClCompile Include="FacingEnum.cpp" />
     <ClCompile Include="GameCommandPacket.cpp" />
-    <ClCompile Include="GameModeCommand.cpp" />
     <ClCompile Include="GenericStats.cpp" />
-    <ClCompile Include="GiveItemCommand.cpp" />
     <ClCompile Include="HealthBoostMobEffect.cpp" />
-    <ClCompile Include="KillCommand.cpp" />
     <ClCompile Include="LeashFenceKnotEntity.cpp" />
     <ClCompile Include="LevelParticlesPacket.cpp" />
     <ClCompile Include="LivingEntity.cpp" />
@@ -3762,8 +3730,6 @@
     <ClCompile Include="SetScorePacket.cpp" />
     <ClCompile Include="SharedMonsterAttributes.cpp" />
     <ClCompile Include="TileEditorOpenPacket.cpp" />
-    <ClCompile Include="TimeCommand.cpp" />
-    <ClCompile Include="ToggleDownfallCommand.cpp" />
     <ClCompile Include="TradeItemPacket.cpp" />
     <ClCompile Include="CraftItemPacket.cpp" />
     <ClCompile Include="Creature.cpp" />

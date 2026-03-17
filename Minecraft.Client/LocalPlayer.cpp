@@ -1185,11 +1185,6 @@ void LocalPlayer::sendRidingJump()
 {
 }
 
-bool LocalPlayer::hasPermission(EGameCommand command)
-{
-	return level->getLevelData()->getAllowCommands();
-}
-
 void LocalPlayer::onCrafted(shared_ptr<ItemInstance> item)
 {
 	if( minecraft->localgameModes[m_iPad] != nullptr )

@@ -18,6 +18,9 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Registries\CommandRegistry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\Events\BaseEvent.h">
@@ -27,6 +30,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="includes\Events\Packet\PacketEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\TeleportCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseClasses\Command.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseClasses\CommandSender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Registries\CommandRegistry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

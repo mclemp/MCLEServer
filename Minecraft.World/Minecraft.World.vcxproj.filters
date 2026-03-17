@@ -2669,53 +2669,8 @@
     <ClInclude Include="TradeItemPacket.h">
       <Filter>net\minecraft\network\packet</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>net\minecraft\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="net.minecraft.commands.h">
-      <Filter>net\minecraft\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandSender.h">
-      <Filter>net\minecraft\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandDispatcher.h">
-      <Filter>net\minecraft\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandsEnum.h">
-      <Filter>net\minecraft\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="DefaultGameModeCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="net.minecraft.commands.common.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="ExperienceCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="GameModeCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="GiveItemCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="KillCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="ToggleDownfallCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
     <ClInclude Include="GameCommandPacket.h">
       <Filter>net\minecraft\network\packet</Filter>
-    </ClInclude>
-    <ClInclude Include="AdminLogCommand.h">
-      <Filter>net\minecraft\commands</Filter>
-    </ClInclude>
-    <ClInclude Include="EnchantItemCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
     </ClInclude>
     <ClInclude Include="GenericStats.h">
       <Filter>net\minecraft\stats</Filter>
@@ -2734,30 +2689,6 @@
     </ClInclude>
     <ClInclude Include="PerformanceTimer.h">
       <Filter>ConsoleHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDifficultyCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="GameRuleCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="PlaySoundCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="SetPlayerTimeoutCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="ShowSeedCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="SpreadPlayersCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClInclude>
-    <ClInclude Include="WeatherCommand.h">
-      <Filter>net\minecraft\commands\common</Filter>
     </ClInclude>
     <ClInclude Include="PlayerSelector.h">
       <Filter>net\minecraft\commands</Filter>
@@ -5218,38 +5149,8 @@
     <ClCompile Include="TradeItemPacket.cpp">
       <Filter>net\minecraft\network\packet</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>net\minecraft\commands</Filter>
-    </ClCompile>
-    <ClCompile Include="CommandDispatcher.cpp">
-      <Filter>net\minecraft\commands</Filter>
-    </ClCompile>
-    <ClCompile Include="DefaultGameModeCommand.cpp">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClCompile>
-    <ClCompile Include="ExperienceCommand.cpp">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClCompile>
-    <ClCompile Include="GameModeCommand.cpp">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClCompile>
-    <ClCompile Include="GiveItemCommand.cpp">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClCompile>
-    <ClCompile Include="KillCommand.cpp">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClCompile>
-    <ClCompile Include="TimeCommand.cpp">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClCompile>
-    <ClCompile Include="ToggleDownfallCommand.cpp">
-      <Filter>net\minecraft\commands\common</Filter>
-    </ClCompile>
     <ClCompile Include="GameCommandPacket.cpp">
       <Filter>net\minecraft\network\packet</Filter>
-    </ClCompile>
-    <ClCompile Include="EnchantItemCommand.cpp">
-      <Filter>net\minecraft\commands\common</Filter>
     </ClCompile>
     <ClCompile Include="GenericStats.cpp">
       <Filter>net\minecraft\stats</Filter>
@@ -5268,9 +5169,6 @@
     </ClCompile>
     <ClCompile Include="PerformanceTimer.cpp">
       <Filter>ConsoleHelpers</Filter>
-    </ClCompile>
-    <ClCompile Include="EffectCommand.cpp">
-      <Filter>net\minecraft\commands\common</Filter>
     </ClCompile>
     <ClCompile Include="BlockSourceImpl.cpp">
       <Filter>net\minecraft\core</Filter>

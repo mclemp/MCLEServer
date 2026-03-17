@@ -1559,18 +1559,6 @@ void ServerPlayer::sendMessage(const wstring& message, ChatPacket::EChatPacketMe
 	connection->send(std::make_shared<ChatPacket>(message, type, customData, additionalMessage));
 }
 
-bool ServerPlayer::hasPermission(EGameCommand command)
-{
-	return server->getPlayers()->isOp(dynamic_pointer_cast<ServerPlayer>(shared_from_this()));
-
-	// 4J: Removed permission level
-	/*if( server->getPlayers()->isOp(dynamic_pointer_cast<ServerPlayer>(shared_from_this())) )
-	{
-		return server->getOperatorUserPermissionLevel() >= permissionLevel;
-	}
-	return false;*/
-}
-
 // 4J - Don't use
 //void ServerPlayer::updateOptions(shared_ptr<ClientInformationPacket> packet)
 //{

@@ -32,6 +32,5 @@ public:
     virtual void setEquippedSlot(int slot, shared_ptr<ItemInstance> item);// 4J Stu - Brought forward change from 1.3 to fix #64688 - Customer Encountered: TU7: Content: Art: Aura of enchanted item is not displayed for other players in online game
     virtual void animateRespawn();
 	virtual float getHeadHeight();
-	bool hasPermission(EGameCommand command) { return false; }
 	virtual Pos getCommandSenderWorldPosition();
 };
