@@ -418,6 +418,10 @@ public:
 	void setOnlineXuid(PlayerUID xuid)															{ m_OnlineXuid = xuid; }
 	PlayerUID getOnlineXuid()																	{ return m_OnlineXuid; }
 
+	void setSafeXuid(PlayerUID xuid)                                                          { m_SafeXuid = xuid; }
+	PlayerUID getSafeXuid()                                                                     { return m_SafeXuid; }
+
+
 	void setPlayerIndex(DWORD dwIndex)														{ m_playerIndex = dwIndex; }
 	DWORD getPlayerIndex()																	{ return m_playerIndex; }
 
@@ -431,6 +435,7 @@ public:
 private:
 	PlayerUID m_xuid;
 	PlayerUID m_OnlineXuid;
+	PlayerUID m_SafeXuid;
 
 protected:
 	bool m_bShownOnMaps;

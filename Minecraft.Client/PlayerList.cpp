@@ -36,6 +36,7 @@
 #elif defined(__PS3__) || defined(__ORBIS__)
 #include "Common\Network\Sony\NetworkPlayerSony.h"
 #endif
+#include <Windows64/Windows64_Minecraft.h>
 
 // 4J - this class is fairly substantially altered as there didn't seem any point in porting code for banning, whitelisting, ops etc.
 
@@ -555,6 +556,7 @@ shared_ptr<ServerPlayer> PlayerList::getPlayerForLogin(PendingConnection *pendin
 	player->gameMode->player = player; // 4J added as had to remove this assignment from ServerPlayer ctor
 	player->setXuid( xuid ); // 4J Added
 	player->setOnlineXuid( onlineXuid ); // 4J Added
+	player->setSafeXuid(Windows64Minecraft::ResolvePersistentXuidFromName(userName));
 #ifdef _WINDOWS64
 	{
 		// Use packet-supplied identity from LoginPacket.
@@ -563,6 +565,7 @@ shared_ptr<ServerPlayer> PlayerList::getPlayerForLogin(PendingConnection *pendin
 		if (np != nullptr)
 		{
 			player->setOnlineXuid(np->GetUID());
+			player->setSafeXuid(Windows64Minecraft::ResolvePersistentXuidFromName(userName));
 
 			// Backward compatibility: when Minecraft.Client is hosting, keep the first
 			// host player on the legacy embedded host XUID (base + 0).
@@ -674,6 +677,7 @@ shared_ptr<ServerPlayer> PlayerList::respawn(shared_ptr<ServerPlayer> serverPlay
 	player->gameMode->player = player; // 4J added as had to remove this assignment from ServerPlayer ctor
 	player->setXuid( playerXuid ); // 4J Added
 	player->setOnlineXuid( playerOnlineXuid ); // 4J Added
+	player->setSafeXuid(Windows64Minecraft::ResolvePersistentXuidFromName(serverPlayer->getName()));
 
 	// 4J Stu - Don't reuse the id. If we do, then the player can be re-added after being removed, but the add packet gets sent before the remove packet
 	//player->entityId = serverPlayer->entityId;
@@ -1189,7 +1193,7 @@ shared_ptr<ServerPlayer> PlayerList::getPlayer(PlayerUID uid)
 	for (unsigned int i = 0; i < players.size(); i++)
 	{
 		shared_ptr<ServerPlayer> p = players[i];
-		if (p->getXuid() == uid || p->getOnlineXuid() == uid)	// 4J - used to be case insensitive (using equalsIgnoreCase) - imagine we'll be shifting to XUIDs anyway
+		if (p->getXuid() == uid || p->getOnlineXuid() == uid || p->getSafeXuid() == uid)	// 4J - used to be case insensitive (using equalsIgnoreCase) - imagine we'll be shifting to XUIDs anyway
 		{
 			return p;
 		}

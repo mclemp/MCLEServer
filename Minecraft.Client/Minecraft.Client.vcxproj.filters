@@ -741,17 +741,8 @@
     <Filter Include="ExampleAddon\Command">
       <UniqueIdentifier>{7b446921-d75b-4978-867a-161683156df0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ExampleAddon\AntiCheat">
-      <UniqueIdentifier>{b58409c8-d240-4b93-90c9-66e0e5dfd599}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ExampleAddon\AntiCheat\Movement">
-      <UniqueIdentifier>{5b067d45-4a5c-4594-973b-c2c386cea000}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ExampleAddon\Command\Default">
       <UniqueIdentifier>{187b7904-a74e-4770-bcea-d6e5a0db6688}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ExampleAddon\Command\AntiCheat">
-      <UniqueIdentifier>{126e6028-55c6-4c4f-a274-c904623adbee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1923,12 +1914,6 @@
     <ClInclude Include="CallbackHelper.h">
       <Filter>ExampleAddon</Filter>
     </ClInclude>
-    <ClInclude Include="AntiFlightFeature.h">
-      <Filter>ExampleAddon\AntiCheat\Movement</Filter>
-    </ClInclude>
-    <ClInclude Include="AntiCheatFeature.h">
-      <Filter>ExampleAddon\AntiCheat</Filter>
-    </ClInclude>
     <ClInclude Include="TeleportCommand.h">
       <Filter>ExampleAddon\Command\Default</Filter>
     </ClInclude>
@@ -1939,6 +1924,9 @@
       <Filter>ExampleAddon\Command\Default</Filter>
     </ClInclude>
     <ClInclude Include="OPCommand.h">
+      <Filter>ExampleAddon\Command\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="GamemodeCommand.h">
       <Filter>ExampleAddon\Command\Default</Filter>
     </ClInclude>
   </ItemGroup>

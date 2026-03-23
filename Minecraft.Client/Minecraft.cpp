@@ -69,6 +69,7 @@
 #ifdef __ORBIS__
 #include "Orbis\Network\PsPlusUpsellWrapper_Orbis.h"
 #endif
+#include <Windows64/Windows64_Minecraft.h>
 
 // #define DISABLE_SPU_CODE
 // 4J Turning this on will change the graph at the bottom of the debug overlay to show the number of packets of each type added per fram
@@ -986,9 +987,13 @@ shared_ptr<MultiplayerLocalPlayer> Minecraft::createExtraLocalPlayer(int idx, co
 #endif
 		localplayers[idx]->setXuid(playerXUIDOffline);
 		localplayers[idx]->setOnlineXuid(playerXUIDOnline);
+		
+
 		localplayers[idx]->setIsGuest(ProfileManager.IsGuest(idx));
 
 		localplayers[idx]->m_displayName = ProfileManager.GetDisplayName(idx);
+
+		localplayers[idx]->setSafeXuid(Windows64Minecraft::ResolvePersistentXuidFromName(localplayers[idx]->m_displayName));
 
 		localplayers[idx]->m_iScreenSection = tempScreenSection;
 
@@ -2187,6 +2192,7 @@ void Minecraft::setLevel(MultiPlayerLevel *level, int message /*=-1*/, shared_pt
 
 			player->m_displayName = ProfileManager.GetDisplayName(iPrimaryPlayer);
 
+			player->setSafeXuid(Windows64Minecraft::ResolvePersistentXuidFromName(player->m_displayName));
 
 
 			player->resetPos();
