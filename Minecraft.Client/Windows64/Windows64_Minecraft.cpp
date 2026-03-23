@@ -259,7 +259,28 @@ void Windows64Minecraft::StartDedicatedServer() {
 		app.SetGameHostOption(eGameHostOption_WorldSize, 4);
 	}
 
-	//param->savePlatform = SAVE_FILE_PLATFORM_X360;
+	wchar_t exePath[MAX_PATH] = {};
+	GetModuleFileNameW(NULL, exePath, MAX_PATH);
+
+	wchar_t* lastSlash = wcsrchr(exePath, L'\\');
+	if (lastSlash) {
+		*(lastSlash + 1) = L'\0'; // keep trailing slash
+	}
+
+	wchar_t filePath[MAX_PATH] = {};
+	_snwprintf_s(filePath, sizeof(filePath), _TRUNCATE, L"%sWindows64\\GameHDD\\saveData.ms", exePath);
+
+	File* saveFile = new File(filePath);
+
+	__int64 fileSize = saveFile->length();
+	FileInputStream fis(*saveFile);
+	byteArray ba(fileSize);
+	fis.read(ba);
+	fis.close();
+
+	LoadSaveDataThreadParam* saveData = new LoadSaveDataThreadParam(ba.data, ba.length, saveFile->getName());
+
+	param->saveData = saveData;
 
 	param->settings = app.GetGameHostOption(eGameHostOption_All);
 
