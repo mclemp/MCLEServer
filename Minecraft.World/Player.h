@@ -6,8 +6,8 @@ using namespace std;
 #include "Abilities.h"
 #include "FoodData.h"
 #include "PlayerEnderChestContainer.h"
-#include "CommandSender.h"
 #include "ScoreHolder.h"
+#include "ChatPacket.h"
 
 class AbstractContainerMenu;
 class Stats;
@@ -33,7 +33,7 @@ class PlayerEnderChestContainer;
 class GameType;
 class Scoreboard;
 
-class Player : public LivingEntity, public CommandSender, public ScoreHolder
+class Player : public LivingEntity, public ScoreHolder
 {
 public:
 	static const int MAX_NAME_LENGTH = 16 + 4;

@@ -5,7 +5,6 @@
 #include "ServerPlayerGameMode.h"
 #include "PlayerList.h"
 #include "MinecraftServer.h"
-#include "..\Minecraft.World\net.minecraft.commands.h"
 #include "..\Minecraft.World\net.minecraft.network.h"
 #include "..\Minecraft.World\net.minecraft.world.entity.item.h"
 #include "..\Minecraft.World\net.minecraft.world.level.h"
@@ -34,6 +33,8 @@
 // 4J Added
 #include "..\Minecraft.World\net.minecraft.world.item.crafting.h"
 #include "Options.h"
+
+#include "CommandDispatcher.h"
 
 Random PlayerConnection::random;
 
@@ -616,10 +617,11 @@ void PlayerConnection::handleChat(shared_ptr<ChatPacket> packet)
 		disconnect(DisconnectPacket::eDisconnect_None); // or a specific reason
 		return;
 	}
+
 	// Optional: validate characters (acceptableLetters)
 	if (message.length() > 0 && message[0] == L'/')
 	{
-		handleCommand(message);
+		CommandDispatcher::OnPlayerCommand(this->getPlayer(), message);
 		return;
 	}
 	wstring formatted = L"<" + player->name + L"> " + message;
@@ -1041,10 +1043,7 @@ void PlayerConnection::handleKickPlayer(shared_ptr<KickPlayerPacket> packet)
 	}
 }
 
-void PlayerConnection::handleGameCommand(shared_ptr<GameCommandPacket> packet)
-{
-	MinecraftServer::getInstance()->getCommandDispatcher()->performCommand(player, packet->command, packet->data);
-}
+void PlayerConnection::handleGameCommand(shared_ptr<GameCommandPacket> packet) { }
 
 void PlayerConnection::handleClientCommand(shared_ptr<ClientCommandPacket> packet)
 {
@@ -1500,24 +1499,6 @@ void PlayerConnection::handleCustomPayload(shared_ptr<CustomPayloadPacket> custo
 			{
 				app.DebugPrintf("Command blocks not enabled");
 				//player->sendMessage(ChatMessageComponent.forTranslation("advMode.notEnabled"));
-			}
-			else if (player->hasPermission(eGameCommand_Effect) && player->abilities.instabuild)
-			{
-				ByteArrayInputStream bais(customPayloadPacket->data);
-				DataInputStream input(&bais);
-				int x = input.readInt();
-				int y = input.readInt();
-				int z = input.readInt();
-				wstring command = Packet::readUtf(&input, 256);
-
-				shared_ptr<TileEntity> tileEntity = player->level->getTileEntity(x, y, z);
-				shared_ptr<CommandBlockEntity> cbe = dynamic_pointer_cast<CommandBlockEntity>(tileEntity);
-				if (tileEntity != nullptr && cbe != nullptr)
-				{
-					cbe->setCommand(command);
-					player->level->sendTileUpdated(x, y, z);
-					//player->sendMessage(ChatMessageComponent.forTranslation("advMode.setCommand.success", command));
-				}
 			}
 			else
 			{

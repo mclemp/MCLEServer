@@ -3920,6 +3920,8 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
     <ClInclude Include="AchievementPopup.h" />
     <ClInclude Include="AchievementScreen.h" />
     <ClInclude Include="AllowAllCuller.h" />
+    <ClInclude Include="AntiCheatFeature.h" />
+    <ClInclude Include="AntiFlightFeature.h" />
     <ClInclude Include="ArchiveFile.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Xbox 360'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ContentPackage_Vita|Xbox 360'">false</ExcludedFromBuild>
@@ -3938,6 +3940,7 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
     <ClInclude Include="BubbleParticle.h" />
     <ClInclude Include="BufferedImage.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="CallbackHelper.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChatScreen.h" />
     <ClInclude Include="ChestModel.h" />
@@ -3959,6 +3962,8 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
     </ClInclude>
     <ClInclude Include="ClientConstants.h" />
     <ClInclude Include="ClockTexture.h" />
+    <ClInclude Include="GenericCommand.h" />
+    <ClInclude Include="CommandDispatcher.h" />
     <ClInclude Include="Common\App_Defines.h" />
     <ClInclude Include="Common\App_enums.h" />
     <ClInclude Include="Common\App_structs.h" />
@@ -5398,6 +5403,7 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ContentPackage_Vita|Durango'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="OcelotModel.h" />
+    <ClInclude Include="OPCommand.h" />
     <ClInclude Include="PendingConnection.h" />
     <ClInclude Include="PlayerCloudParticle.h" />
     <ClInclude Include="PlayerConnection.h" />
@@ -5433,7 +5439,7 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
     </ClInclude>
     <ClInclude Include="Rect2i.h" />
     <ClInclude Include="ResourceLocation.h" />
-    <ClInclude Include="ServerCommandDispatcher.h" />
+    <ClInclude Include="SaveCommand.h" />
     <ClInclude Include="ServerConnection.h" />
     <ClInclude Include="ServerInterface.h" />
     <ClInclude Include="ServerPlayerGameMode.h" />
@@ -5558,6 +5564,7 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
     <ClInclude Include="StitchedTexture.h" />
     <ClInclude Include="Stitcher.h" />
     <ClInclude Include="StitchSlot.h" />
+    <ClInclude Include="StopCommand.h" />
     <ClInclude Include="StringTable.h" />
     <ClInclude Include="stubs.h" />
     <ClInclude Include="SuspendedParticle.h" />
@@ -7072,6 +7079,7 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
     <ClCompile Include="BubbleParticle.cpp" />
     <ClCompile Include="BufferedImage.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CallbackHelper.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChatScreen.cpp" />
     <ClCompile Include="ChestModel.cpp" />
@@ -7093,6 +7101,7 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
     </ClCompile>
     <ClCompile Include="ClientConstants.cpp" />
     <ClCompile Include="ClockTexture.cpp" />
+    <ClCompile Include="CommandDispatcher.cpp" />
     <ClCompile Include="Common\Audio\Consoles_SoundEngine.cpp" />
     <ClCompile Include="Common\Audio\SoundEngine.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ContentPackage|Xbox 360'">true</ExcludedFromBuild>
@@ -9341,7 +9350,6 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
     <ClCompile Include="ScrolledSelectionList.cpp" />
     <ClCompile Include="SelectWorldScreen.cpp" />
     <ClCompile Include="ServerChunkCache.cpp" />
-    <ClCompile Include="ServerCommandDispatcher.cpp" />
     <ClCompile Include="ServerConnection.cpp" />
     <ClCompile Include="ServerPlayerGameMode.cpp" />
     <ClCompile Include="ServerLevel.cpp" />
@@ -9501,7 +9509,6 @@ xcopy /q /y /i /s /e $(ProjectDir)Durango\CU  $(LayoutDir)Image\Loose\CU</Comman
     <ClCompile Include="SuspendedParticle.cpp" />
     <ClCompile Include="SuspendedTownParticle.cpp" />
     <ClCompile Include="TakeAnimationParticle.cpp" />
-    <ClCompile Include="TeleportCommand.cpp" />
     <ClCompile Include="TerrainParticle.cpp" />
     <ClCompile Include="Tesselator.cpp" />
     <ClCompile Include="TexOffs.cpp" />

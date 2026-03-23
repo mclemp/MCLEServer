@@ -1,6 +1,7 @@
 #pragma once
 
 #include <assert.h>
+#include <cstddef>
 
 //Note - this is meant to be a really simple wrapper round a pointer just to be able to add a length value to arrays.
 // As such, it shouldn't delete its data in a destructor as shallow copies will be made of this and we don't want to
@@ -84,7 +85,7 @@ class ClipChunk;
 
 typedef arrayWithLength<double> doubleArray;
 typedef array2DWithLength<double> coords2DArray;
-typedef arrayWithLength<byte> byteArray;
+typedef arrayWithLength<unsigned char> byteArray;
 typedef arrayWithLength<char> charArray;
 typedef arrayWithLength<short> shortArray;
 typedef arrayWithLength<int> intArray;

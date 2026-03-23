@@ -145,7 +145,6 @@ public:
 	ServerLevel *getLevel();
 	void setGameMode(GameType *mode);
 	void sendMessage(const wstring& message, ChatPacket::EChatPacketMessage type = ChatPacket::e_ChatCustom, int customData = -1, const wstring& additionalMessage = L"");
-	bool hasPermission(EGameCommand command);
 	// bool hasPermission(int permissionLevel, EGameCommand command);
 	//void updateOptions(shared_ptr<ClientInformationPacket> packet); // 4J: Don't use
 	int getViewDistance();

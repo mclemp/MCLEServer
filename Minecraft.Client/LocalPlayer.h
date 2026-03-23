@@ -196,7 +196,6 @@ protected:
 	virtual void sendRidingJump();
 
 public:
-	bool hasPermission(EGameCommand command);
 
 	void updateRichPresence();
 

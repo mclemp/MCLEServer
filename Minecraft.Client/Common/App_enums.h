@@ -115,7 +115,7 @@ enum eTMSAction
 enum eXuiServerAction
 {
 	eXuiServerAction_Idle=0,
-	eXuiServerAction_DropItem, // Debug
+	eXuiServerAction_StopServer,
 	eXuiServerAction_SaveGame,
 	eXuiServerAction_AutoSaveGame,
 	eXuiServerAction_SpawnMob, // Debug

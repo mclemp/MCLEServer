@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "net.minecraft.network.packet.h"
 #include "net.minecraft.world.level.h"
-#include "net.minecraft.commands.h"
 #include "..\Minecraft.Client\MinecraftServer.h"
 #include "CommandBlockEntity.h"
 
@@ -53,15 +52,6 @@ wstring CommandBlockEntity::getName()
 void CommandBlockEntity::setName(const wstring &name)
 {
 	this->name = name;
-}
-
-void CommandBlockEntity::sendMessage(const wstring& message, ChatPacket::EChatPacketMessage type, int customData , const wstring& additionalMessage)
-{
-}
-
-bool CommandBlockEntity::hasPermission(EGameCommand command)
-{
-	return false;
 }
 
 void CommandBlockEntity::save(CompoundTag *tag)
