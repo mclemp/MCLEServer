@@ -651,17 +651,16 @@ shared_ptr<Packet> TrackedEntity::getAddEntityPacket()
 	{
 		shared_ptr<ServerPlayer> player = dynamic_pointer_cast<ServerPlayer>(e);
 
-		PlayerUID xuid = INVALID_XUID;
-		//PlayerUID OnlineXuid = INVALID_XUID;
-		PlayerUID SafeXuid = INVALID_XUID;
+		/*PlayerUID xuid = INVALID_XUID;
+		PlayerUID OnlineXuid = INVALID_XUID;
 		if( player != nullptr )
 		{
 			xuid = player->getXuid();
-			//OnlineXuid = player->getOnlineXuid();
-			SafeXuid = player->getSafeXuid();
+			OnlineXuid = player->getOnlineXuid();
 		}
+		*/
 		// 4J Added yHeadRotp param to fix #102563 - TU12: Content: Gameplay: When one of the Players is idle for a few minutes his head turns 180 degrees.
-		return std::make_shared<AddPlayerPacket>(player, xuid, SafeXuid, xp, yp, zp, yRotp, xRotp, yHeadRotp); //was using OnlineXuid instead of SafeXuid
+		return std::make_shared<AddPlayerPacket>(player, INVALID_XUID, INVALID_XUID, xp, yp, zp, yRotp, xRotp, yHeadRotp); //was using OnlineXuid and xuid before being invalids
 	}
 	else if (e->instanceof(eTYPE_MINECART))
 	{

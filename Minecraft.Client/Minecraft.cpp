@@ -993,8 +993,6 @@ shared_ptr<MultiplayerLocalPlayer> Minecraft::createExtraLocalPlayer(int idx, co
 
 		localplayers[idx]->m_displayName = ProfileManager.GetDisplayName(idx);
 
-		localplayers[idx]->setSafeXuid(Windows64Minecraft::ResolvePersistentXuidFromName(localplayers[idx]->m_displayName));
-
 		localplayers[idx]->m_iScreenSection = tempScreenSection;
 
 		if( levelpassedin == nullptr)	level->addEntity(localplayers[idx]);	// Don't add if we're passing the level in, we only do this from the client connection & we'll be handling adding it ourselves
@@ -2191,8 +2189,6 @@ void Minecraft::setLevel(MultiPlayerLevel *level, int message /*=-1*/, shared_pt
 			player->setOnlineXuid(playerXUIDOnline);
 
 			player->m_displayName = ProfileManager.GetDisplayName(iPrimaryPlayer);
-
-			player->setSafeXuid(Windows64Minecraft::ResolvePersistentXuidFromName(player->m_displayName));
 
 
 			player->resetPos();

@@ -735,13 +735,13 @@
     <Filter Include="include\lce_filesystem">
       <UniqueIdentifier>{70b1f1aa-fe50-4aab-9a6c-14df8cb1f231}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ExampleAddon">
+    <Filter Include="DefaultAddon">
       <UniqueIdentifier>{ba8312f8-f2a9-44e6-8b5d-75c1cc241f47}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ExampleAddon\Command">
+    <Filter Include="DefaultAddon\Command">
       <UniqueIdentifier>{7b446921-d75b-4978-867a-161683156df0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ExampleAddon\Command\Default">
+    <Filter Include="DefaultAddon\Command\Default">
       <UniqueIdentifier>{187b7904-a74e-4770-bcea-d6e5a0db6688}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -1906,28 +1906,28 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommandDispatcher.h">
-      <Filter>ExampleAddon\Command</Filter>
+      <Filter>DefaultAddon\Command</Filter>
     </ClInclude>
     <ClInclude Include="GenericCommand.h">
-      <Filter>ExampleAddon\Command</Filter>
+      <Filter>DefaultAddon\Command</Filter>
     </ClInclude>
     <ClInclude Include="CallbackHelper.h">
-      <Filter>ExampleAddon</Filter>
+      <Filter>DefaultAddon</Filter>
     </ClInclude>
     <ClInclude Include="TeleportCommand.h">
-      <Filter>ExampleAddon\Command\Default</Filter>
+      <Filter>DefaultAddon\Command\Default</Filter>
     </ClInclude>
     <ClInclude Include="StopCommand.h">
-      <Filter>ExampleAddon\Command\Default</Filter>
+      <Filter>DefaultAddon\Command\Default</Filter>
     </ClInclude>
     <ClInclude Include="SaveCommand.h">
-      <Filter>ExampleAddon\Command\Default</Filter>
+      <Filter>DefaultAddon\Command\Default</Filter>
     </ClInclude>
     <ClInclude Include="OPCommand.h">
-      <Filter>ExampleAddon\Command\Default</Filter>
+      <Filter>DefaultAddon\Command\Default</Filter>
     </ClInclude>
     <ClInclude Include="GamemodeCommand.h">
-      <Filter>ExampleAddon\Command\Default</Filter>
+      <Filter>DefaultAddon\Command\Default</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2901,10 +2901,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CommandDispatcher.cpp">
-      <Filter>ExampleAddon\Command</Filter>
+      <Filter>DefaultAddon\Command</Filter>
     </ClCompile>
     <ClCompile Include="CallbackHelper.cpp">
-      <Filter>ExampleAddon</Filter>
+      <Filter>DefaultAddon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
